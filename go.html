@@ -278,6 +278,74 @@
       debugVisible: false
     };
 
+    const PERSIST_KEY = 'utd:autoReportState:v1';
+    const storage = (()=>{
+      try {
+        if(typeof localStorage === 'undefined') return null;
+        const testKey = '__utd_persist_test__';
+        localStorage.setItem(testKey, '1');
+        localStorage.removeItem(testKey);
+        return localStorage;
+      } catch(err) {
+        return null;
+      }
+    })();
+
+    function loadSavedState(){
+      if(!storage) return null;
+      try {
+        const raw = storage.getItem(PERSIST_KEY);
+        if(!raw) return null;
+        return JSON.parse(raw);
+      } catch(err) {
+        return null;
+      }
+    }
+
+    function persistState(){
+      if(!storage || state.silenceAutoReport) return;
+      try {
+        const payload = {};
+        if(state.autoReport){
+          const data = JSON.parse(JSON.stringify(state.autoReport));
+          if(typeof data.runStartTime === 'number' && Number.isFinite(data.runStartTime)){
+            const elapsed = performance.now() - data.runStartTime;
+            if(Number.isFinite(elapsed) && elapsed >= 0){
+              data.runElapsed = elapsed;
+            } else {
+              delete data.runElapsed;
+            }
+          } else {
+            delete data.runElapsed;
+          }
+          payload.autoReport = data;
+        } else {
+          payload.autoReport = null;
+        }
+        storage.setItem(PERSIST_KEY, JSON.stringify(payload));
+      } catch(err) {
+        /* ignore persistence errors */
+      }
+    }
+
+    function applySavedState(saved){
+      if(!saved || typeof saved !== 'object') return;
+      const savedReport = saved.autoReport;
+      if(!savedReport || typeof savedReport !== 'object') return;
+      const restored = Object.assign({}, savedReport);
+      if(Array.isArray(savedReport.waves)) restored.waves = savedReport.waves.map(w=>Object.assign({}, w));
+      const rawElapsed = restored.runElapsed ?? savedReport.runElapsed;
+      const elapsed = Number(rawElapsed);
+      if(Number.isFinite(elapsed) && elapsed >= 0){
+        const runStart = performance.now() - elapsed;
+        if(Number.isFinite(runStart)) restored.runStartTime = runStart;
+        else delete restored.runStartTime;
+      } else if(!(typeof restored.runStartTime === 'number' && Number.isFinite(restored.runStartTime))){
+        delete restored.runStartTime;
+      }
+      state.autoReport = restored;
+    }
+
     const BAL = {
       hpLinearSlope: 0.020846,
       hpPeriodicEvery: 10,
@@ -408,6 +476,7 @@
         startWave();
       }
       updateAutoReportPanel('Auto-play engaged. The AI will log how the run feels.');
+      persistState();
     }
 
     function finishAutoReport(reason){
@@ -416,6 +485,7 @@
       if(reason === 'gameover') state.autoReport.endedWithGameOver = true;
       if(state.autoReport.runStartTime){ state.autoReport.runDuration = Math.round((performance.now()-state.autoReport.runStartTime)/1000); }
       updateAutoReportPanel();
+      persistState();
     }
 
     function recordAutoPlayWave(waveNumber){
@@ -434,6 +504,7 @@
       stats.lastMoney = state.money;
       stats.lastRecordedWave = waveNumber;
       updateAutoReportPanel();
+      persistState();
     }
 
     function resetInteractiveState(){
@@ -484,6 +555,8 @@
     }
     const AudioSys = (()=>{ let actx=null, enabled=true; function ensure(){ try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){} } function blip({freq=520, dur=0.06, vol=0.05, type='triangle'}={}){ if(!enabled) return; ensure(); if(!actx) return; const t=actx.currentTime; const o=actx.createOscillator(); const g=actx.createGain(); o.type=type; o.frequency.setValueAtTime(freq,t); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g).connect(actx.destination); o.start(t); o.stop(t+dur+0.03); } function towerFire(){ blip({freq:760+Math.random()*100,dur:0.04,vol:0.06,type:'square'}); } const enemyHitSounds={ grunt: ()=>blip({freq:380+Math.random()*40,dur:0.05,vol:0.045,type:'triangle'}), fast: ()=>blip({freq:520+Math.random()*60,dur:0.04,vol:0.04,type:'sawtooth'}), tank: ()=>blip({freq:240+Math.random()*30,dur:0.07,vol:0.06,type:'sine'}), healer:()=>blip({freq:640+Math.random()*50,dur:0.05,vol:0.04,type:'triangle'}), rich: ()=>blip({freq:660,dur:0.06,vol:0.05,type:'square'}), boss: ()=>blip({freq:180,dur:0.1,vol:0.08,type:'sine'}), }; function onEnemyHit(kind){ const f=enemyHitSounds[kind]||enemyHitSounds.grunt; f(); } function toggle(){ enabled=!enabled; UI.soundBtn.textContent=`Sound: ${enabled?'On':'Off'}`; ensure(); } function isEnabled(){ return enabled; } return { ensure, towerFire, onEnemyHit, toggle, isEnabled }; })();
     window.addEventListener('pointerdown', ()=>AudioSys.ensure(), {once:true, passive:true});
+    if(typeof document !== 'undefined'){ document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden') persistState(); }); }
+    window.addEventListener('beforeunload', persistState);
 
     const assets = { bgImg:null };
     (function setDefaultBG(){ const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='480'><defs><radialGradient id='g' cx='50%' cy='50%'><stop offset='0%' stop-color='#0b1430'/><stop offset='100%' stop-color='#060a1a'/></radialGradient></defs><rect width='100%' height='100%' fill='url(#g)'/>${Array.from({length:120}).map(()=>{ const x=Math.random()*800|0, y=Math.random()*480|0, r=(Math.random()*1.4+0.3).toFixed(2); return `<circle cx='${x}' cy='${y}' r='${r}' fill='white' opacity='${(Math.random()*0.9+0.1).toFixed(2)}'/>`; }).join('')}</svg>`); const img = new Image(); img.src = `data:image/svg+xml;charset=utf-8,${svg}`; assets.bgImg = img; })();
@@ -751,6 +824,8 @@
     function init(){
       buildShop();
       resetInteractiveState();
+      const saved = loadSavedState();
+      if(saved) applySavedState(saved);
       dumpParams();
       updateAutoReportPanel();
       requestAnimationFrame(loop);
