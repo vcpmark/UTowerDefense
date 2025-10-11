@@ -19,6 +19,7 @@
     .badge { background: #1a2047; padding: 6px 10px; border-radius: 999px; border: 1px solid #2c3770; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
     .pill { background:#1a2047; border:1px solid #2c3770; border-radius:999px; padding:6px 12px; font-size: 13px; }
     .pill.warn { background: rgba(148,54,73,0.18); border-color: rgba(248,113,113,0.6); color: #fda4af; }
+    .pill.success { background: rgba(34,197,94,0.18); border-color: rgba(74,222,128,0.55); color: #bbf7d0; }
     .shop-card { display: grid; grid-template-columns: 1fr auto; gap: 6px; padding: 10px; border: 1px dashed #2a3470; border-radius: 10px; background: rgba(15,20,43,0.45); }
     .shop-list { display: flex; flex-direction: column; gap: 10px; }
     .tower-card { cursor: pointer; }
@@ -34,6 +35,17 @@
     .debug-panel.active { display:flex; }
     label.input-label { display:flex; align-items:center; gap:6px; font-size:13px; color:#b2bbf8; }
     .section-title { font-weight:600; text-transform:uppercase; font-size:12px; letter-spacing:0.12em; color:#94a3ff; margin-bottom:4px; }
+    .event-card { border-style: solid; border-color: rgba(112,129,255,0.25); background: rgba(23,30,68,0.55); }
+    .event-card .badge { background: rgba(112,129,255,0.18); border-color: rgba(112,129,255,0.45); }
+    .meter { position: relative; width: 100%; height: 12px; border-radius: 999px; background: rgba(30,41,82,0.65); overflow: hidden; border: 1px solid rgba(112,129,255,0.25); }
+    .meter-fill { position:absolute; inset:0; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #38bdf8, #c084fc); box-shadow: 0 0 12px rgba(56,189,248,0.45); transition: width .25s ease; }
+    .event-highlight { color:#facc15; font-weight:600; }
+    #crowdCard.success { border-color: rgba(74,222,128,0.45); background: rgba(34,197,94,0.12); }
+    #crowdCard.failed { border-color: rgba(248,113,113,0.45); background: rgba(148,54,73,0.12); }
+    #crowdCard .meter { margin-top: 4px; }
+    #crowdCard .meter-fill { transition: width .18s ease; }
+    #momentumCard .meter { margin-top: 6px; }
+    #momentumCard .meter-fill { background: linear-gradient(90deg, #f472b6, #fb7185); box-shadow: 0 0 12px rgba(244,114,182,0.45); }
     @media (max-width: 1320px) {
       .wrap { grid-template-columns: 1fr; }
     }
@@ -85,6 +97,51 @@
         </label>
         <button id="sellMode" class="btn">Sell Mode</button>
         <span id="towerInfo" class="pill">Select a tower to build</span>
+      </div>
+
+      <div class="shop-card event-card" id="eventCard">
+        <div>
+          <div class="tower-header"><strong>Wave Modifier</strong><span id="eventName" class="badge">None</span></div>
+          <div id="eventDesc" style="color:#9aa3d7; font-size:13px;">Each wave now rolls a playful twist. Clear waves to reveal the next surprise.</div>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="shop-card" id="hypeCard">
+        <div>
+          <div class="tower-header"><strong>Hype Burst</strong><button id="hypeBtn" class="btn ghost" disabled>Charge: 0%</button></div>
+          <div style="color:#9aa3d7; font-size:13px;">Defeating enemies fills the hype meter. Unleash it to supercharge your defenses. <span id="hypeStatus" class="pill">Dormant</span></div>
+          <div class="meter" style="margin-top:6px;"><div id="hypeMeter" class="meter-fill"></div></div>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="shop-card event-card" id="momentumCard">
+        <div>
+          <div class="tower-header"><strong id="momentumName">Momentum Chain</strong><span id="momentumBadge" class="badge">Building</span></div>
+          <div id="momentumDesc" style="color:#9aa3d7; font-size:13px;">Chain swift eliminations to ignite a Frenzy that drenches towers in speed and power.</div>
+          <div class="meter"><div id="momentumMeter" class="meter-fill"></div></div>
+          <div class="row tight" style="justify-content: space-between; align-items:center;">
+            <span id="momentumStatus" class="pill">Build momentum</span>
+            <span id="momentumProgressLabel" style="font-size:12px;color:#9aa3d7;">0%</span>
+            <span id="momentumCombo" class="badge">Chain x0</span>
+          </div>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="shop-card event-card" id="crowdCard">
+        <div>
+          <div class="tower-header"><strong id="crowdName">Crowd Request</strong><span id="crowdReward" class="badge">Awaiting</span></div>
+          <div id="crowdDesc" style="color:#9aa3d7; font-size:13px;">Clear waves to unlock special requests from the roaring arena crowd.</div>
+          <div class="meter"><div id="crowdMeter" class="meter-fill"></div></div>
+          <div class="row tight" style="justify-content: space-between; align-items:center;">
+            <span id="crowdStatus" class="pill">Awaiting wave</span>
+            <span id="crowdProgressLabel" style="font-size:12px;color:#9aa3d7;">0%</span>
+            <span id="crowdStreak" class="badge">Streak 0</span>
+          </div>
+        </div>
+        <div></div>
       </div>
 
       <div>
@@ -162,7 +219,26 @@
       simIters: document.getElementById('simIters'),
       paramDump: document.getElementById('paramDump'),
       resetBal: document.getElementById('resetBal'),
-      copyLog: document.getElementById('copyLog')
+      copyLog: document.getElementById('copyLog'),
+      eventName: document.getElementById('eventName'),
+      eventDesc: document.getElementById('eventDesc'),
+      hypeBtn: document.getElementById('hypeBtn'),
+      hypeMeter: document.getElementById('hypeMeter'),
+      hypeStatus: document.getElementById('hypeStatus'),
+      momentumCard: document.getElementById('momentumCard'),
+      momentumMeter: document.getElementById('momentumMeter'),
+      momentumStatus: document.getElementById('momentumStatus'),
+      momentumProgressLabel: document.getElementById('momentumProgressLabel'),
+      momentumCombo: document.getElementById('momentumCombo'),
+      momentumBadge: document.getElementById('momentumBadge'),
+      crowdCard: document.getElementById('crowdCard'),
+      crowdName: document.getElementById('crowdName'),
+      crowdDesc: document.getElementById('crowdDesc'),
+      crowdReward: document.getElementById('crowdReward'),
+      crowdMeter: document.getElementById('crowdMeter'),
+      crowdStatus: document.getElementById('crowdStatus'),
+      crowdProgressLabel: document.getElementById('crowdProgressLabel'),
+      crowdStreak: document.getElementById('crowdStreak')
     };
 
     const GRID = 40; const W = canvas.width; const H = canvas.height;
@@ -242,6 +318,67 @@
           tower.rate = Math.max(0.9, +(tower.rate * 0.95).toFixed(2));
           if(tower.level % 2 === 0) tower.pierce++;
         }
+      },
+      storm: {
+        name: 'Storm Nexus',
+        icon: '⚡',
+        color: '#fde68a',
+        cost: 150,
+        range: 160,
+        rate: 1.05,
+        damage: 52,
+        pierce: 0,
+        chainTargets: 3,
+        chainRange: 150,
+        chainFalloff: 0.75,
+        description: 'Arcs chain lightning between clustered enemies.',
+        fire(tower, target, mods){ performChainLightning(tower, target, mods); },
+        upgrade(tower){
+          tower.damage = Math.round(tower.damage * 1.24);
+          tower.range = Math.min(230, tower.range + 14);
+          tower.rate = Math.max(0.65, +(tower.rate * 0.92).toFixed(2));
+          tower.chainTargets = Math.min(6, (tower.chainTargets || 3) + (tower.level % 2 === 0 ? 1 : 0));
+          tower.chainRange = Math.min(220, (tower.chainRange || 150) + 10);
+        }
+      },
+      resonance: {
+        name: 'Resonance Beacon',
+        icon: '🌀',
+        color: '#c084fc',
+        cost: 110,
+        range: 0,
+        rate: 1.2,
+        damage: 0,
+        pierce: 0,
+        utility: true,
+        aura: { range: 160, damageMult: 1.12, rateMult: 0.88, rangeBonus: 8 },
+        description: 'Projects an empowering aura that speeds nearby towers.',
+        utilityUpdate(tower, dt){
+          tower.pulseTimer = (tower.pulseTimer || 0) + dt * state.speedMultiplier;
+          if(tower.pulseTimer >= 1.4){
+            tower.pulseTimer = 0;
+            state.pulses.push({ x: tower.x, y: tower.y, r: 0, max: (tower.aura?.range || 150), ttl: 0.7, life: 0.7, color:'#c084fc' });
+          }
+        },
+        postDraw(tower, ctx){
+          const radius = tower.aura?.range || 0;
+          if(radius <= 0) return;
+          ctx.save();
+          ctx.globalAlpha = 0.18;
+          ctx.strokeStyle = '#c084fc';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(tower.x, tower.y, radius, 0, Math.PI*2);
+          ctx.stroke();
+          ctx.restore();
+        },
+        upgrade(tower){
+          if(!tower.aura) tower.aura = { range:160, damageMult:1.12, rateMult:0.88, rangeBonus:8 };
+          tower.aura.range = Math.min(240, tower.aura.range + 12);
+          tower.aura.damageMult = +(tower.aura.damageMult + 0.04).toFixed(2);
+          tower.aura.rateMult = +Math.max(0.6, tower.aura.rateMult - 0.05).toFixed(2);
+          tower.aura.rangeBonus = Math.min(42, (tower.aura.rangeBonus || 0) + 3);
+        }
       }
     };
 
@@ -275,7 +412,27 @@
       towersBuilt: 0,
       autoReport: null,
       silenceAutoReport: false,
-      debugVisible: false
+      debugVisible: false,
+      eventModifiers: null,
+      activeEvent: null,
+      lightning: [],
+      pulses: [],
+      hype: 0,
+      hypeMax: 120,
+      hypeActiveTimer: 0,
+      hypeDuration: 8,
+      hypeReadyPinged: false,
+      momentum: 0,
+      momentumMax: 100,
+      momentumActiveTimer: 0,
+      momentumDuration: 5.5,
+      momentumChainGrace: 0,
+      momentumDecayRate: 12,
+      momentumCombo: 0,
+      momentumLastKillTime: 0,
+      crowdRequest: null,
+      crowdTracker: null,
+      crowdStreak: 0
     };
 
     const BAL = {
@@ -298,14 +455,644 @@
 
     function dumpParams(){ if(UI.paramDump) UI.paramDump.textContent = JSON.stringify(BAL, null, 2); }
 
+    const BASE_EVENT_MODIFIERS = Object.freeze({
+      enemyHpMult: 1,
+      enemySpeedMult: 1,
+      enemyRewardMult: 1,
+      towerDamageMult: 1,
+      towerRateMult: 1,
+      towerRangeBonus: 0,
+      killBonus: 0,
+      hypeGainBonus: 0,
+      postWaveLife: 0
+    });
+
+    function resetEventModifiers(){ state.eventModifiers = { ...BASE_EVENT_MODIFIERS }; }
+
+    const WAVE_EVENTS = [
+      {
+        key: 'treasure',
+        name: 'Treasure Rush',
+        description: 'Enemies sprint but drop bonus shards of cash.',
+        apply(mods){ mods.killBonus += 4; mods.enemySpeedMult *= 1.12; mods.enemyRewardMult *= 1.05; }
+      },
+      {
+        key: 'overcharge',
+        name: 'Overcharge Grid',
+        description: 'Towers fire faster and hit harder while the grid hums.',
+        apply(mods){ mods.towerRateMult *= 0.85; mods.towerDamageMult *= 1.12; mods.hypeGainBonus += 2; }
+      },
+      {
+        key: 'frostfront',
+        name: 'Frostfront',
+        description: 'A chill slows creeps, but crystalline armor bolsters them.',
+        apply(mods){ mods.enemySpeedMult *= 0.82; mods.enemyHpMult *= 1.18; mods.enemyRewardMult *= 1.12; }
+      },
+      {
+        key: 'meteor',
+        name: 'Meteor Shower',
+        description: 'Falling stardust peppers random enemies for chip damage.',
+        apply(mods, eventState){ eventState.meteorTimer = 1.6; eventState.meteorDamage = 22; mods.hypeGainBonus += 1; },
+        tick(eventState, dt){
+          eventState.meteorTimer -= dt * state.speedMultiplier;
+          if(eventState.meteorTimer <= 0){
+            eventState.meteorTimer += 1.6;
+            const alive = state.enemies.filter(e=>e && e.alive);
+            if(alive.length){
+              const target = alive[Math.floor(Math.random()*alive.length)];
+              if(target){
+                addLightningArc([{x:target.pos.x, y:0}, {x:target.pos.x + (Math.random()*20-10), y:target.pos.y}], '#facc15');
+                applyDamage(target, eventState.meteorDamage, {owner:null});
+              }
+            }
+          }
+        }
+      },
+      {
+        key: 'resonance',
+        name: 'Resonant Grounds',
+        description: 'The arena amplifies tower range and restores morale after waves.',
+        apply(mods){ mods.towerRangeBonus += 12; mods.postWaveLife += 1; }
+      }
+    ];
+
+    function hashWaveIndex(wave){
+      const s = Math.sin(wave * 12.9898) * 43758.5453;
+      return Math.abs(Math.floor(s));
+    }
+
+    function pickWaveEvent(wave){
+      const idx = hashWaveIndex(wave) % WAVE_EVENTS.length;
+      return WAVE_EVENTS[idx];
+    }
+
+    function applyWaveEvent(){
+      resetEventModifiers();
+      if(state.wave <= 0){ state.activeEvent = null; updateEventUI(); return; }
+      const eventDef = pickWaveEvent(state.wave);
+      const eventState = { key: eventDef.key, name: eventDef.name, description: eventDef.description, def: eventDef };
+      if(typeof eventDef.apply === 'function') eventDef.apply(state.eventModifiers, eventState);
+      state.activeEvent = eventState;
+      updateEventUI();
+    }
+
+    function clearWaveEvent(){
+      if(state.activeEvent && state.activeEvent.def && typeof state.activeEvent.def.onWaveCleared === 'function'){
+        state.activeEvent.def.onWaveCleared(state.activeEvent);
+      }
+      const heal = state.eventModifiers && state.eventModifiers.postWaveLife ? state.eventModifiers.postWaveLife : 0;
+      if(heal) state.lives = Math.min(40, state.lives + heal);
+      state.activeEvent = null;
+      resetEventModifiers();
+      updateEventUI();
+    }
+
     function updateSelectedTowerInfo(){
       const def = TOWER_TYPES[state.selectedTowerType] || TOWER_TYPES.basic;
       const infoParts = [`${def.icon} ${def.name}`, `$${def.cost}`];
       if(state.build) infoParts.push('Build mode');
+      if(def.utility) infoParts.push('Aura tower');
+      if(def.aura){
+        if(def.aura.range) infoParts.push(`Aura range ${def.aura.range}`);
+        if(def.aura.damageMult && def.aura.damageMult !== 1){
+          const dmg = Math.round((def.aura.damageMult - 1) * 100);
+          infoParts.push(`Damage +${dmg}%`);
+        }
+        if(def.aura.rateMult && def.aura.rateMult !== 1){
+          const speed = def.aura.rateMult < 1 ? Math.round((1 - def.aura.rateMult) * 100) : -Math.round((def.aura.rateMult - 1) * 100);
+          infoParts.push(`${speed >= 0 ? 'Speed +' : 'Speed '}${speed}%`);
+        }
+      }
       const missing = def.cost - state.money;
       if(missing > 0) infoParts.push(`Need $${missing}`);
       UI.towerInfo.textContent = infoParts.join(' • ');
       UI.towerInfo.classList.toggle('warn', missing > 0);
+    }
+
+    function updateEventUI(){
+      if(!UI.eventName || !UI.eventDesc) return;
+      if(state.activeEvent){
+        UI.eventName.textContent = state.activeEvent.name;
+        UI.eventDesc.textContent = state.activeEvent.description;
+      } else if(state.wave === 0){
+        UI.eventName.textContent = 'None';
+        UI.eventDesc.textContent = 'Each wave now rolls a playful twist. Clear waves to reveal the next surprise.';
+      } else {
+        UI.eventName.textContent = 'Pending';
+        UI.eventDesc.textContent = 'Wave cleared! Ready up to discover the next modifier.';
+      }
+    }
+
+    function updateHypeUI(){
+      if(!UI.hypeBtn || !UI.hypeMeter || !UI.hypeStatus) return;
+      const pct = Math.min(1, state.hype / state.hypeMax);
+      UI.hypeMeter.style.width = `${Math.round(pct * 100)}%`;
+      UI.hypeBtn.textContent = `Charge: ${Math.round(pct * 100)}%`;
+      const ready = pct >= 1 && state.hypeActiveTimer <= 0;
+      UI.hypeBtn.disabled = !ready;
+      UI.hypeBtn.classList.toggle('ghost', !ready);
+      if(state.hypeActiveTimer > 0){
+        UI.hypeStatus.textContent = 'Surging';
+        UI.hypeStatus.classList.remove('warn');
+      } else if(ready){
+        UI.hypeStatus.textContent = 'Ready!';
+        UI.hypeStatus.classList.add('warn');
+      } else {
+        UI.hypeStatus.textContent = 'Dormant';
+        UI.hypeStatus.classList.remove('warn');
+      }
+    }
+
+    function gainHype(amount){
+      if(!amount) return;
+      state.hype = Math.min(state.hypeMax, state.hype + amount);
+      if(state.hype >= state.hypeMax && !state.hypeReadyPinged){
+        state.hypeReadyPinged = true;
+      }
+      updateHypeUI();
+    }
+
+    function updateMomentumUI(){
+      if(!UI.momentumMeter || !UI.momentumStatus) return;
+      const pct = state.momentumMax > 0 ? Math.min(1, state.momentum / state.momentumMax) : 0;
+      const pctText = `${Math.round(pct * 100)}%`;
+      UI.momentumMeter.style.width = pctText;
+      if(UI.momentumProgressLabel) UI.momentumProgressLabel.textContent = pctText;
+      if(UI.momentumCombo) UI.momentumCombo.textContent = `Chain x${state.momentumCombo || 0}`;
+      const active = state.momentumActiveTimer > 0;
+      const ready = !active && pct >= 1;
+      if(UI.momentumBadge){
+        UI.momentumBadge.textContent = active ? 'Frenzy' : ready ? 'Ready' : 'Building';
+      }
+      if(UI.momentumStatus){
+        UI.momentumStatus.textContent = active
+          ? `Frenzy ${Math.min(10, Math.max(1, state.momentumCombo || 1))}x boost`
+          : ready
+          ? 'Tap into the roar!'
+          : (state.momentumChainGrace || 0) > 0
+            ? 'Chain holding'
+            : 'Build momentum';
+        UI.momentumStatus.classList.remove('warn', 'success');
+        if(active) UI.momentumStatus.classList.add('success');
+        else if(ready) UI.momentumStatus.classList.add('warn');
+      }
+      if(UI.momentumCard){
+        UI.momentumCard.classList.toggle('success', active);
+      }
+    }
+
+    function shatterMomentum(leaks = 1){
+      const severity = Math.max(1, leaks);
+      const before = { timer: state.momentumActiveTimer, momentum: state.momentum, combo: state.momentumCombo };
+      state.momentumActiveTimer = Math.max(0, state.momentumActiveTimer - severity * 1.5);
+      state.momentum = Math.max(0, state.momentum - severity * 35);
+      state.momentumCombo = Math.max(0, state.momentumCombo - severity * 2);
+      state.momentumChainGrace = 0;
+      if(
+        before.timer !== state.momentumActiveTimer ||
+        before.momentum !== state.momentum ||
+        before.combo !== state.momentumCombo
+      ){
+        updateMomentumUI();
+      }
+    }
+
+    function activateMomentum(auto = false){
+      if(state.momentumActiveTimer > 0) return false;
+      state.momentumActiveTimer = state.momentumDuration;
+      state.momentum = 0;
+      state.momentumChainGrace = 2.6;
+      state.momentumCombo = Math.max(1, state.momentumCombo || 1);
+      updateMomentumUI();
+      if(!auto) AudioSys.ensure();
+      state.pulses.push({ x: W/2, y: H/2, r: 0, max: Math.max(W, H), ttl: 0.55, life: 0.55, color: '#fb7185' });
+      gainHype(6 + Math.min(10, state.momentumCombo) * 1.5);
+      return true;
+    }
+
+    function gainMomentum(amount){
+      if(!amount) return;
+      if(state.momentumActiveTimer > 0){
+        const before = state.momentumActiveTimer;
+        state.momentumActiveTimer = Math.min(state.momentumDuration + 2.5, state.momentumActiveTimer + amount * 0.02);
+        if(state.momentumActiveTimer !== before) updateMomentumUI();
+        return;
+      }
+      const before = state.momentum;
+      state.momentum = Math.min(state.momentumMax, state.momentum + amount);
+      if(state.momentum >= state.momentumMax){
+        activateMomentum(true);
+      } else if(state.momentum !== before){
+        updateMomentumUI();
+      }
+    }
+
+    function handleMomentumKill(enemy){
+      const now = state.lastTime || 0;
+      const delta = state.momentumLastKillTime ? Math.max(0, now - state.momentumLastKillTime) : Infinity;
+      state.momentumLastKillTime = now;
+      let gain = 8 + Math.min(6, state.wave) * 0.8;
+      if(delta < 0.5) gain += 18;
+      else if(delta < 1.1) gain += 12;
+      else if(delta < 2.5) gain += 6;
+      else gain += 3;
+      state.momentumChainGrace = 3.2;
+      state.momentumCombo = Math.min(15, (state.momentumCombo || 0) + 1);
+      gainMomentum(gain);
+    }
+
+    function updateMomentumState(dt){
+      let changed = false;
+      if(state.momentumActiveTimer > 0){
+        const before = state.momentumActiveTimer;
+        state.momentumActiveTimer = Math.max(0, state.momentumActiveTimer - dt);
+        if(state.momentumActiveTimer !== before) changed = true;
+        if(state.momentumActiveTimer === 0){
+          state.momentumChainGrace = 2;
+          changed = true;
+        }
+      } else if(state.momentumChainGrace > 0){
+        const beforeGrace = state.momentumChainGrace;
+        state.momentumChainGrace = Math.max(0, state.momentumChainGrace - dt);
+        if(state.momentumChainGrace !== beforeGrace) changed = true;
+        if(state.momentumChainGrace === 0 && state.momentumCombo > 0){
+          state.momentumCombo = Math.max(0, state.momentumCombo - 1);
+          if(state.momentumCombo > 0) state.momentumChainGrace = 1.4;
+          changed = true;
+        }
+      } else if(state.momentum > 0){
+        const beforeMomentum = state.momentum;
+        state.momentum = Math.max(0, state.momentum - dt * state.momentumDecayRate);
+        if(state.momentum !== beforeMomentum) changed = true;
+        if(state.momentum === 0 && state.momentumCombo > 0){
+          state.momentumCombo = 0;
+          changed = true;
+        }
+      }
+      if(changed) updateMomentumUI();
+    }
+
+    function computeCrowdReward(baseCash, baseHype){
+      const wave = Math.max(1, state.wave);
+      const streak = Math.max(0, state.crowdStreak || 0);
+      const cash = Math.round(baseCash + wave * 4 + streak * 10);
+      const hype = Math.round(baseHype + Math.min(60, wave * 2.2) + streak * 4);
+      return { money: cash, hype };
+    }
+
+    const CROWD_REQUEST_TEMPLATES = [
+      {
+        key: 'flawless',
+        name: 'Flawless Finish',
+        describe: () => 'Keep every spectator safe by preventing leaks this wave.',
+        reward: () => computeCrowdReward(40, 26),
+        setup(tracker, s){ tracker.lifeLoss = 0; tracker.startLives = s.lives; },
+        onEvent(tracker, event, data){
+          if(event === 'lifeLost'){
+            tracker.lifeLoss = (tracker.lifeLoss || 0) + (data?.amount || 1);
+            return 'failed';
+          }
+          if(event === 'waveCleared' && (tracker.lifeLoss || 0) === 0) return 'complete';
+        },
+        progress(tracker){ return (tracker.lifeLoss || 0) > 0 ? 0 : 1; },
+        activeHeadline: () => 'Hold the line!',
+        activeText: () => 'No leaks allowed.',
+        failHeadline: () => 'Crowd gasped…',
+        failText: () => 'Leaks slipped through.',
+        completeHeadline: () => 'Flawless!',
+        completeText: () => 'The arena erupts!'
+      },
+      {
+        key: 'blueprint',
+        name: 'Blueprint Parade',
+        describe: (s, tracker) => `Construct ${tracker.target} new tower${tracker.target > 1 ? 's' : ''} this wave.`,
+        reward: () => computeCrowdReward(26, 20),
+        setup(tracker, s){ tracker.builds = 0; tracker.target = Math.min(3, 1 + Math.floor(Math.max(1, s.wave) / 3)); if(tracker.target < 1) tracker.target = 1; },
+        onEvent(tracker, event){ if(event === 'build'){ tracker.builds = (tracker.builds || 0) + 1; if(tracker.builds >= tracker.target) return 'complete'; } },
+        progress(tracker){ return tracker.target ? Math.min(1, (tracker.builds || 0) / tracker.target) : 0; },
+        activeHeadline: () => 'Showcase builds',
+        activeText: tracker => `${tracker.builds || 0}/${tracker.target} constructed`,
+        completeHeadline: () => 'Crowd loves it!',
+        completeText: () => 'Fresh towers wowed the fans.',
+        failHeadline: () => 'Designs delayed',
+        failText: () => 'Build quota missed.'
+      },
+      {
+        key: 'glowup',
+        name: 'Glow-Up Routine',
+        describe: (s, tracker) => `Upgrade ${tracker.target} tower${tracker.target > 1 ? 's' : ''} during the wave.`,
+        reward: () => computeCrowdReward(32, 24),
+        setup(tracker, s){ tracker.upgrades = 0; tracker.target = Math.min(4, Math.max(1, Math.floor(Math.max(1, s.wave) / 4))); },
+        onEvent(tracker, event){ if(event === 'upgrade'){ tracker.upgrades = (tracker.upgrades || 0) + 1; if(tracker.upgrades >= tracker.target) return 'complete'; } },
+        progress(tracker){ return tracker.target ? Math.min(1, (tracker.upgrades || 0) / tracker.target) : 0; },
+        activeHeadline: () => 'Polish the arsenal',
+        activeText: tracker => `${tracker.upgrades || 0}/${tracker.target} upgrades`,
+        completeHeadline: () => 'Radiant towers!',
+        completeText: () => 'Upgrades dazzled the stands.',
+        failHeadline: () => 'Upgrades stalled',
+        failText: () => 'No glow-up delivered.'
+      },
+      {
+        key: 'hypeburst',
+        name: 'Bring the Hype',
+        describe: () => 'Trigger the hype burst at least once this wave.',
+        reward: () => computeCrowdReward(34, 36),
+        setup(tracker){ tracker.triggered = false; },
+        available: () => state.wave >= 3,
+        onEvent(tracker, event){ if(event === 'hype'){ tracker.triggered = true; return 'complete'; } if(event === 'waveCleared' && tracker.triggered) return 'complete'; },
+        progress(tracker){ return tracker.triggered ? 1 : Math.min(0.95, state.hype / state.hypeMax || 0); },
+        activeHeadline: () => 'Prime the anthem',
+        activeText: tracker => tracker.triggered ? 'Burst unleashed!' : 'Crowd wants the drop.',
+        completeHeadline: () => 'The drop hits!',
+        completeText: () => 'Spectators go wild!',
+        failHeadline: () => 'Crowd restless',
+        failText: () => 'Hype burst never dropped.'
+      },
+      {
+        key: 'style',
+        name: 'Style Streak',
+        describe: (s, tracker) => `Defeat ${tracker.target} enemies this wave to keep the hype alive.`,
+        reward: () => computeCrowdReward(28, 22),
+        setup(tracker, s){ tracker.kills = 0; tracker.target = Math.min(60, 12 + Math.floor(Math.max(1, s.wave) * 2.4)); },
+        onEvent(tracker, event){ if(event === 'kill'){ tracker.kills = (tracker.kills || 0) + 1; if(tracker.kills >= tracker.target) return 'complete'; } },
+        progress(tracker){ return tracker.target ? Math.min(1, (tracker.kills || 0) / tracker.target) : 0; },
+        activeHeadline: () => 'Keep the combo',
+        activeText: tracker => `${tracker.kills || 0}/${tracker.target} defeated`,
+        completeHeadline: () => 'Combo complete!',
+        completeText: () => 'Stylish elimination spree!',
+        failHeadline: () => 'Combo dropped',
+        failText: () => 'Need more eliminations.'
+      }
+    ];
+
+    function beginCrowdRequest(){
+      if(state.wave <= 0){
+        state.crowdRequest = null;
+        state.crowdTracker = null;
+        updateCrowdUI();
+        return;
+      }
+      const options = CROWD_REQUEST_TEMPLATES.filter(def => !def.available || def.available(state));
+      if(options.length === 0){
+        state.crowdRequest = null;
+        state.crowdTracker = null;
+        updateCrowdUI();
+        return;
+      }
+      const idx = hashWaveIndex(state.wave * 37 + state.crowdStreak * 13) % options.length;
+      const def = options[idx];
+      const tracker = { wave: state.wave };
+      if(typeof def.setup === 'function') def.setup(tracker, state);
+      const desc = typeof def.describe === 'function' ? def.describe(state, tracker) : (def.description || 'The crowd demands a show.');
+      const reward = typeof def.reward === 'function' ? def.reward(state, tracker) : computeCrowdReward(28, 22);
+      state.crowdTracker = tracker;
+      state.crowdRequest = { key: def.key, name: def.name, description: desc, reward, status: 'active', progress: 0, tracker, def, settled: false };
+      notifyCrowd('waveStart');
+    }
+
+    function updateCrowdProgress(){
+      if(!UI.crowdCard) return;
+      const req = state.crowdRequest;
+      if(!req){
+        UI.crowdCard.classList.remove('success', 'failed');
+        if(UI.crowdName) UI.crowdName.textContent = 'Crowd Request';
+        if(UI.crowdDesc) UI.crowdDesc.textContent = 'Clear waves to unlock special requests from the roaring arena crowd.';
+        if(UI.crowdReward) UI.crowdReward.textContent = 'Awaiting';
+        if(UI.crowdMeter) UI.crowdMeter.style.width = '0%';
+        if(UI.crowdStatus){ UI.crowdStatus.textContent = 'Awaiting wave'; UI.crowdStatus.classList.remove('warn', 'success'); }
+        if(UI.crowdProgressLabel) UI.crowdProgressLabel.textContent = '0%';
+        if(UI.crowdStreak) UI.crowdStreak.textContent = state.crowdStreak > 0 ? `🔥 Streak ${state.crowdStreak}` : 'Streak 0';
+        return;
+      }
+      if(UI.crowdName) UI.crowdName.textContent = req.name;
+      if(UI.crowdDesc) UI.crowdDesc.textContent = req.description;
+      if(UI.crowdReward) UI.crowdReward.textContent = `+$${req.reward.money} • +${req.reward.hype}⚡`;
+      let progress = req.progress;
+      let label = req.progressLabel || '';
+      let headline = req.headline || '';
+      if(req.status === 'active'){
+        if(typeof req.def.progress === 'function'){
+          const value = Number(req.def.progress(req.tracker, state, req));
+          progress = Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
+          req.progress = progress;
+        }
+        if(typeof req.def.activeText === 'function') label = req.def.activeText(req.tracker, state, req);
+        else label = `${Math.round((req.progress || 0) * 100)}%`;
+        if(typeof req.def.activeHeadline === 'function') headline = req.def.activeHeadline(req.tracker, state, req);
+        else headline = 'In progress';
+      } else if(req.status === 'complete'){
+        progress = 1;
+        if(typeof req.def.completeText === 'function') label = req.def.completeText(req.tracker, state, req);
+        else label = 'Completed!';
+        if(typeof req.def.completeHeadline === 'function') headline = req.def.completeHeadline(req.tracker, state, req);
+        else headline = 'Complete';
+      } else if(req.status === 'failed'){
+        progress = 0;
+        if(typeof req.def.failText === 'function') label = req.def.failText(req.tracker, state, req);
+        else label = 'Request failed';
+        if(typeof req.def.failHeadline === 'function') headline = req.def.failHeadline(req.tracker, state, req);
+        else headline = 'Failed';
+      }
+      req.progress = progress;
+      req.progressLabel = label;
+      req.headline = headline;
+      if(UI.crowdMeter) UI.crowdMeter.style.width = `${Math.round(progress * 100)}%`;
+      if(UI.crowdProgressLabel) UI.crowdProgressLabel.textContent = label;
+      if(UI.crowdStatus){
+        UI.crowdStatus.textContent = headline;
+        UI.crowdStatus.classList.remove('warn', 'success');
+        if(req.status === 'complete') UI.crowdStatus.classList.add('success');
+        if(req.status === 'failed') UI.crowdStatus.classList.add('warn');
+      }
+      if(UI.crowdCard){
+        UI.crowdCard.classList.toggle('success', req.status === 'complete');
+        UI.crowdCard.classList.toggle('failed', req.status === 'failed');
+      }
+      if(UI.crowdStreak) UI.crowdStreak.textContent = state.crowdStreak > 0 ? `🔥 Streak ${state.crowdStreak}` : 'Streak 0';
+    }
+
+    function updateCrowdUI(){
+      updateCrowdProgress();
+    }
+
+
+    function grantCrowdReward(req){
+      if(!req || !req.reward) return;
+      if(req.reward.money){ state.money += req.reward.money; if(UI.money) UI.money.textContent = state.money; }
+      if(req.reward.hype){ gainHype(req.reward.hype); }
+      state.pulses.push({ x: W/2, y: H/2, r: 0, max: Math.max(W, H), ttl: 0.7, life: 0.7, color: '#facc15' });
+    }
+
+    function settleCrowdRequest(req, status){
+      if(!req || req.settled) return;
+      req.status = status;
+      req.settled = true;
+      if(status === 'complete'){
+        state.crowdStreak = Math.min(10, (state.crowdStreak || 0) + 1);
+        grantCrowdReward(req);
+      } else if(status === 'failed'){
+        state.crowdStreak = 0;
+      }
+      updateCrowdProgress();
+    }
+
+    function notifyCrowd(event, data){
+      const req = state.crowdRequest;
+      if(!req) return;
+      if(event !== 'waveStart' && req.status !== 'active') return;
+      if(event === 'waveStart'){
+        if(req.def && typeof req.def.onStart === 'function') req.def.onStart(req.tracker, state, data);
+        req.settled = false;
+        req.status = 'active';
+        updateCrowdProgress();
+        return;
+      }
+      if(req.def && typeof req.def.onEvent === 'function'){
+        const outcome = req.def.onEvent(req.tracker, event, data, state);
+        if(outcome === 'complete'){ settleCrowdRequest(req, 'complete'); return; }
+        if(outcome === 'failed'){ settleCrowdRequest(req, 'failed'); return; }
+      }
+      if(req.def){
+        if(typeof req.def.complete === 'function' && req.def.complete(req.tracker, event, data, state)){ settleCrowdRequest(req, 'complete'); return; }
+        if(typeof req.def.fail === 'function' && req.def.fail(req.tracker, event, data, state)){ settleCrowdRequest(req, 'failed'); return; }
+      }
+      if(event === 'waveCleared' && req.status === 'active'){ settleCrowdRequest(req, 'failed'); return; }
+      updateCrowdProgress();
+    }
+
+    function activateHype(auto=false){
+      if(state.hypeActiveTimer > 0 || state.hype < state.hypeMax) return false;
+      state.hype -= state.hypeMax;
+      state.hypeActiveTimer = state.hypeDuration;
+      state.hypeReadyPinged = false;
+      updateHypeUI();
+      if(!auto) AudioSys.ensure();
+      state.pulses.push({x: W/2, y: H/2, r: 0, max: Math.max(W,H), ttl: 0.6, life: 0.6, color:'#38bdf8'});
+      notifyCrowd('hype');
+      return true;
+    }
+
+    function updateHypeState(dt){
+      if(state.hypeActiveTimer > 0){
+        state.hypeActiveTimer = Math.max(0, state.hypeActiveTimer - dt * state.speedMultiplier);
+        if(state.hypeActiveTimer === 0){
+          updateHypeUI();
+        }
+      }
+    }
+
+    function handleKillBonuses(enemy){
+      const mods = state.eventModifiers || BASE_EVENT_MODIFIERS;
+      if(mods.killBonus) state.money += mods.killBonus;
+      let hypeGain = 6 + (mods.hypeGainBonus || 0);
+      if(enemy.kind === 'boss') hypeGain += 30;
+      if(state.crowdStreak > 0) hypeGain += state.crowdStreak * 1.5;
+      gainHype(hypeGain);
+      handleMomentumKill(enemy);
+    }
+
+    function processEventTick(dt){
+      if(!state.activeEvent || !state.activeEvent.def || typeof state.activeEvent.def.tick !== 'function') return;
+      state.activeEvent.def.tick(state.activeEvent, dt);
+    }
+
+    function addLightningArc(points, color='#38bdf8'){
+      if(!points || points.length < 2) return;
+      state.lightning.push({ points, ttl: 0.18, life: 0.18, color });
+    }
+
+    function updateLightning(dt){
+      for(let i=state.lightning.length-1;i>=0;i--){
+        const bolt = state.lightning[i];
+        bolt.ttl -= dt;
+        if(bolt.ttl <= 0){ state.lightning.splice(i,1); }
+      }
+    }
+
+    function updatePulses(dt){
+      for(let i=state.pulses.length-1;i>=0;i--){
+        const pulse = state.pulses[i];
+        pulse.ttl -= dt;
+        const progress = 1 - Math.max(0, pulse.ttl) / (pulse.life || 0.6);
+        pulse.r = pulse.max * progress;
+        if(pulse.ttl <= 0) state.pulses.splice(i,1);
+      }
+    }
+
+    function gatherTowerModifiers(tower){
+      const mods = state.eventModifiers || BASE_EVENT_MODIFIERS;
+      let damageMult = mods.towerDamageMult || 1;
+      let rateMult = mods.towerRateMult || 1;
+      let rangeBonus = mods.towerRangeBonus || 0;
+      let pierceBonus = 0;
+      if(state.hypeActiveTimer > 0){
+        damageMult *= 1.25;
+        rateMult *= 0.6;
+        rangeBonus += 6;
+      }
+      if(state.momentumActiveTimer > 0){
+        const combo = Math.min(12, Math.max(1, state.momentumCombo || 1));
+        damageMult *= 1.18 + combo * 0.015;
+        rateMult *= Math.max(0.45, 0.72 - combo * 0.012);
+        rangeBonus += 5 + combo * 1.1;
+        pierceBonus += Math.max(0, Math.floor(combo / 4));
+      } else if(state.momentumCombo > 0){
+        const chain = Math.min(10, state.momentumCombo);
+        damageMult *= 1 + chain * 0.01;
+        rateMult *= Math.max(0.6, 1 - chain * 0.015);
+        rangeBonus += chain * 0.8;
+      }
+      if(state.crowdStreak > 0){
+        const streak = Math.min(6, state.crowdStreak);
+        damageMult *= 1 + streak * 0.02;
+        rateMult *= Math.max(0.5, 1 - streak * 0.035);
+        rangeBonus += streak * 2;
+      }
+      for(const auraTower of state.towers){
+        if(!auraTower || !auraTower.aura) continue;
+        if(auraTower === tower && !auraTower.aura.affectSelf) continue;
+        const auraRange = auraTower.aura.range || 0;
+        const dist = Math.hypot(auraTower.x - tower.x, auraTower.y - tower.y);
+        if(dist <= auraRange){
+          if(auraTower.aura.damageMult) damageMult *= auraTower.aura.damageMult;
+          if(auraTower.aura.rateMult) rateMult *= auraTower.aura.rateMult;
+          if(auraTower.aura.rangeBonus) rangeBonus += auraTower.aura.rangeBonus;
+          if(auraTower.aura.pierceBonus) pierceBonus += auraTower.aura.pierceBonus;
+        }
+      }
+      return { damageMult, rateMult, rangeBonus, pierceBonus };
+    }
+
+    function findChainTarget(fromEnemy, visited, range){
+      let best=null, bestDist=Infinity;
+      for(const e of state.enemies){
+        if(!e || !e.alive || visited.has(e)) continue;
+        const dist = Math.hypot(e.pos.x - fromEnemy.pos.x, e.pos.y - fromEnemy.pos.y);
+        if(dist <= range && dist < bestDist){
+          best = e;
+          bestDist = dist;
+        }
+      }
+      return best;
+    }
+
+    function performChainLightning(tower, target, mods){
+      if(!target || !target.alive) return;
+      const visited = new Set();
+      const points = [{x:tower.x, y:tower.y}];
+      let current = target;
+      let damage = Math.round((tower.damage || 0) * (mods.damageMult || 1));
+      const bounces = Math.max(1, tower.chainTargets || 3);
+      const falloff = tower.chainFalloff || 0.75;
+      const range = tower.chainRange || tower.range;
+      for(let i=0;i<bounces && current && damage>0;i++){
+        visited.add(current);
+        applyDamage(current, damage, { owner: tower, dmg: damage });
+        points.push({ x: current.pos.x + (Math.random()*12-6), y: current.pos.y + (Math.random()*12-6) });
+        damage = Math.round(damage * falloff);
+        current = findChainTarget(current, visited, range);
+      }
+      if(points.length>1) addLightningArc(points, '#bef264');
     }
 
     function setSelectedTowerType(key, opts={}){
@@ -331,7 +1118,22 @@
         const card = document.createElement('div');
         card.className = 'shop-card tower-card';
         card.dataset.tower = key;
-        const stats = [`Range ${def.range}`, `Rate ${def.rate.toFixed(2)}s`, `Damage ${def.damage}`];
+        let stats;
+        if(def.utility && def.aura){
+          stats = [`Aura ${def.aura.range}`];
+          if(def.aura.damageMult && def.aura.damageMult !== 1){
+            stats.push(`Damage +${Math.round((def.aura.damageMult - 1) * 100)}%`);
+          }
+          if(def.aura.rateMult && def.aura.rateMult !== 1){
+            const speed = def.aura.rateMult < 1 ? Math.round((1 - def.aura.rateMult) * 100) : -Math.round((def.aura.rateMult - 1) * 100);
+            stats.push(`${speed >= 0 ? 'Speed +' : 'Speed '}${speed}%`);
+          }
+          if(def.aura.rangeBonus){
+            stats.push(`Range +${Math.round(def.aura.rangeBonus)}`);
+          }
+        } else {
+          stats = [`Range ${def.range}`, `Rate ${def.rate.toFixed(2)}s`, `Damage ${def.damage}`];
+        }
         if((def.pierce||0) > 0) stats.push(`Pierce ${def.pierce+1}`);
         if(def.bullet && def.bullet.splashRadius) stats.push(`Splash ${def.bullet.splashRadius}`);
         card.innerHTML = `
@@ -463,6 +1265,21 @@
       state.selling = false;
       state.build = false;
       state.debugVisible = false;
+      state.lightning.length = 0;
+      state.pulses.length = 0;
+      state.hype = 0;
+      state.hypeActiveTimer = 0;
+      state.hypeReadyPinged = false;
+      state.momentum = 0;
+      state.momentumActiveTimer = 0;
+      state.momentumChainGrace = 0;
+      state.momentumCombo = 0;
+      state.momentumLastKillTime = 0;
+      state.crowdRequest = null;
+      state.crowdTracker = null;
+      state.crowdStreak = 0;
+      resetEventModifiers();
+      state.activeEvent = null;
       UI.startWave.disabled = false;
       UI.money.textContent = state.money;
       UI.lives.textContent = state.lives;
@@ -481,6 +1298,10 @@
       UI.debugToggle.textContent = 'Show Debug Tools';
       UI.soundBtn.textContent = `Sound: ${AudioSys.isEnabled() ? 'On' : 'Off'}`;
       setSelectedTowerType('basic', { activateBuild: false });
+      updateEventUI();
+      updateHypeUI();
+      updateMomentumUI();
+      updateCrowdUI();
     }
     const AudioSys = (()=>{ let actx=null, enabled=true; function ensure(){ try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){} } function blip({freq=520, dur=0.06, vol=0.05, type='triangle'}={}){ if(!enabled) return; ensure(); if(!actx) return; const t=actx.currentTime; const o=actx.createOscillator(); const g=actx.createGain(); o.type=type; o.frequency.setValueAtTime(freq,t); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g).connect(actx.destination); o.start(t); o.stop(t+dur+0.03); } function towerFire(){ blip({freq:760+Math.random()*100,dur:0.04,vol:0.06,type:'square'}); } const enemyHitSounds={ grunt: ()=>blip({freq:380+Math.random()*40,dur:0.05,vol:0.045,type:'triangle'}), fast: ()=>blip({freq:520+Math.random()*60,dur:0.04,vol:0.04,type:'sawtooth'}), tank: ()=>blip({freq:240+Math.random()*30,dur:0.07,vol:0.06,type:'sine'}), healer:()=>blip({freq:640+Math.random()*50,dur:0.05,vol:0.04,type:'triangle'}), rich: ()=>blip({freq:660,dur:0.06,vol:0.05,type:'square'}), boss: ()=>blip({freq:180,dur:0.1,vol:0.08,type:'sine'}), }; function onEnemyHit(kind){ const f=enemyHitSounds[kind]||enemyHitSounds.grunt; f(); } function toggle(){ enabled=!enabled; UI.soundBtn.textContent=`Sound: ${enabled?'On':'Off'}`; ensure(); } function isEnabled(){ return enabled; } return { ensure, towerFire, onEnemyHit, toggle, isEnabled }; })();
     window.addEventListener('pointerdown', ()=>AudioSys.ensure(), {once:true, passive:true});
@@ -510,21 +1331,21 @@
     function waveHpScale(){ const w=Math.max(0,state.wave-1); return (1 + w * BAL.hpLinearSlope) * (1 + Math.floor(w/BAL.hpPeriodicEvery) * BAL.hpPeriodicStep); }
 
     class Enemy{
-      constructor(kind){ const t=ENEMY_TYPES[kind]||ENEMY_TYPES.grunt; const d=diff(); const w=waveHpScale(); this.kind=kind; this.icon=t.icon; this.baseSpeed=(t.baseSpd)*d.spd*Math.max(0.9, 1 + (state.wave-1)*0.02); this.speed=this.baseSpeed; this.hp=(t.baseHp)*d.hp*w; this.maxHp=this.hp; this.armor = Math.max(0, (state.wave-1)*BAL.armorPerWave + (kind==='tank'?BAL.armorTank:0) + (kind==='boss'?BAL.armorBoss:0)); this.reward=Math.round(t.reward*(1 + BAL.rewardSlope*Math.max(0,state.wave-1))); this.onDeath=t.onDeath; this.pos={x:waypoints[0].x,y:waypoints[0].y}; this.seg=0; this.t=0; this.progress=0; this.alive=true; this.slowTimer=0; this.slowFactor=1; }
+      constructor(kind){ const t=ENEMY_TYPES[kind]||ENEMY_TYPES.grunt; const d=diff(); const w=waveHpScale(); const mods=state.eventModifiers||BASE_EVENT_MODIFIERS; this.kind=kind; this.icon=t.icon; this.baseSpeed=(t.baseSpd)*d.spd*Math.max(0.9, 1 + (state.wave-1)*0.02)*(mods.enemySpeedMult||1); this.speed=this.baseSpeed; this.hp=(t.baseHp)*d.hp*w*(mods.enemyHpMult||1); this.maxHp=this.hp; this.armor = Math.max(0, (state.wave-1)*BAL.armorPerWave + (kind==='tank'?BAL.armorTank:0) +(kind==='boss'?BAL.armorBoss:0)); this.reward=Math.round(t.reward*(1 + BAL.rewardSlope*Math.max(0,state.wave-1))*(mods.enemyRewardMult||1)); this.onDeath=t.onDeath; this.pos={x:waypoints[0].x,y:waypoints[0].y}; this.seg=0; this.t=0; this.progress=0; this.alive=true; this.slowTimer=0; this.slowFactor=1; }
       getRadius(){ const minR=12,maxR=(this.kind==='boss'?40:26); const f=Math.max(0,Math.min(1,this.hp/this.maxHp)); const eased=Math.pow(f,4); return minR+(maxR-minR)*eased; }
       applySlow(factor,duration){ if(!factor || factor>=1 || !duration) return; if(this.slowTimer>0){ this.slowFactor=Math.min(this.slowFactor,factor); this.slowTimer=Math.max(this.slowTimer,duration); } else { this.slowFactor=factor; this.slowTimer=duration; } }
-      update(dt){ if(!this.alive) return; this.slowTimer=Math.max(0,this.slowTimer-dt); if(this.slowTimer<=0) this.slowFactor=1; this.speed=this.baseSpeed*(this.slowTimer>0?this.slowFactor:1); let dtr=dt; while(dtr>0 && this.alive){ const a=waypoints[this.seg], b=waypoints[this.seg+1]; if(!b){ this.alive=false; state.lives -= (this.kind==='boss'?BAL.bossLeakLives:1); if(state.lives<=0) state.gameOver=true; return; } const segLen=segmentLengths[this.seg]; const step=Math.min(dtr*this.speed, segLen-this.t); this.t+=step; const r=this.t/segLen; this.pos.x=a.x+(b.x-a.x)*r; this.pos.y=a.y+(b.y-a.y)*r; this.progress=segmentPrefix[this.seg]+this.t; dtr-=step/this.speed; if(this.t>=segLen-0.0001){ this.seg++; this.t=0; } } }
+      update(dt){ if(!this.alive) return; this.slowTimer=Math.max(0,this.slowTimer-dt); if(this.slowTimer<=0) this.slowFactor=1; this.speed=this.baseSpeed*(this.slowTimer>0?this.slowFactor:1); let dtr=dt; while(dtr>0 && this.alive){ const a=waypoints[this.seg], b=waypoints[this.seg+1]; if(!b){ this.alive=false; const leak=(this.kind==='boss'?BAL.bossLeakLives:1); state.lives -= leak; notifyCrowd('lifeLost', { amount: leak, enemy: this }); shatterMomentum(leak); if(state.lives<=0) state.gameOver=true; return; } const segLen=segmentLengths[this.seg]; const step=Math.min(dtr*this.speed, segLen-this.t); this.t+=step; const r=this.t/segLen; this.pos.x=a.x+(b.x-a.x)*r; this.pos.y=a.y+(b.y-a.y)*r; this.progress=segmentPrefix[this.seg]+this.t; dtr-=step/this.speed; if(this.t>=segLen-0.0001){ this.seg++; this.t=0; } } }
       hit(dmg){ const eff = Math.max(1, dmg - (this.armor||0)); this.hp-=eff; AudioSys.onEnemyHit(this.kind); if(this.hp<=0 && this.alive){ this.alive=false; state.money+=this.reward; if(this.onDeath) this.onDeath(state); } }
       draw(ctx){ if(!this.alive) return; const R=this.getRadius(); ctx.font=`${Math.floor(R*1.8)}px system-ui, apple color emoji, segoe ui emoji`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(this.icon(), this.pos.x, this.pos.y+1); const w=26,h=5,ox=-13,oy=-R-14; ctx.fillStyle='#1f2a44'; ctx.fillRect(this.pos.x+ox,this.pos.y+oy,w,h); ctx.fillStyle='#ef4444'; ctx.fillRect(this.pos.x+ox,this.pos.y+oy,w*(this.hp/this.maxHp),h); if(this.slowTimer>0){ ctx.strokeStyle='rgba(56,189,248,0.55)'; ctx.beginPath(); ctx.arc(this.pos.x,this.pos.y,R+6,0,Math.PI*2); ctx.stroke(); } }
     }
 
     class Tower{
-      constructor(x,y,typeKey){ const def=TOWER_TYPES[typeKey]||TOWER_TYPES.basic; this.x=x; this.y=y; this.type=typeKey; this.def=def; this.range=def.range; this.cooldown=0; this.rate=def.rate; this.damage=def.damage; this.level=1; this.totalDamage=0; this.upgradeCost=Math.round(def.cost*1.35); this.sellValue=Math.floor(def.cost*0.7); this.pierce=def.pierce||0; this.icon=def.icon||'🛰️'; this.color=def.color||'#5b72ff'; this.bullet=JSON.parse(JSON.stringify(def.bullet||{})); }
+      constructor(x,y,typeKey){ const def=TOWER_TYPES[typeKey]||TOWER_TYPES.basic; this.x=x; this.y=y; this.type=typeKey; this.def=def; this.range=def.range; this.cooldown=0; this.rate=def.rate; this.damage=def.damage; this.level=1; this.totalDamage=0; this.upgradeCost=Math.round(def.cost*1.35); this.sellValue=Math.floor(def.cost*0.7); this.pierce=def.pierce||0; this.icon=def.icon||'🛰️'; this.color=def.color||'#5b72ff'; this.bullet=JSON.parse(JSON.stringify(def.bullet||{})); this.utility=!!def.utility; this.aura=def.aura?JSON.parse(JSON.stringify(def.aura)):null; this.chainTargets=def.chainTargets||0; this.chainRange=def.chainRange||def.range; this.chainFalloff=def.chainFalloff||0.75; }
       canUpgrade(){ return this.level < (this.def.maxLevel || 10); }
-      upgrade(){ if(!this.canUpgrade()) return false; if(state.money < this.upgradeCost) return false; state.money -= this.upgradeCost; this.level++; if(typeof this.def.upgrade === 'function') this.def.upgrade(this); else { this.damage=Math.round(this.damage*1.25); this.rate=Math.max(0.18, +(this.rate*0.92).toFixed(2)); this.range=Math.min(240, this.range+12); if(this.level%3===0) this.pierce++; } this.upgradeCost=Math.round(this.upgradeCost*(this.def.upgradeCostGrowth||1.6)); this.sellValue=Math.floor(this.sellValue+this.upgradeCost*0.3); return true; }
-      fire(target){ spawnProjectile(this,target); }
-      update(dt){ if(this.cooldown>0) this.cooldown-=dt; let target=null, best=-1; for(const e of state.enemies){ if(!e.alive) continue; const d=Math.hypot(e.pos.x-this.x, e.pos.y-this.y); if(d<=this.range && e.progress>best){ best=e.progress; target=e; } } if(target && this.cooldown<=0){ this.fire(target); this.cooldown=this.rate; } }
-      draw(ctx){ ctx.save(); ctx.translate(this.x,this.y); ctx.globalAlpha=0.95; ctx.fillStyle= state.selected===this ? '#9aa8ff' : this.color; ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.fill(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.font='24px system-ui, apple color emoji, segoe ui emoji'; ctx.fillText(this.icon,0,2); ctx.restore(); if(state.build||state.selling||state.selected===this){ ctx.strokeStyle= state.selected===this ? 'rgba(255,255,255,.35)' : 'rgba(147,162,255,.18)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.range,0,Math.PI*2); ctx.stroke(); } }
+      upgrade(){ if(!this.canUpgrade()) return false; if(state.money < this.upgradeCost) return false; state.money -= this.upgradeCost; this.level++; if(typeof this.def.upgrade === 'function') this.def.upgrade(this); else { this.damage=Math.round(this.damage*1.25); this.rate=Math.max(0.18, +(this.rate*0.92).toFixed(2)); this.range=Math.min(240, this.range+12); if(this.level%3===0) this.pierce++; } this.upgradeCost=Math.round(this.upgradeCost*(this.def.upgradeCostGrowth||1.6)); this.sellValue=Math.floor(this.sellValue+this.upgradeCost*0.3); notifyCrowd('upgrade', { tower: this }); return true; }
+      fire(target, mods={}){ const damage = Math.max(1, Math.round((this.damage||0) * (mods.damageMult||1))); const pierce = (this.pierce||0) + (mods.pierceBonus||0); spawnProjectile(this,target,{damage,pierce}); }
+      update(dt){ if(this.utility){ if(typeof this.def.utilityUpdate === 'function') this.def.utilityUpdate(this, dt); return; } const mods=gatherTowerModifiers(this); if(this.cooldown>0) this.cooldown-=dt; let target=null, best=-1; const effectiveRange=this.range+(mods.rangeBonus||0); for(const e of state.enemies){ if(!e.alive) continue; const d=Math.hypot(e.pos.x-this.x, e.pos.y-this.y); if(d<=effectiveRange && e.progress>best){ best=e.progress; target=e; } } if(typeof this.def.acquireTarget === 'function'){ target = this.def.acquireTarget(this, state.enemies, effectiveRange) || target; } if(target && this.cooldown<=0){ if(typeof this.def.fire === 'function') this.def.fire(this, target, mods); else this.fire(target, mods); const mult=Math.max(0.1, mods.rateMult||1); this.cooldown=Math.max(0.05, this.rate*mult); } if(typeof this.def.customUpdate === 'function') this.def.customUpdate(this, dt, mods); }
+      draw(ctx){ ctx.save(); ctx.translate(this.x,this.y); ctx.globalAlpha=0.95; ctx.fillStyle= state.selected===this ? '#9aa8ff' : this.color; ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.fill(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.font='24px system-ui, apple color emoji, segoe ui emoji'; ctx.fillText(this.icon,0,2); ctx.restore(); if(this.def && typeof this.def.postDraw === 'function') this.def.postDraw(this, ctx); if(state.build||state.selling||state.selected===this){ const range = this.utility && this.aura ? this.aura.range : this.range; ctx.strokeStyle= state.selected===this ? 'rgba(255,255,255,.35)' : 'rgba(147,162,255,.18)'; ctx.beginPath(); ctx.arc(this.x,this.y,range+(state.build||state.selling?0:0),0,Math.PI*2); ctx.stroke(); } }
     }
 
     function spawnProjectile(tower, target, overrides={}){
@@ -549,7 +1370,7 @@
       AudioSys.towerFire();
     }
 
-    function applyDamage(enemy, damage, bullet){ if(!enemy || !enemy.alive) return; enemy.hit(damage); if(bullet && bullet.slow) enemy.applySlow(bullet.slow.factor, bullet.slow.duration); if(bullet && bullet.owner) bullet.owner.totalDamage += damage; if(!enemy.alive){ state.kills++; state.totalEarned += enemy.reward; } }
+    function applyDamage(enemy, damage, bullet){ if(!enemy || !enemy.alive) return; enemy.hit(damage); if(bullet && bullet.slow) enemy.applySlow(bullet.slow.factor, bullet.slow.duration); if(bullet && bullet.owner) bullet.owner.totalDamage += damage; if(!enemy.alive){ state.kills++; state.totalEarned += enemy.reward; handleKillBonuses(enemy); notifyCrowd('kill', { enemy, bullet }); } }
 
     function applySplashDamage(bullet, primaryEnemy, primaryIndex){ const radius = bullet.splashRadius; if(!radius) return; const dmg = Math.max(1, Math.round(bullet.dmg * (bullet.splashFalloff ?? 0.6))); for(let j=0;j<state.enemies.length;j++){ if(j===primaryIndex) continue; const other=state.enemies[j]; if(!other||!other.alive) continue; const dist=Math.hypot(other.pos.x-primaryEnemy.pos.x, other.pos.y-primaryEnemy.pos.y); if(dist<=radius){ applyDamage(other, dmg, bullet); } } }
 
@@ -559,7 +1380,7 @@
     function worldToGrid(x,y){ return {gx:Math.floor(x/GRID), gy:Math.floor(y/GRID)}; }
     function gridToWorld(gx,gy){ return {x:gx*GRID+GRID/2, y:gy*GRID+GRID/2}; }
     function canPlaceAt(gx,gy){ if(gx<0||gy<0||gx>=W/GRID||gy>=H/GRID) return false; if(state.blocked.has(`${gx},${gy}`)) return false; for(const t of state.towers){ const g=worldToGrid(t.x,t.y); if(g.gx===gx&&g.gy===gy) return false; } const pos=gridToWorld(gx,gy); const minDist = 14 + 18 + 2; if(distToPath(pos.x,pos.y) < minDist) return false; return true; }
-    canvas.addEventListener('click', e=>{ if(state.gameOver) return; const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const {gx,gy}=worldToGrid(x,y); if(state.selling){ for(let i=0;i<state.towers.length;i++){ const t=state.towers[i]; const tg=worldToGrid(t.x,t.y); if(tg.gx===gx&&tg.gy===gy){ state.money+=t.sellValue; state.towers.splice(i,1); return; } } return; } if(state.build){ const def=TOWER_TYPES[state.selectedTowerType]||TOWER_TYPES.basic; const cost=def.cost; if(state.money>=cost && canPlaceAt(gx,gy)){ const pos=gridToWorld(gx,gy); const t=new Tower(pos.x,pos.y,state.selectedTowerType); state.towers.push(t); state.towersBuilt++; state.money-=cost; } return; } });
+    canvas.addEventListener('click', e=>{ if(state.gameOver) return; const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const {gx,gy}=worldToGrid(x,y); if(state.selling){ for(let i=0;i<state.towers.length;i++){ const t=state.towers[i]; const tg=worldToGrid(t.x,t.y); if(tg.gx===gx&&tg.gy===gy){ state.money+=t.sellValue; state.towers.splice(i,1); return; } } return; } if(state.build){ const def=TOWER_TYPES[state.selectedTowerType]||TOWER_TYPES.basic; const cost=def.cost; if(state.money>=cost && canPlaceAt(gx,gy)){ const pos=gridToWorld(gx,gy); const t=new Tower(pos.x,pos.y,state.selectedTowerType); state.towers.push(t); state.towersBuilt++; state.money-=cost; notifyCrowd('build', { tower: t, auto: false }); } return; } });
 
     UI.towerShop.addEventListener('click', e=>{ const target=e.target.closest('[data-tower]'); if(!target) return; const key=target.dataset.tower; setSelectedTowerType(key); AudioSys.ensure(); });
 
@@ -571,6 +1392,7 @@
     UI.autoStart.addEventListener('change', ()=>{ state.autoStart=UI.autoStart.checked; });
     UI.autoPlayBtn.addEventListener('click', ()=>{ state.autoPlay=!state.autoPlay; UI.autoPlayBtn.textContent=`Auto-Play: ${state.autoPlay?'On':'Off'}`; if(state.autoPlay) beginAutoReport(); else finishAutoReport(); });
     UI.soundBtn.addEventListener('click', ()=>{ AudioSys.toggle(); });
+    UI.hypeBtn.addEventListener('click', ()=>{ activateHype(false); });
     UI.debugToggle.addEventListener('click', ()=>{ state.debugVisible=!state.debugVisible; UI.debugPanel.classList.toggle('active', state.debugVisible); UI.debugToggle.textContent = state.debugVisible ? 'Hide Debug Tools' : 'Show Debug Tools'; });
     UI.copyLog.addEventListener('click', async () => { const txt = (UI.simOut.textContent || '').trim(); const payload = txt ? txt : '[No results yet]'; try { await navigator.clipboard.writeText(payload); UI.copyLog.textContent = 'Copied!'; setTimeout(()=> UI.copyLog.textContent='Copy Log', 1200); } catch(e){ const ta=document.createElement('textarea'); ta.value=payload; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); UI.copyLog.textContent='Copied!'; setTimeout(()=> UI.copyLog.textContent='Copy Log', 1200);} finally{ document.body.removeChild(ta);} } });
 
@@ -578,7 +1400,7 @@
     let aiCandidates=nearTurnTiles();
     function countTowersOf(type){ let n=0; for(const t of state.towers){ if(t.type===type) n++; } return n; }
     function aiChooseTowerType(){ const wave=Math.max(1,state.wave); const counts={ basic:countTowersOf('basic'), pulse:countTowersOf('pulse'), frost:countTowersOf('frost'), sniper:countTowersOf('sniper') }; const order=[]; if(wave>=4 && counts.frost<1) order.push('frost'); if(wave>=6 && counts.pulse<Math.ceil(wave/5)) order.push('pulse'); if(wave>=8 && counts.sniper<Math.ceil(wave/6)) order.push('sniper'); if(wave>=10 && counts.pulse<Math.ceil(wave/4)) order.push('pulse'); order.push('basic'); for(const key of order){ const def=TOWER_TYPES[key]; if(def && state.money>=def.cost) return key; } let fallback=null; for(const [key,def] of Object.entries(TOWER_TYPES)){ if(state.money>=def.cost && (!fallback || def.cost<fallback.cost)) fallback={key,cost:def.cost}; } return fallback?fallback.key:null; }
-    function aiTryPlace(){ if(state.aiPlaceCooldown>0) return; const typeKey=aiChooseTowerType(); if(!typeKey) return; const def=TOWER_TYPES[typeKey]; const cost=def.cost; const cap=BAL.desiredTowersCap; const desired=(BAL.aiBaseDesired|0)+Math.floor(state.wave/3); if(state.towers.length>=Math.min(cap,desired)) return; if(aiCandidates.length===0) aiCandidates=nearTurnTiles(); for(let i=0;i<aiCandidates.length;i++){ const c=aiCandidates[i]; if(!canPlaceAt(c.gx,c.gy)) continue; const pos=gridToWorld(c.gx,c.gy); let ok=true; for(const t of state.towers){ if(Math.hypot(t.x-pos.x,t.y-pos.y)<34){ ok=false; break; } } if(!ok) continue; if(state.money<cost) continue; state.towers.push(new Tower(pos.x,pos.y,typeKey)); state.towersBuilt++; state.money-=cost; state.aiPlaceCooldown=Math.max(0.2, BAL.aiCooldown||0.35); return; } }
+    function aiTryPlace(){ if(state.aiPlaceCooldown>0) return; const typeKey=aiChooseTowerType(); if(!typeKey) return; const def=TOWER_TYPES[typeKey]; const cost=def.cost; const cap=BAL.desiredTowersCap; const desired=(BAL.aiBaseDesired|0)+Math.floor(state.wave/3); if(state.towers.length>=Math.min(cap,desired)) return; if(aiCandidates.length===0) aiCandidates=nearTurnTiles(); for(let i=0;i<aiCandidates.length;i++){ const c=aiCandidates[i]; if(!canPlaceAt(c.gx,c.gy)) continue; const pos=gridToWorld(c.gx,c.gy); let ok=true; for(const t of state.towers){ if(Math.hypot(t.x-pos.x,t.y-pos.y)<34){ ok=false; break; } } if(!ok) continue; if(state.money<cost) continue; const tower=new Tower(pos.x,pos.y,typeKey); state.towers.push(tower); state.towersBuilt++; state.money-=cost; notifyCrowd('build', { tower, auto: true }); state.aiPlaceCooldown=Math.max(0.2, BAL.aiCooldown||0.35); return; } }
     function aiTryUpgrade(){ if(state.aiUpgradeCooldown>0 || state.towers.length===0) return; let best=null; for(const t of state.towers){ if(!t.canUpgrade()) continue; if(!best || t.totalDamage>best.totalDamage) best=t; } if(best && state.money>=best.upgradeCost){ best.upgrade(); state.aiUpgradeCooldown=0.6; } }
 
     const WAVES = [
@@ -592,10 +1414,10 @@
 
     function generateWavePlan(idx){ const def=WAVES[idx % WAVES.length]; const plan=[]; let t=0; const countScale = 1 + idx*BAL.countSlope; for(const g of def){ const scaled = Math.max(1, Math.floor(g.count * countScale)); for(let i=0;i<scaled;i++){ plan.push({ time:t, type:g.type }); t+=g.spacing; } t+=0.6; } if(idx>=1){ const bosses = 1 + Math.floor(idx/BAL.bossEvery); for(let i=0;i<bosses;i++){ t+=0.8; plan.push({ time:t, type:'boss' }); } } return plan; }
 
-    function startWave(){ if(state.gameOver) return; state.wave++; const basePlan=generateWavePlan(state.wave-1); state.wavePlan = basePlan; state.waveClock=0; state.enemiesRemaining=basePlan.length; state.waveClearedBonusGiven=false; UI.startWave.disabled=true; }
+    function startWave(){ if(state.gameOver) return; state.wave++; applyWaveEvent(); beginCrowdRequest(); const basePlan=generateWavePlan(state.wave-1); state.wavePlan = basePlan; state.waveClock=0; state.enemiesRemaining=basePlan.length; state.waveClearedBonusGiven=false; UI.startWave.disabled=true; }
     function spawnDue(dt){ state.waveClock += dt * state.speedMultiplier; while(state.wavePlan.length && state.wavePlan[0].time <= state.waveClock){ const evt=state.wavePlan.shift(); const e=new Enemy(evt.type); state.enemies.push(e); state.enemiesRemaining--; } }
 
-    function update(dt){ if(state.gameOver){ if(state.autoReport && state.autoReport.active) finishAutoReport('gameover'); return; } const sdt=Math.min(0.05, dt*state.speedMultiplier); let waveJustCleared=false; let clearedWaveIndex=null; if(state.enemiesRemaining>0 || state.wavePlan.length>0){ spawnDue(sdt); } else if(state.enemies.length===0 && state.wave>0){ if(!state.waveClearedBonusGiven){ state.money += BAL.clearBase + Math.floor(state.wave*BAL.clearPer); state.waveClearedBonusGiven=true; } UI.startWave.disabled=false; waveJustCleared=true; clearedWaveIndex=state.wave; if(state.autoStart) startWave(); }
+    function update(dt){ if(state.gameOver){ if(state.autoReport && state.autoReport.active) finishAutoReport('gameover'); return; } const sdt=Math.min(0.05, dt*state.speedMultiplier); processEventTick(sdt); let waveJustCleared=false; let clearedWaveIndex=null; if(state.enemiesRemaining>0 || state.wavePlan.length>0){ spawnDue(sdt); } else if(state.enemies.length===0 && state.wave>0){ if(!state.waveClearedBonusGiven){ state.money += BAL.clearBase + Math.floor(state.wave*BAL.clearPer); state.waveClearedBonusGiven=true; clearWaveEvent(); } if(state.crowdRequest && state.crowdRequest.status === 'active') notifyCrowd('waveCleared', { wave: state.wave }); UI.startWave.disabled=false; waveJustCleared=true; clearedWaveIndex=state.wave; if(state.autoStart) startWave(); }
       if(state.autoPlay){ state.aiPlaceCooldown=Math.max(0,state.aiPlaceCooldown-sdt); state.aiUpgradeCooldown=Math.max(0,state.aiUpgradeCooldown-sdt); aiTryPlace(); aiTryUpgrade(); if(state.enemies.length===0 && state.enemiesRemaining===0 && !state.gameOver && state.wave>0 && state.autoStart===false) startWave(); }
       for(const e of state.enemies) e.update(sdt); state.enemies = state.enemies.filter(e=>e.alive);
       for(const t of state.towers) t.update(sdt);
@@ -603,6 +1425,11 @@
         if(b.ttl<=0){ state.bullets.splice(i,1); continue; }
         b.x=nx; b.y=ny;
       }
+      updateLightning(sdt);
+      updatePulses(sdt);
+      updateHypeState(sdt);
+      updateMomentumState(sdt);
+      if(state.autoPlay && state.hype >= state.hypeMax && state.hypeActiveTimer<=0) activateHype(true);
       UI.money.textContent=state.money;
       UI.lives.textContent=state.lives;
       UI.wave.textContent=state.wave;
@@ -614,7 +1441,17 @@
     function drawBackground(){ if(assets.bgImg){ const iw=assets.bgImg.naturalWidth||assets.bgImg.width, ih=assets.bgImg.naturalHeight||assets.bgImg.height; const s=Math.max(W/iw,H/ih); const w=iw*s,h=ih*s; ctx.globalAlpha=0.45; ctx.drawImage(assets.bgImg,(W-w)/2,(H-h)/2,w,h); ctx.globalAlpha=1; } }
     function drawGrid(){ ctx.strokeStyle='rgba(27,34,68,0.65)'; ctx.lineWidth=1; for(let x=0;x<=W;x+=GRID){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); } for(let y=0;y<=H;y+=GRID){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); } }
     function drawPath(){ ctx.strokeStyle='rgba(30,41,59,0.9)'; ctx.lineWidth=28; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(waypoints[0].x,waypoints[0].y); for(let i=1;i<waypoints.length;i++) ctx.lineTo(waypoints[i].x,waypoints[i].y); ctx.stroke(); ctx.fillStyle='#eab308'; ctx.fillRect(W-30, waypoints[waypoints.length-1].y-20, 24, 40); }
-    function draw(){ ctx.clearRect(0,0,W,H); drawBackground(); drawGrid(); drawPath(); for(const t of state.towers) t.draw(ctx); for(const e of state.enemies) e.draw(ctx); ctx.fillStyle='#e5e7eb'; for(const b of state.bullets){ ctx.fillStyle=b.color||'#e5e7eb'; ctx.beginPath(); ctx.arc(b.x,b.y,b.r||3.5,0,Math.PI*2); ctx.fill(); } if(state.build && state.mouse){ const {gx,gy}=worldToGrid(state.mouse.x,state.mouse.y); const pos=gridToWorld(gx,gy); const valid=canPlaceAt(gx,gy); ctx.globalAlpha=0.5; ctx.fillStyle= valid? '#5b72ff':'#ef4444'; ctx.beginPath(); ctx.arc(pos.x,pos.y,18,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; ctx.strokeStyle='rgba(147,162,255,.22)'; ctx.beginPath(); ctx.arc(pos.x,pos.y,TOWER_TYPES[state.selectedTowerType]?.range||140,0,Math.PI*2); ctx.stroke(); } if(state.gameOver){ ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='bold 42px system-ui'; ctx.fillText('Game Over', W/2, H/2-10); ctx.font='16px system-ui'; ctx.fillText('Refresh the page to restart', W/2, H/2+22); } }
+    function draw(){ ctx.clearRect(0,0,W,H); drawBackground(); drawGrid(); drawPath();
+      for(const pulse of state.pulses){ const life=pulse.life||0.6; const alpha=Math.max(0, (pulse.ttl>0?pulse.ttl:0)/life); if(alpha<=0) continue; ctx.save(); ctx.globalAlpha=alpha*0.35; ctx.strokeStyle=pulse.color||'#c084fc'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(pulse.x, pulse.y, pulse.r||0, 0, Math.PI*2); ctx.stroke(); ctx.restore(); }
+      for(const t of state.towers) t.draw(ctx);
+      for(const e of state.enemies) e.draw(ctx);
+      ctx.fillStyle='#e5e7eb';
+      for(const b of state.bullets){ ctx.fillStyle=b.color||'#e5e7eb'; ctx.beginPath(); ctx.arc(b.x,b.y,b.r||3.5,0,Math.PI*2); ctx.fill(); }
+      for(const bolt of state.lightning){ if(!bolt.points||bolt.points.length<2) continue; const life=bolt.life||0.18; const alpha=Math.max(0, bolt.ttl/life); if(alpha<=0) continue; ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=bolt.color||'#facc15'; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(bolt.points[0].x, bolt.points[0].y); for(let i=1;i<bolt.points.length;i++){ const p=bolt.points[i]; ctx.lineTo(p.x,p.y); } ctx.stroke(); ctx.restore(); }
+      if(state.momentumActiveTimer>0){ ctx.save(); const flicker = 0.08 + 0.12*Math.sin(performance.now()/150); const alpha=Math.max(0.05, Math.min(0.28, flicker)); ctx.fillStyle=`rgba(251,113,133,${alpha})`; ctx.fillRect(0,0,W,H); ctx.restore(); }
+      if(state.hypeActiveTimer>0){ ctx.save(); const pulse = 0.12 + 0.18*Math.sin(performance.now()/180); const alpha=Math.max(0.08, Math.min(0.3, pulse)); ctx.fillStyle=`rgba(56,189,248,${alpha})`; ctx.fillRect(0,0,W,H); ctx.restore(); }
+      if(state.build && state.mouse){ const {gx,gy}=worldToGrid(state.mouse.x,state.mouse.y); const pos=gridToWorld(gx,gy); const valid=canPlaceAt(gx,gy); ctx.globalAlpha=0.5; ctx.fillStyle= valid? '#5b72ff':'#ef4444'; ctx.beginPath(); ctx.arc(pos.x,pos.y,18,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; ctx.strokeStyle='rgba(147,162,255,.22)'; ctx.beginPath(); ctx.arc(pos.x,pos.y,TOWER_TYPES[state.selectedTowerType]?.range||140,0,Math.PI*2); ctx.stroke(); }
+      if(state.gameOver){ ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='bold 42px system-ui'; ctx.fillText('Game Over', W/2, H/2-10); ctx.font='16px system-ui'; ctx.fillText('Refresh the page to restart', W/2, H/2+22); } }
     function loop(ts){ const t=ts/1000; const dt=Math.min(0.033, state.lastTime? t-state.lastTime:0); state.lastTime=t; update(dt); draw(); requestAnimationFrame(loop); }
 
     function runTests(){
@@ -628,6 +1465,41 @@
       while(t.level%3!==0) t.upgrade();
       results.push({name:'pierce increments', pass: t.pierce>p0});
       state.money=savedMoney;
+      const momentumSnapshot = { momentum: state.momentum, timer: state.momentumActiveTimer, chain: state.momentumChainGrace, combo: state.momentumCombo, last: state.momentumLastKillTime, money: state.money, kills: state.kills, earned: state.totalEarned, hype: state.hype, hypeTimer: state.hypeActiveTimer, hypePing: state.hypeReadyPinged, pulses: state.pulses.slice() };
+      state.lastTime = 5;
+      state.momentum = 0;
+      state.momentumActiveTimer = 0;
+      state.momentumChainGrace = 0;
+      state.momentumCombo = 0;
+      state.momentumLastKillTime = 0;
+      const momentumEnemy = new Enemy('grunt'); momentumEnemy.hp = 1; applyDamage(momentumEnemy, 999, { dmg: 999 });
+      const momentumGained = state.momentum > 0 && state.momentumCombo === 1;
+      state.momentum = Math.max(0, state.momentumMax - 2);
+      state.lastTime += 0.2;
+      const momentumEnemy2 = new Enemy('grunt'); momentumEnemy2.hp = 1; applyDamage(momentumEnemy2, 999, { dmg: 999 });
+      const frenzyTriggered = state.momentumActiveTimer > 0;
+      state.momentumActiveTimer = 0;
+      state.momentum = 60;
+      state.momentumCombo = 4;
+      shatterMomentum(2);
+      const momentumPenalty = state.momentum < 60 && state.momentumCombo <= 2;
+      state.momentum = momentumSnapshot.momentum;
+      state.momentumActiveTimer = momentumSnapshot.timer;
+      state.momentumChainGrace = momentumSnapshot.chain;
+      state.momentumCombo = momentumSnapshot.combo;
+      state.momentumLastKillTime = momentumSnapshot.last;
+      state.money = momentumSnapshot.money;
+      state.kills = momentumSnapshot.kills;
+      state.totalEarned = momentumSnapshot.earned;
+      state.hype = momentumSnapshot.hype;
+      state.hypeActiveTimer = momentumSnapshot.hypeTimer;
+      state.hypeReadyPinged = momentumSnapshot.hypePing;
+      state.pulses.length = 0;
+      Array.prototype.push.apply(state.pulses, momentumSnapshot.pulses);
+      updateMomentumUI();
+      results.push({name:'momentum gain on kill', pass: momentumGained});
+      results.push({name:'momentum frenzy triggers', pass: frenzyTriggered});
+      results.push({name:'momentum leak penalty', pass: momentumPenalty});
       const e=new Enemy('grunt'); const rFull=e.getRadius(); e.hp=e.maxHp*0.05; const rLow=e.getRadius();
       results.push({name:'enemy radius scales with hp', pass: rFull>rLow && Math.abs(rLow-12)<0.01});
       const plan=generateWavePlan(0); const total=plan.length; const expected=WAVES[0].reduce((s,g)=>s+g.count,0);
@@ -641,7 +1513,57 @@
       results.push({name:'slow effect reduces speed', pass: slowEnemy.speed < baseSpd});
       results.push({name:'boss leaks hurt', pass: BAL.bossLeakLives>1});
       results.push({name:'tower variety', pass: Object.keys(TOWER_TYPES).length>=4});
-      const sim = simulateOnce(10, 300);
+            const prevWaveState = state.wave; state.wave = 1; applyWaveEvent(); const eventApplied = !!state.activeEvent && !!state.eventModifiers; clearWaveEvent(); state.wave = prevWaveState; updateEventUI();
+      const hypeSaved = { hype: state.hype, hypeMax: state.hypeMax, timer: state.hypeActiveTimer, ping: state.hypeReadyPinged }; state.hype = 0; state.hypeMax = 10; gainHype(12); const hypeReady = state.hype === state.hypeMax; activateHype(true); const hypeActive = state.hypeActiveTimer > 0; state.hype = hypeSaved.hype; state.hypeMax = hypeSaved.hypeMax; state.hypeActiveTimer = hypeSaved.timer; state.hypeReadyPinged = hypeSaved.ping; state.pulses.length = 0; updateHypeUI();
+      const stormTestTower = new Tower(0,0,'storm'); const testEnemyA = new Enemy('grunt'); const testEnemyB = new Enemy('fast'); testEnemyA.pos={x:80,y:80}; testEnemyB.pos={x:140,y:80}; testEnemyA.alive=true; testEnemyB.alive=true; state.enemies=[testEnemyA,testEnemyB]; performChainLightning(stormTestTower, testEnemyA, {damageMult:1}); const chainWorked = testEnemyB.hp < testEnemyB.maxHp; state.enemies.length = 0;
+      results.push({name:'wave event applied', pass: eventApplied});
+      results.push({name:'hype activation works', pass: hypeReady && hypeActive});
+      const crowdSaved = { request: state.crowdRequest, tracker: state.crowdTracker, streak: state.crowdStreak };
+      const crowdWaveSaved = state.wave;
+      const moneySaved = state.money;
+      state.wave = 3;
+      beginCrowdRequest();
+      const crowdCreated = !!state.crowdRequest;
+      let crowdProgressed = false;
+      if(state.crowdRequest){
+        const key = state.crowdRequest.key;
+        if(key === 'flawless'){
+          notifyCrowd('lifeLost', { amount: 1 });
+          crowdProgressed = state.crowdRequest.status === 'failed';
+        } else if(key === 'blueprint'){
+          notifyCrowd('build', {});
+          crowdProgressed = (state.crowdRequest.tracker?.builds || 0) > 0 || state.crowdRequest.status !== 'active';
+        } else if(key === 'glowup'){
+          state.money = 1e6;
+          const tempTower = new Tower(0,0,'basic');
+          state.towers.push(tempTower);
+          tempTower.upgrade();
+          crowdProgressed = (state.crowdRequest.tracker?.upgrades || 0) > 0 || state.crowdRequest.status !== 'active';
+          state.towers.pop();
+        } else if(key === 'hypeburst'){
+          const saved = { hype: state.hype, max: state.hypeMax, timer: state.hypeActiveTimer, ping: state.hypeReadyPinged };
+          state.hype = state.hypeMax;
+          activateHype(true);
+          crowdProgressed = state.crowdRequest.status === 'complete';
+          state.hype = saved.hype;
+          state.hypeMax = saved.max;
+          state.hypeActiveTimer = saved.timer;
+          state.hypeReadyPinged = saved.ping;
+        } else {
+          notifyCrowd('kill', { enemy: new Enemy('grunt') });
+          crowdProgressed = (state.crowdRequest.tracker?.kills || 0) > 0 || state.crowdRequest.status !== 'active';
+        }
+      }
+      state.money = moneySaved;
+      state.crowdRequest = crowdSaved.request;
+      state.crowdTracker = crowdSaved.tracker;
+      state.crowdStreak = crowdSaved.streak || 0;
+      state.wave = crowdWaveSaved;
+      updateCrowdUI();
+      results.push({name:'crowd request spawns', pass: crowdCreated});
+      results.push({name:'crowd request tracks progress', pass: crowdCreated ? crowdProgressed : true});
+      results.push({name:'storm chain damages secondary', pass: chainWorked});
+const sim = simulateOnce(10, 300);
       results.push({name:'simulateOnce returns summary', pass: sim && sim.summary && Number.isFinite(sim.summary.wavesSurvived)});
       const allPass=results.every(r=>r.pass);
       if(allPass) console.log('[TD Tests] All tests passed:', results);
@@ -653,7 +1575,7 @@
       maxWaves   = Math.max(1, Math.min(200, maxWaves|0));
       timeBudgetMs = Math.max(200, Math.min(4000, timeBudgetMs|0));
 
-      state.money=120; state.lives=20; state.wave=0; state.enemies=[]; state.towers=[]; state.bullets=[]; state.wavePlan=[]; state.waveClock=0; state.kills=0; state.totalEarned=0; state.towersBuilt=0; state.gameOver=false; state.autoStart=true; state.autoPlay=true; state.speedMultiplier=6; state.build=false; state.selling=false; state.silenceAutoReport=true; state.autoReport=null; aiCandidates=nearTurnTiles();
+      state.money=120; state.lives=20; state.wave=0; state.enemies=[]; state.towers=[]; state.bullets=[]; state.wavePlan=[]; state.waveClock=0; state.kills=0; state.totalEarned=0; state.towersBuilt=0; state.gameOver=false; state.autoStart=true; state.autoPlay=true; state.speedMultiplier=6; state.build=false; state.selling=false; state.silenceAutoReport=true; state.autoReport=null; state.crowdRequest=null; state.crowdTracker=null; state.crowdStreak=0; state.momentum=0; state.momentumActiveTimer=0; state.momentumChainGrace=0; state.momentumCombo=0; state.momentumLastKillTime=0; aiCandidates=nearTurnTiles();
       const wavesLog=[]; startWave();
       let steps=0,lastWave=0; const MAX_STEPS = Math.min(150000, maxWaves*6000);
       try{
