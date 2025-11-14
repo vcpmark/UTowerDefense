@@ -14,6 +14,7 @@ export const ComponentType = {
   ENEMY: 'enemy',
   BULLET: 'bullet',
   PLAYER: 'player',
+  WEAPON: 'weapon',
   LIFETIME: 'lifetime',
   COLLISION: 'collision',
   AURA: 'aura',
@@ -110,6 +111,7 @@ export function Player(speed, health, maxHealth) {
     xp: 0,
     level: 1,
     weapons: [],
+    weaponEntities: [], // Weapon entity references
     items: [],
     stats: {
       damage: 1,
@@ -124,6 +126,24 @@ export function Player(speed, health, maxHealth) {
       harvesting: 1,
       engineering: 0
     }
+  };
+}
+
+// Weapon component (attached weapons)
+export function Weapon(type, damage, rate, range, projectileSpeed, pierce = 0) {
+  return {
+    type,
+    damage,
+    rate,
+    range,
+    projectileSpeed,
+    pierce,
+    cooldown: 0,
+    target: null,
+    aimingRange: range * 1.2, // Slightly larger than attack range
+    rotation: 0,
+    offsetX: 10, // Offset from player
+    offsetY: 0
   };
 }
 
