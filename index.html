@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brotato Towers - Choose Your Mode</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f1220 0%, #1a1f3a 100%);
+      color: #e8eaf6;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .title {
+      font-size: 64px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #5b72ff, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: #9aa3d7;
+      font-weight: 500;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 32px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .game-card {
+      background: #141830;
+      border: 2px solid #263059;
+      border-radius: 24px;
+      padding: 32px;
+      transition: all .3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .game-card:hover {
+      border-color: #5b72ff;
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(91, 114, 255, 0.2);
+    }
+
+    .game-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .game-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #e8eaf6;
+    }
+
+    .game-desc {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #a6b3f5;
+      margin-bottom: 24px;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #9aa3d7;
+    }
+
+    .features li:before {
+      content: "✓";
+      color: #22c55e;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(91, 114, 255, 0.15);
+      border: 1px solid rgba(91, 114, 255, 0.3);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 16px;
+      color: #7c9eff;
+    }
+
+    .footer {
+      margin-top: 60px;
+      text-align: center;
+      color: #6b7ba8;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #7c9eff;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 48px;
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">🥔 Brotato Towers</div>
+      <div class="subtitle">Choose Your Game Mode</div>
+    </div>
+
+    <div class="games-grid">
+      <a href="brotato.html" class="game-card">
+        <span class="game-icon">🥔</span>
+        <h2 class="game-title">Brotato</h2>
+        <p class="game-desc">
+          Top-down wave survival shooter with auto-attacking weapons. Move around, level up, and survive increasingly difficult waves!
+        </p>
+        <ul class="features">
+          <li>Player character with WASD movement</li>
+          <li>Auto-attacking weapons</li>
+          <li>Level & XP progression system</li>
+          <li>Wave-based survival gameplay</li>
+          <li>Sprite-based graphics</li>
+        </ul>
+        <span class="badge">Recommended</span>
+      </a>
+
+      <a href="go.html" class="game-card">
+        <span class="game-icon">🗼</span>
+        <h2 class="game-title">Tower Defense</h2>
+        <p class="game-desc">
+          Classic tower defense with Brotato-inspired mechanics. Place towers strategically and use special abilities!
+        </p>
+        <ul class="features">
+          <li>Multiple tower types</li>
+          <li>Hype Burst & Momentum systems</li>
+          <li>Strategic tower placement</li>
+          <li>Wave modifiers & events</li>
+          <li>Chain lightning & AoE effects</li>
+        </ul>
+        <span class="badge">Original</span>
+      </a>
+    </div>
+
+    <div class="footer">
+      <p>Built with WebGL2, ECS Architecture, and Modern JavaScript</p>
+      <p style="margin-top: 8px;">
+        <a href="https://github.com/vcpmark/UTowerDefense" target="_blank">View on GitHub</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

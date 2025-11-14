@@ -1,0 +1,210 @@
+# Brotato Towers - Modern WebGL Edition
+
+A dual-mode game featuring both a Brotato clone and tower defense, built with a modern WebGL2 engine, actual Brotato sprites, and an Entity Component System architecture.
+
+## 🎮 Two Game Modes
+
+### 🥔 Brotato Mode (Recommended)
+A faithful recreation of Brotato with:
+- Player-controlled character (WASD movement)
+- Auto-attacking weapons
+- Wave-based survival
+- XP and level progression
+- Real sprites from BrotatoWithUnity
+
+### 🗼 Tower Defense Mode
+Strategic tower placement with:
+- Multiple tower types
+- Hype Burst & Momentum mechanics
+- Special abilities and chain effects
+- Wave modifiers and events
+
+## 🚀 Features
+
+### Modern WebGL2 Engine
+- **Batch Rendering**: Efficient sprite batching for optimal performance
+- **WebGL2 Shaders**: Custom GLSL shaders for rendering shapes and sprites
+- **Fixed Timestep**: Deterministic physics with fixed update rate
+- **Entity Component System**: Flexible and maintainable game architecture
+- **Modular Design**: Clean separation of concerns with multiple systems
+
+### Game Systems
+- **Rendering System**: WebGL-based rendering with effects and animations
+- **Physics System**: Movement, velocity, and collision detection
+- **Tower System**: Automated targeting and shooting mechanics
+- **Enemy System**: Path-following AI with various enemy types
+- **Bullet System**: Projectile physics with homing and special effects
+
+### Brotato-Inspired Mechanics
+- **Hype Burst**: Build hype from kills and unleash for massive damage boost
+- **Momentum Frenzy**: Chain kills rapidly to trigger a speed/power frenzy
+- **Wave Events**: Dynamic modifiers that change gameplay each wave
+- **Multiple Tower Types**: Basic, Pulse, Frost, Sniper, and Storm towers
+- **Special Effects**: Chain lightning, splash damage, and slow effects
+
+## 📁 Project Structure
+
+```
+UTowerDefense/
+├── index.html                  # Landing page / game mode selector
+├── brotato.html                # Brotato game mode
+├── go.html                     # Tower defense (original)
+├── towers.html                 # Tower defense (WebGL2 version)
+├── assets/
+│   └── sprites/                # Brotato sprites from Unity
+│       ├── player/             # potato.png, legs.png, highlight.png
+│       ├── enemies/            # Enemy sprites
+│       ├── weapons/            # Weapon sprites
+│       └── bullets/            # Bullet animations
+├── src/
+│   ├── renderer/
+│   │   ├── WebGLRenderer.js    # WebGL2 rendering engine
+│   │   └── TextureLoader.js    # Texture loading and caching
+│   ├── core/
+│   │   └── Engine.js           # Game loop and system management
+│   ├── ecs/
+│   │   ├── Entity.js           # Entity and EntityManager
+│   │   └── Components.js       # Component definitions
+│   ├── systems/
+│   │   ├── RenderSystem.js     # Rendering logic
+│   │   └── PhysicsSystem.js    # Physics and movement
+│   └── game/
+│       ├── Game.js             # Tower defense logic
+│       ├── BrotatoGame.js      # Brotato game logic
+│       └── GameState.js        # Game state management
+└── README.md
+```
+
+## 🎮 How to Play
+
+### Brotato Mode (`brotato.html`)
+1. **Move**: Use WASD or Arrow Keys
+2. **Attack**: Weapons automatically shoot nearest enemies
+3. **Survive**: Complete waves to earn money and XP
+4. **Level Up**: Gain stat boosts every level
+5. **Wave Control**: Start new waves when ready
+
+### Tower Defense Mode (`go.html` or `towers.html`)
+1. **Select Tower**: Click on a tower card
+2. **Place**: Click on canvas to place tower
+3. **Start Wave**: Begin the enemy assault
+4. **Abilities**: Use Hype Burst and momentum
+5. **Strategy**: Upgrade towers and use chain effects
+
+### GitHub Pages Deployment
+The game works on GitHub Pages! Access via:
+- Main page: `https://[username].github.io/UTowerDefense/`
+- Brotato: `https://[username].github.io/UTowerDefense/brotato.html`
+- Tower Defense: `https://[username].github.io/UTowerDefense/go.html`
+
+## 🏗️ Architecture
+
+### WebGL Renderer
+The `WebGLRenderer` class provides a modern WebGL2 API for drawing:
+- Circles (filled and outlined)
+- Rectangles
+- Lines
+- Custom shapes with batching
+
+### Entity Component System
+Entities are composed of components:
+- **Transform**: Position, rotation, scale
+- **Velocity**: Movement vector
+- **Health**: HP and armor
+- **Tower**: Tower behavior and stats
+- **Enemy**: Enemy AI and pathfinding
+- **Bullet**: Projectile behavior
+
+### Game Systems
+Systems process entities with specific components:
+- **PhysicsSystem**: Updates positions based on velocity
+- **RenderSystem**: Draws entities to the canvas
+- **Game**: Handles tower shooting, enemy movement, collisions
+
+## 🔧 Technical Details
+
+### WebGL2 Features
+- Orthographic projection matrix for 2D rendering
+- Custom vertex and fragment shaders
+- Efficient buffer management
+- Alpha blending for transparency
+
+### Performance Optimizations
+- Batch rendering to minimize draw calls
+- Efficient collision detection with spatial partitioning (future)
+- Fixed timestep prevents physics issues
+- Component-based architecture for cache efficiency
+
+### Brotato Mechanics Integration
+Based on the BrotatoWithUnity repository analysis:
+- Player-like progression systems
+- Wave-based difficulty scaling
+- Item and stat modifiers
+- Chain and combo mechanics
+- Visual feedback with effects
+
+## 🛠️ Development
+
+### Requirements
+- Modern browser with WebGL2 support
+- ES6 module support
+- Local web server (for development)
+
+### Running Locally
+```bash
+# Using Python 3
+python -m http.server 8000
+
+# Using Node.js
+npx http-server
+
+# Then open http://localhost:8000
+```
+
+### Adding New Towers
+1. Define tower stats in `Game.getTowerData()`
+2. Add tower card to `TOWERS` array in `index.html`
+3. Implement special behavior in tower system if needed
+
+### Adding New Mechanics
+1. Create new component in `Components.js`
+2. Add system to process the component
+3. Update game logic in `Game.js`
+
+## 🎯 Future Enhancements
+
+### Brotato Mode
+- [ ] Item shop between waves
+- [ ] Multiple weapon types
+- [ ] Stat modifiers and items
+- [ ] More character sprites (different classes)
+- [ ] Boss enemies
+- [ ] Achievements and unlocks
+
+### Tower Defense Mode
+- [ ] Tower upgrades UI
+- [ ] More tower types
+- [ ] Path editor
+- [ ] Multiple difficulty levels
+
+### Both Modes
+- [ ] Save/load game state
+- [ ] Sound effects and music
+- [ ] Particle system for better effects
+- [ ] Mobile touch controls
+- [ ] Leaderboards
+- [ ] Multiplayer support
+
+## 📜 License
+
+This project is open source and available for educational purposes.
+
+## 🙏 Credits
+
+- Inspired by Brotato by Blobfish
+- BrotatoWithUnity reference implementation
+- WebGL2 rendering techniques from various sources
+
+---
+
+**Note**: This is a modernized version using WebGL2 and ECS architecture. The original game logic has been preserved while the rendering engine has been completely rewritten for better performance and maintainability.
