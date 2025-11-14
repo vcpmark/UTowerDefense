@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UTower Defense - v5.0 (Auto-Play Analyzer)</title>
+  <title>Brotato Towers - Arena Defense</title>
   <style>
     html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: #0f1220; color: #e8eaf6; }
     .wrap { display: grid; grid-template-columns: 820px 1fr; gap: 16px; padding: 16px; align-items: start; }
@@ -59,13 +59,13 @@
 
     <div class="panel">
       <div class="row" style="justify-content: space-between;">
-        <div style="font-weight:800; font-size:20px;">UTower Defense</div>
-        <div class="badge">v5.0 • Auto-Play Analyzer</div>
+        <div style="font-weight:800; font-size:20px;">🥔 Brotato Towers</div>
+        <div class="badge">Arena Defense</div>
       </div>
 
       <div class="row" style="gap: 12px;">
         <div>💰 Money: <span id="money">0</span></div>
-        <div>❤️ Lives: <span id="lives">0</span></div>
+        <div>❤️ HP: <span id="lives">0</span></div>
         <div>🌊 Wave: <span id="wave">0</span></div>
         <div>👾 Enemies: <span id="enemies">0</span></div>
       </div>
@@ -432,7 +432,8 @@
       momentumLastKillTime: 0,
       crowdRequest: null,
       crowdTracker: null,
-      crowdStreak: 0
+      crowdStreak: 0,
+      player: null
     };
 
     const BAL = {
@@ -1331,12 +1332,217 @@
     function waveHpScale(){ const w=Math.max(0,state.wave-1); return (1 + w * BAL.hpLinearSlope) * (1 + Math.floor(w/BAL.hpPeriodicEvery) * BAL.hpPeriodicStep); }
 
     class Enemy{
-      constructor(kind){ const t=ENEMY_TYPES[kind]||ENEMY_TYPES.grunt; const d=diff(); const w=waveHpScale(); const mods=state.eventModifiers||BASE_EVENT_MODIFIERS; this.kind=kind; this.icon=t.icon; this.baseSpeed=(t.baseSpd)*d.spd*Math.max(0.9, 1 + (state.wave-1)*0.02)*(mods.enemySpeedMult||1); this.speed=this.baseSpeed; this.hp=(t.baseHp)*d.hp*w*(mods.enemyHpMult||1); this.maxHp=this.hp; this.armor = Math.max(0, (state.wave-1)*BAL.armorPerWave + (kind==='tank'?BAL.armorTank:0) +(kind==='boss'?BAL.armorBoss:0)); this.reward=Math.round(t.reward*(1 + BAL.rewardSlope*Math.max(0,state.wave-1))*(mods.enemyRewardMult||1)); this.onDeath=t.onDeath; this.pos={x:waypoints[0].x,y:waypoints[0].y}; this.seg=0; this.t=0; this.progress=0; this.alive=true; this.slowTimer=0; this.slowFactor=1; }
+      constructor(kind){
+        const t=ENEMY_TYPES[kind]||ENEMY_TYPES.grunt;
+        const d=diff();
+        const w=waveHpScale();
+        const mods=state.eventModifiers||BASE_EVENT_MODIFIERS;
+        this.kind=kind;
+        this.icon=t.icon;
+        this.baseSpeed=(t.baseSpd)*d.spd*Math.max(0.9, 1 + (state.wave-1)*0.02)*(mods.enemySpeedMult||1);
+        this.speed=this.baseSpeed;
+        this.hp=(t.baseHp)*d.hp*w*(mods.enemyHpMult||1);
+        this.maxHp=this.hp;
+        this.armor = Math.max(0, (state.wave-1)*BAL.armorPerWave + (kind==='tank'?BAL.armorTank:0) +(kind==='boss'?BAL.armorBoss:0));
+        this.reward=Math.round(t.reward*(1 + BAL.rewardSlope*Math.max(0,state.wave-1))*(mods.enemyRewardMult||1));
+        this.onDeath=t.onDeath;
+
+        // Spawn from random edge
+        const edge = Math.floor(Math.random() * 4);
+        if(edge === 0){ // Top
+          this.pos = {x: Math.random() * W, y: 0};
+        } else if(edge === 1){ // Right
+          this.pos = {x: W, y: Math.random() * H};
+        } else if(edge === 2){ // Bottom
+          this.pos = {x: Math.random() * W, y: H};
+        } else { // Left
+          this.pos = {x: 0, y: Math.random() * H};
+        }
+
+        this.seg=0;
+        this.t=0;
+        this.progress=0;
+        this.alive=true;
+        this.slowTimer=0;
+        this.slowFactor=1;
+      }
       getRadius(){ const minR=12,maxR=(this.kind==='boss'?40:26); const f=Math.max(0,Math.min(1,this.hp/this.maxHp)); const eased=Math.pow(f,4); return minR+(maxR-minR)*eased; }
       applySlow(factor,duration){ if(!factor || factor>=1 || !duration) return; if(this.slowTimer>0){ this.slowFactor=Math.min(this.slowFactor,factor); this.slowTimer=Math.max(this.slowTimer,duration); } else { this.slowFactor=factor; this.slowTimer=duration; } }
-      update(dt){ if(!this.alive) return; this.slowTimer=Math.max(0,this.slowTimer-dt); if(this.slowTimer<=0) this.slowFactor=1; this.speed=this.baseSpeed*(this.slowTimer>0?this.slowFactor:1); let dtr=dt; while(dtr>0 && this.alive){ const a=waypoints[this.seg], b=waypoints[this.seg+1]; if(!b){ this.alive=false; const leak=(this.kind==='boss'?BAL.bossLeakLives:1); state.lives -= leak; notifyCrowd('lifeLost', { amount: leak, enemy: this }); shatterMomentum(leak); if(state.lives<=0) state.gameOver=true; return; } const segLen=segmentLengths[this.seg]; const step=Math.min(dtr*this.speed, segLen-this.t); this.t+=step; const r=this.t/segLen; this.pos.x=a.x+(b.x-a.x)*r; this.pos.y=a.y+(b.y-a.y)*r; this.progress=segmentPrefix[this.seg]+this.t; dtr-=step/this.speed; if(this.t>=segLen-0.0001){ this.seg++; this.t=0; } } }
+      update(dt){
+        if(!this.alive) return;
+        this.slowTimer=Math.max(0,this.slowTimer-dt);
+        if(this.slowTimer<=0) this.slowFactor=1;
+        this.speed=this.baseSpeed*(this.slowTimer>0?this.slowFactor:1);
+
+        // Chase player instead of following path
+        if(!state.player) return;
+
+        const dx = state.player.x - this.pos.x;
+        const dy = state.player.y - this.pos.y;
+        const dist = Math.hypot(dx, dy);
+
+        if(dist > 0){
+          // Move towards player
+          const moveX = (dx / dist) * this.speed * dt;
+          const moveY = (dy / dist) * this.speed * dt;
+          this.pos.x += moveX;
+          this.pos.y += moveY;
+          this.progress = W + H - dist; // For tower targeting (closer = higher priority)
+        }
+
+        // Check if touching player
+        const playerDist = Math.hypot(state.player.x - this.pos.x, state.player.y - this.pos.y);
+        const touchDist = this.getRadius() + state.player.radius;
+        if(playerDist < touchDist){
+          // Damage player
+          const damage = this.kind === 'boss' ? 10 : this.kind === 'tank' ? 5 : 3;
+          state.player.hit(damage);
+          this.alive = false; // Enemy dies on contact
+        }
+      }
       hit(dmg){ const eff = Math.max(1, dmg - (this.armor||0)); this.hp-=eff; AudioSys.onEnemyHit(this.kind); if(this.hp<=0 && this.alive){ this.alive=false; state.money+=this.reward; if(this.onDeath) this.onDeath(state); } }
       draw(ctx){ if(!this.alive) return; const R=this.getRadius(); ctx.font=`${Math.floor(R*1.8)}px system-ui, apple color emoji, segoe ui emoji`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(this.icon(), this.pos.x, this.pos.y+1); const w=26,h=5,ox=-13,oy=-R-14; ctx.fillStyle='#1f2a44'; ctx.fillRect(this.pos.x+ox,this.pos.y+oy,w,h); ctx.fillStyle='#ef4444'; ctx.fillRect(this.pos.x+ox,this.pos.y+oy,w*(this.hp/this.maxHp),h); if(this.slowTimer>0){ ctx.strokeStyle='rgba(56,189,248,0.55)'; ctx.beginPath(); ctx.arc(this.pos.x,this.pos.y,R+6,0,Math.PI*2); ctx.stroke(); } }
+    }
+
+    class Player{
+      constructor(){
+        this.x = W/2;
+        this.y = H/2;
+        this.vx = 0;
+        this.vy = 0;
+        this.speed = 180;
+        this.hp = 100;
+        this.maxHp = 100;
+        this.damage = 10;
+        this.attackSpeed = 1.0; // attacks per second
+        this.attackCooldown = 0;
+        this.range = 160;
+        this.pierce = 0;
+        this.radius = 16;
+        this.icon = '🥔';
+        this.weapons = [];
+        this.xp = 0;
+        this.level = 1;
+        // Movement
+        this.moveLeft = false;
+        this.moveRight = false;
+        this.moveUp = false;
+        this.moveDown = false;
+      }
+
+      update(dt){
+        // Movement
+        let dx = 0, dy = 0;
+        if(this.moveLeft) dx -= 1;
+        if(this.moveRight) dx += 1;
+        if(this.moveUp) dy -= 1;
+        if(this.moveDown) dy += 1;
+
+        // Normalize diagonal movement
+        if(dx !== 0 && dy !== 0){
+          dx *= 0.707;
+          dy *= 0.707;
+        }
+
+        this.vx = dx * this.speed;
+        this.vy = dy * this.speed;
+
+        // Update position
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+
+        // Boundary collision
+        const margin = this.radius;
+        if(this.x < margin) this.x = margin;
+        if(this.x > W - margin) this.x = W - margin;
+        if(this.y < margin) this.y = margin;
+        if(this.y > H - margin) this.y = H - margin;
+
+        // Auto-attack
+        if(this.attackCooldown > 0){
+          this.attackCooldown -= dt;
+        }
+
+        // Find nearest enemy and shoot
+        if(this.attackCooldown <= 0){
+          let nearest = null;
+          let minDist = this.range;
+
+          for(const e of state.enemies){
+            if(!e.alive) continue;
+            const dist = Math.hypot(e.pos.x - this.x, e.pos.y - this.y);
+            if(dist < minDist){
+              minDist = dist;
+              nearest = e;
+            }
+          }
+
+          if(nearest){
+            this.shoot(nearest);
+            this.attackCooldown = 1.0 / this.attackSpeed;
+          }
+        }
+      }
+
+      shoot(target){
+        const angle = Math.atan2(target.pos.y - this.y, target.pos.x - this.x);
+        const speed = 400;
+        state.bullets.push({
+          x: this.x,
+          y: this.y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          dmg: this.damage,
+          ttl: 2,
+          owner: this,
+          r: 4,
+          pierce: this.pierce,
+          color: '#facc15',
+          isPlayer: true
+        });
+        AudioSys.towerFire();
+      }
+
+      hit(damage){
+        this.hp -= damage;
+        if(this.hp <= 0){
+          this.hp = 0;
+          state.gameOver = true;
+        }
+      }
+
+      draw(ctx){
+        // Draw player
+        ctx.save();
+        ctx.font = `${this.radius * 2}px system-ui, apple color emoji, segoe ui emoji`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.icon, this.x, this.y);
+
+        // HP bar
+        const barW = 40;
+        const barH = 5;
+        const barX = this.x - barW/2;
+        const barY = this.y - this.radius - 12;
+
+        ctx.fillStyle = '#1f2a44';
+        ctx.fillRect(barX, barY, barW, barH);
+
+        const hpRatio = this.hp / this.maxHp;
+        ctx.fillStyle = hpRatio > 0.5 ? '#22c55e' : hpRatio > 0.25 ? '#eab308' : '#ef4444';
+        ctx.fillRect(barX, barY, barW * hpRatio, barH);
+
+        ctx.restore();
+
+        // Draw attack range when building/selling
+        if(state.build || state.selling){
+          ctx.strokeStyle = 'rgba(250,204,21,0.15)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.range, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
     }
 
     class Tower{
@@ -1344,7 +1550,7 @@
       canUpgrade(){ return this.level < (this.def.maxLevel || 10); }
       upgrade(){ if(!this.canUpgrade()) return false; if(state.money < this.upgradeCost) return false; state.money -= this.upgradeCost; this.level++; if(typeof this.def.upgrade === 'function') this.def.upgrade(this); else { this.damage=Math.round(this.damage*1.25); this.rate=Math.max(0.18, +(this.rate*0.92).toFixed(2)); this.range=Math.min(240, this.range+12); if(this.level%3===0) this.pierce++; } this.upgradeCost=Math.round(this.upgradeCost*(this.def.upgradeCostGrowth||1.6)); this.sellValue=Math.floor(this.sellValue+this.upgradeCost*0.3); notifyCrowd('upgrade', { tower: this }); return true; }
       fire(target, mods={}){ const damage = Math.max(1, Math.round((this.damage||0) * (mods.damageMult||1))); const pierce = (this.pierce||0) + (mods.pierceBonus||0); spawnProjectile(this,target,{damage,pierce}); }
-      update(dt){ if(this.utility){ if(typeof this.def.utilityUpdate === 'function') this.def.utilityUpdate(this, dt); return; } const mods=gatherTowerModifiers(this); if(this.cooldown>0) this.cooldown-=dt; let target=null, best=-1; const effectiveRange=this.range+(mods.rangeBonus||0); for(const e of state.enemies){ if(!e.alive) continue; const d=Math.hypot(e.pos.x-this.x, e.pos.y-this.y); if(d<=effectiveRange && e.progress>best){ best=e.progress; target=e; } } if(typeof this.def.acquireTarget === 'function'){ target = this.def.acquireTarget(this, state.enemies, effectiveRange) || target; } if(target && this.cooldown<=0){ if(typeof this.def.fire === 'function') this.def.fire(this, target, mods); else this.fire(target, mods); const mult=Math.max(0.1, mods.rateMult||1); this.cooldown=Math.max(0.05, this.rate*mult); } if(typeof this.def.customUpdate === 'function') this.def.customUpdate(this, dt, mods); }
+      update(dt){ if(this.utility){ if(typeof this.def.utilityUpdate === 'function') this.def.utilityUpdate(this, dt); return; } const mods=gatherTowerModifiers(this); if(this.cooldown>0) this.cooldown-=dt; let target=null, best=Infinity; const effectiveRange=this.range+(mods.rangeBonus||0); for(const e of state.enemies){ if(!e.alive) continue; const d=Math.hypot(e.pos.x-this.x, e.pos.y-this.y); if(d<=effectiveRange && d<best){ best=d; target=e; } } if(typeof this.def.acquireTarget === 'function'){ target = this.def.acquireTarget(this, state.enemies, effectiveRange) || target; } if(target && this.cooldown<=0){ if(typeof this.def.fire === 'function') this.def.fire(this, target, mods); else this.fire(target, mods); const mult=Math.max(0.1, mods.rateMult||1); this.cooldown=Math.max(0.05, this.rate*mult); } if(typeof this.def.customUpdate === 'function') this.def.customUpdate(this, dt, mods); }
       draw(ctx){ ctx.save(); ctx.translate(this.x,this.y); ctx.globalAlpha=0.95; ctx.fillStyle= state.selected===this ? '#9aa8ff' : this.color; ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.fill(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.font='24px system-ui, apple color emoji, segoe ui emoji'; ctx.fillText(this.icon,0,2); ctx.restore(); if(this.def && typeof this.def.postDraw === 'function') this.def.postDraw(this, ctx); if(state.build||state.selling||state.selected===this){ const range = this.utility && this.aura ? this.aura.range : this.range; ctx.strokeStyle= state.selected===this ? 'rgba(255,255,255,.35)' : 'rgba(147,162,255,.18)'; ctx.beginPath(); ctx.arc(this.x,this.y,range+(state.build||state.selling?0:0),0,Math.PI*2); ctx.stroke(); } }
     }
 
@@ -1376,10 +1582,60 @@
 
     function segmentCircleAllHits(x1,y1,x2,y2,enemies,bulletR){ const hits=[]; const dx=x2-x1, dy=y2-y1, denom=dx*dx+dy*dy; for(let i=0;i<enemies.length;i++){ const e=enemies[i]; if(!e||!e.alive) continue; const cx=e.pos.x, cy=e.pos.y; const R=(e.getRadius?e.getRadius():12)+(bulletR||3); let t=0; if(denom>0){ t=((cx-x1)*dx+(cy-y1)*dy)/denom; if(t<0)t=0; else if(t>1)t=1; } const px=x1+dx*t, py=y1+dy*t; const d2=(px-cx)*(px-cx)+(py-cy)*(py-cy); if(d2<=R*R) hits.push({i,t}); } hits.sort((a,b)=>a.t-b.t); return hits; }
 
+    // Initialize player after class definition
+    state.player = new Player();
+
     canvas.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); state.mouse={x:e.clientX-r.left,y:e.clientY-r.top}; });
+
+    // Keyboard controls for player movement
+    window.addEventListener('keydown', e => {
+      if(!state.player) return;
+      if(e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp'){
+        state.player.moveUp = true;
+        e.preventDefault();
+      }
+      if(e.key === 's' || e.key === 'S' || e.key === 'ArrowDown'){
+        state.player.moveDown = true;
+        e.preventDefault();
+      }
+      if(e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft'){
+        state.player.moveLeft = true;
+        e.preventDefault();
+      }
+      if(e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight'){
+        state.player.moveRight = true;
+        e.preventDefault();
+      }
+    });
+
+    window.addEventListener('keyup', e => {
+      if(!state.player) return;
+      if(e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp'){
+        state.player.moveUp = false;
+      }
+      if(e.key === 's' || e.key === 'S' || e.key === 'ArrowDown'){
+        state.player.moveDown = false;
+      }
+      if(e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft'){
+        state.player.moveLeft = false;
+      }
+      if(e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight'){
+        state.player.moveRight = false;
+      }
+    });
+
     function worldToGrid(x,y){ return {gx:Math.floor(x/GRID), gy:Math.floor(y/GRID)}; }
     function gridToWorld(gx,gy){ return {x:gx*GRID+GRID/2, y:gy*GRID+GRID/2}; }
-    function canPlaceAt(gx,gy){ if(gx<0||gy<0||gx>=W/GRID||gy>=H/GRID) return false; if(state.blocked.has(`${gx},${gy}`)) return false; for(const t of state.towers){ const g=worldToGrid(t.x,t.y); if(g.gx===gx&&g.gy===gy) return false; } const pos=gridToWorld(gx,gy); const minDist = 14 + 18 + 2; if(distToPath(pos.x,pos.y) < minDist) return false; return true; }
+    function canPlaceAt(gx,gy){
+      if(gx<0||gy<0||gx>=W/GRID||gy>=H/GRID) return false;
+      if(state.blocked.has(`${gx},${gy}`)) return false;
+      for(const t of state.towers){
+        const g=worldToGrid(t.x,t.y);
+        if(g.gx===gx&&g.gy===gy) return false;
+      }
+      // No path constraints in Brotato mode - can place anywhere!
+      return true;
+    }
     canvas.addEventListener('click', e=>{ if(state.gameOver) return; const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const {gx,gy}=worldToGrid(x,y); if(state.selling){ for(let i=0;i<state.towers.length;i++){ const t=state.towers[i]; const tg=worldToGrid(t.x,t.y); if(tg.gx===gx&&tg.gy===gy){ state.money+=t.sellValue; state.towers.splice(i,1); return; } } return; } if(state.build){ const def=TOWER_TYPES[state.selectedTowerType]||TOWER_TYPES.basic; const cost=def.cost; if(state.money>=cost && canPlaceAt(gx,gy)){ const pos=gridToWorld(gx,gy); const t=new Tower(pos.x,pos.y,state.selectedTowerType); state.towers.push(t); state.towersBuilt++; state.money-=cost; notifyCrowd('build', { tower: t, auto: false }); } return; } });
 
     UI.towerShop.addEventListener('click', e=>{ const target=e.target.closest('[data-tower]'); if(!target) return; const key=target.dataset.tower; setSelectedTowerType(key); AudioSys.ensure(); });
@@ -1419,6 +1675,7 @@
 
     function update(dt){ if(state.gameOver){ if(state.autoReport && state.autoReport.active) finishAutoReport('gameover'); return; } const sdt=Math.min(0.05, dt*state.speedMultiplier); processEventTick(sdt); let waveJustCleared=false; let clearedWaveIndex=null; if(state.enemiesRemaining>0 || state.wavePlan.length>0){ spawnDue(sdt); } else if(state.enemies.length===0 && state.wave>0){ if(!state.waveClearedBonusGiven){ state.money += BAL.clearBase + Math.floor(state.wave*BAL.clearPer); state.waveClearedBonusGiven=true; clearWaveEvent(); } if(state.crowdRequest && state.crowdRequest.status === 'active') notifyCrowd('waveCleared', { wave: state.wave }); UI.startWave.disabled=false; waveJustCleared=true; clearedWaveIndex=state.wave; if(state.autoStart) startWave(); }
       if(state.autoPlay){ state.aiPlaceCooldown=Math.max(0,state.aiPlaceCooldown-sdt); state.aiUpgradeCooldown=Math.max(0,state.aiUpgradeCooldown-sdt); aiTryPlace(); aiTryUpgrade(); if(state.enemies.length===0 && state.enemiesRemaining===0 && !state.gameOver && state.wave>0 && state.autoStart===false) startWave(); }
+      if(state.player) state.player.update(sdt);
       for(const e of state.enemies) e.update(sdt); state.enemies = state.enemies.filter(e=>e.alive);
       for(const t of state.towers) t.update(sdt);
       for(let i=state.bullets.length-1;i>=0;i--){ const b=state.bullets[i]; const nx=b.x+b.vx*sdt, ny=b.y+b.vy*sdt; b.ttl-=sdt; const hits=segmentCircleAllHits(b.x,b.y,nx,ny,state.enemies,b.r); if(hits.length>0){ const maxHits=1+(b.pierce||0); let applied=0; const hitSet=new Set(); for(const h of hits){ const e=state.enemies[h.i]; if(!e||!e.alive||hitSet.has(h.i)) continue; applyDamage(e, b.dmg, b); if(b.splashRadius) applySplashDamage(b, e, h.i); hitSet.add(h.i); applied++; if(applied>=maxHits) break; } if(applied>=maxHits){ state.bullets.splice(i,1); continue; } }
@@ -1431,7 +1688,7 @@
       updateMomentumState(sdt);
       if(state.autoPlay && state.hype >= state.hypeMax && state.hypeActiveTimer<=0) activateHype(true);
       UI.money.textContent=state.money;
-      UI.lives.textContent=state.lives;
+      UI.lives.textContent=state.player ? `${Math.floor(state.player.hp)}/${state.player.maxHp}` : '0/100';
       UI.wave.textContent=state.wave;
       UI.enemies.textContent=state.enemies.length+state.enemiesRemaining+(state.wavePlan?state.wavePlan.length:0);
       if(waveJustCleared && clearedWaveIndex!=null) recordAutoPlayWave(clearedWaveIndex);
@@ -1440,11 +1697,11 @@
 
     function drawBackground(){ if(assets.bgImg){ const iw=assets.bgImg.naturalWidth||assets.bgImg.width, ih=assets.bgImg.naturalHeight||assets.bgImg.height; const s=Math.max(W/iw,H/ih); const w=iw*s,h=ih*s; ctx.globalAlpha=0.45; ctx.drawImage(assets.bgImg,(W-w)/2,(H-h)/2,w,h); ctx.globalAlpha=1; } }
     function drawGrid(){ ctx.strokeStyle='rgba(27,34,68,0.65)'; ctx.lineWidth=1; for(let x=0;x<=W;x+=GRID){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); } for(let y=0;y<=H;y+=GRID){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); } }
-    function drawPath(){ ctx.strokeStyle='rgba(30,41,59,0.9)'; ctx.lineWidth=28; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(waypoints[0].x,waypoints[0].y); for(let i=1;i<waypoints.length;i++) ctx.lineTo(waypoints[i].x,waypoints[i].y); ctx.stroke(); ctx.fillStyle='#eab308'; ctx.fillRect(W-30, waypoints[waypoints.length-1].y-20, 24, 40); }
-    function draw(){ ctx.clearRect(0,0,W,H); drawBackground(); drawGrid(); drawPath();
+    function draw(){ ctx.clearRect(0,0,W,H); drawBackground(); drawGrid();
       for(const pulse of state.pulses){ const life=pulse.life||0.6; const alpha=Math.max(0, (pulse.ttl>0?pulse.ttl:0)/life); if(alpha<=0) continue; ctx.save(); ctx.globalAlpha=alpha*0.35; ctx.strokeStyle=pulse.color||'#c084fc'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(pulse.x, pulse.y, pulse.r||0, 0, Math.PI*2); ctx.stroke(); ctx.restore(); }
       for(const t of state.towers) t.draw(ctx);
       for(const e of state.enemies) e.draw(ctx);
+      if(state.player) state.player.draw(ctx);
       ctx.fillStyle='#e5e7eb';
       for(const b of state.bullets){ ctx.fillStyle=b.color||'#e5e7eb'; ctx.beginPath(); ctx.arc(b.x,b.y,b.r||3.5,0,Math.PI*2); ctx.fill(); }
       for(const bolt of state.lightning){ if(!bolt.points||bolt.points.length<2) continue; const life=bolt.life||0.18; const alpha=Math.max(0, bolt.ttl/life); if(alpha<=0) continue; ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=bolt.color||'#facc15'; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(bolt.points[0].x, bolt.points[0].y); for(let i=1;i<bolt.points.length;i++){ const p=bolt.points[i]; ctx.lineTo(p.x,p.y); } ctx.stroke(); ctx.restore(); }
