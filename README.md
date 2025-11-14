@@ -1,6 +1,23 @@
 # Brotato Towers - Modern WebGL Edition
 
-A tower defense game built with a modern WebGL2 engine, featuring Brotato-inspired mechanics and an Entity Component System architecture.
+A dual-mode game featuring both a Brotato clone and tower defense, built with a modern WebGL2 engine, actual Brotato sprites, and an Entity Component System architecture.
+
+## 🎮 Two Game Modes
+
+### 🥔 Brotato Mode (Recommended)
+A faithful recreation of Brotato with:
+- Player-controlled character (WASD movement)
+- Auto-attacking weapons
+- Wave-based survival
+- XP and level progression
+- Real sprites from BrotatoWithUnity
+
+### 🗼 Tower Defense Mode
+Strategic tower placement with:
+- Multiple tower types
+- Hype Burst & Momentum mechanics
+- Special abilities and chain effects
+- Wave modifiers and events
 
 ## 🚀 Features
 
@@ -29,10 +46,20 @@ A tower defense game built with a modern WebGL2 engine, featuring Brotato-inspir
 
 ```
 UTowerDefense/
-├── index.html              # Main entry point
+├── index.html                  # Landing page / game mode selector
+├── brotato.html                # Brotato game mode
+├── go.html                     # Tower defense (original)
+├── towers.html                 # Tower defense (WebGL2 version)
+├── assets/
+│   └── sprites/                # Brotato sprites from Unity
+│       ├── player/             # potato.png, legs.png, highlight.png
+│       ├── enemies/            # Enemy sprites
+│       ├── weapons/            # Weapon sprites
+│       └── bullets/            # Bullet animations
 ├── src/
 │   ├── renderer/
-│   │   └── WebGLRenderer.js    # WebGL2 rendering engine
+│   │   ├── WebGLRenderer.js    # WebGL2 rendering engine
+│   │   └── TextureLoader.js    # Texture loading and caching
 │   ├── core/
 │   │   └── Engine.js           # Game loop and system management
 │   ├── ecs/
@@ -42,24 +69,33 @@ UTowerDefense/
 │   │   ├── RenderSystem.js     # Rendering logic
 │   │   └── PhysicsSystem.js    # Physics and movement
 │   └── game/
-│       ├── Game.js             # Main game logic
+│       ├── Game.js             # Tower defense logic
+│       ├── BrotatoGame.js      # Brotato game logic
 │       └── GameState.js        # Game state management
 └── README.md
 ```
 
 ## 🎮 How to Play
 
-1. **Start the Game**: Open `index.html` in a modern browser (Chrome, Firefox, Edge)
-2. **Select a Tower**: Click on a tower card in the right panel
-3. **Place Towers**: Click on the game canvas to place the selected tower
-4. **Start Wave**: Click "Start Wave" to begin the enemy assault
-5. **Build Strategy**: Upgrade towers and use special abilities to survive
+### Brotato Mode (`brotato.html`)
+1. **Move**: Use WASD or Arrow Keys
+2. **Attack**: Weapons automatically shoot nearest enemies
+3. **Survive**: Complete waves to earn money and XP
+4. **Level Up**: Gain stat boosts every level
+5. **Wave Control**: Start new waves when ready
 
-### Controls
-- **Left Click**: Place selected tower / Select tower
-- **Start Wave**: Begin the next wave
-- **Speed Button**: Toggle game speed (1x, 2x, 3x)
-- **Activate Hype**: Unleash hype burst when meter is full
+### Tower Defense Mode (`go.html` or `towers.html`)
+1. **Select Tower**: Click on a tower card
+2. **Place**: Click on canvas to place tower
+3. **Start Wave**: Begin the enemy assault
+4. **Abilities**: Use Hype Burst and momentum
+5. **Strategy**: Upgrade towers and use chain effects
+
+### GitHub Pages Deployment
+The game works on GitHub Pages! Access via:
+- Main page: `https://[username].github.io/UTowerDefense/`
+- Brotato: `https://[username].github.io/UTowerDefense/brotato.html`
+- Tower Defense: `https://[username].github.io/UTowerDefense/go.html`
 
 ## 🏗️ Architecture
 
@@ -137,14 +173,26 @@ npx http-server
 
 ## 🎯 Future Enhancements
 
-- [ ] Player-controlled character (Brotato-style)
+### Brotato Mode
 - [ ] Item shop between waves
-- [ ] Weapon system with auto-attack
-- [ ] Stat system (damage, speed, armor, etc.)
+- [ ] Multiple weapon types
+- [ ] Stat modifiers and items
+- [ ] More character sprites (different classes)
+- [ ] Boss enemies
+- [ ] Achievements and unlocks
+
+### Tower Defense Mode
+- [ ] Tower upgrades UI
+- [ ] More tower types
+- [ ] Path editor
+- [ ] Multiple difficulty levels
+
+### Both Modes
 - [ ] Save/load game state
 - [ ] Sound effects and music
 - [ ] Particle system for better effects
 - [ ] Mobile touch controls
+- [ ] Leaderboards
 - [ ] Multiplayer support
 
 ## 📜 License
