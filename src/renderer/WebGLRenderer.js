@@ -47,6 +47,21 @@ export class WebGLRenderer {
 
     // Create buffers
     this.createBuffers();
+
+    // Create white texture for colored sprites
+    this.createWhiteTexture();
+
+    // Current bound texture
+    this.currentTexture = null;
+  }
+
+  createWhiteTexture() {
+    const gl = this.gl;
+    this.whiteTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.whiteTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255, 255]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   }
 
   createShapeProgram() {
@@ -375,6 +390,76 @@ export class WebGLRenderer {
     }
 
     return [1, 1, 1, 1];
+  }
+
+  // Draw a textured sprite
+  drawSprite(texture, x, y, width, height, options = {}) {
+    const gl = this.gl;
+    const program = this.programs.sprite;
+
+    const rotation = options.rotation || 0;
+    const scaleX = options.scaleX || 1;
+    const scaleY = options.scaleY || 1;
+    const originX = options.originX || 0.5;
+    const originY = options.originY || 0.5;
+    const color = options.color || [1, 1, 1, 1];
+    const [r, g, b, a] = Array.isArray(color) ? color : this.parseColor(color);
+
+    // Calculate sprite vertices with rotation
+    const hw = width * scaleX / 2;
+    const hh = height * scaleY / 2;
+    const ox = -width * originX;
+    const oy = -height * originY;
+
+    const cos = Math.cos(rotation);
+    const sin = Math.sin(rotation);
+
+    const vertices = new Float32Array([
+      // Position (x, y), TexCoord (u, v), Color (r, g, b, a)
+      ox - hw, oy - hh, 0, 0, r, g, b, a,
+      ox + hw, oy - hh, 1, 0, r, g, b, a,
+      ox + hw, oy + hh, 1, 1, r, g, b, a,
+      ox - hw, oy + hh, 0, 1, r, g, b, a
+    ]);
+
+    // Apply rotation and translation
+    for (let i = 0; i < 4; i++) {
+      const vx = vertices[i * 8];
+      const vy = vertices[i * 8 + 1];
+      vertices[i * 8] = vx * cos - vy * sin + x;
+      vertices[i * 8 + 1] = vx * sin + vy * cos + y;
+    }
+
+    gl.useProgram(program.program);
+
+    // Bind texture
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture || this.whiteTexture);
+    gl.uniform1i(program.uniforms.u_texture, 0);
+
+    // Set projection matrix
+    gl.uniformMatrix4fv(program.uniforms.u_projection, false, this.projectionMatrix);
+
+    // Upload vertex data
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW);
+
+    // Set up attributes (position, texCoord, color)
+    const stride = 8 * 4; // 8 floats per vertex
+    gl.enableVertexAttribArray(program.attributes.a_position);
+    gl.vertexAttribPointer(program.attributes.a_position, 2, gl.FLOAT, false, stride, 0);
+
+    gl.enableVertexAttribArray(program.attributes.a_texCoord);
+    gl.vertexAttribPointer(program.attributes.a_texCoord, 2, gl.FLOAT, false, stride, 2 * 4);
+
+    gl.enableVertexAttribArray(program.attributes.a_color);
+    gl.vertexAttribPointer(program.attributes.a_color, 4, gl.FLOAT, false, stride, 4 * 4);
+
+    // Draw quad using index buffer
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+    this.drawCalls++;
   }
 
   // Draw text using emoji/unicode

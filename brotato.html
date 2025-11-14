@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brotato - WebGL2 Edition</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1220;
+      color: #e8eaf6;
+      overflow: hidden;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 820px 1fr;
+      gap: 16px;
+      padding: 16px;
+      height: 100vh;
+    }
+
+    .game-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ui-panel {
+      background: #141830;
+      border: 1px solid #263059;
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.25);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      max-height: 100%;
+    }
+
+    canvas {
+      background: #0b0f1f;
+      border-radius: 12px;
+      border: 1px solid #273057;
+      display: block;
+      cursor: crosshair;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title {
+      font-weight: 800;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      background: #1a2047;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #2c3770;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(15,20,43,0.45);
+      border: 1px solid #2a3470;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #9aa3d7;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #7c9eff;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      background: #2a3470;
+      color: #fff;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: .2px;
+      transition: all .2s ease;
+      flex: 1;
+    }
+
+    .btn:hover {
+      background: #374298;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #5b72ff, #7c9eff);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #6e84ff, #8daeff);
+    }
+
+    .section-title {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: #94a3ff;
+      margin-bottom: 8px;
+    }
+
+    .info-box {
+      background: rgba(23,30,68,0.55);
+      border: 1px solid rgba(112,129,255,0.25);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #a6b3f5;
+    }
+
+    .meter {
+      position: relative;
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(30,41,82,0.65);
+      overflow: hidden;
+      border: 1px solid rgba(112,129,255,0.25);
+      margin-top: 6px;
+    }
+
+    .meter-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8, #c084fc);
+      transition: width .25s ease;
+    }
+
+    .meter-fill.health {
+      background: linear-gradient(90deg, #ef4444, #f59e0b);
+    }
+
+    .meter-fill.xp {
+      background: linear-gradient(90deg, #22c55e, #3b82f6);
+    }
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      background: #0f1220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 1000;
+    }
+
+    .loading.hidden {
+      display: none;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #2a3470;
+      border-top-color: #5b72ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .controls-help {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+    }
+
+    .controls-help h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #60a5fa;
+    }
+
+    .controls-help ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .controls-help li {
+      padding: 4px 0;
+      color: #a6b3f5;
+    }
+
+    @media (max-width: 1320px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div>Loading Brotato...</div>
+  </div>
+
+  <div class="container">
+    <div class="game-panel">
+      <canvas id="game" width="800" height="480"></canvas>
+    </div>
+
+    <div class="ui-panel">
+      <div class="header">
+        <div class="title">
+          <span>🥔</span>
+          <span>Brotato</span>
+        </div>
+        <span class="badge">WebGL2 Edition</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">💰 Money</div>
+          <div class="stat-value" id="money">120</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">❤️ Health</div>
+          <div class="stat-value" id="health">100/100</div>
+          <div class="meter">
+            <div class="meter-fill health" id="healthMeter"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">⭐ Level</div>
+          <div class="stat-value" id="level">1</div>
+          <div class="meter">
+            <div class="meter-fill xp" id="xpMeter"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">🌊 Wave</div>
+          <div class="stat-value" id="wave">0</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="startWave" class="btn btn-primary">Start Wave</button>
+        <button id="speedBtn" class="btn">Speed: 1x</button>
+      </div>
+
+      <div class="controls-help">
+        <h3>Controls</h3>
+        <ul>
+          <li><strong>WASD</strong> or <strong>Arrow Keys</strong> - Move</li>
+          <li><strong>Weapons</strong> - Auto-attack nearest enemies</li>
+          <li><strong>Survive waves</strong> - Kill enemies to gain XP and gold</li>
+          <li><strong>Level up</strong> - Earn stat boosts every level</li>
+        </ul>
+      </div>
+
+      <div class="section-title">Game Info</div>
+      <div class="info-box" id="gameInfo">
+        Move around with WASD and survive waves of enemies! Your weapons automatically attack nearby foes. Gain XP to level up and earn money to buy upgrades between waves.
+      </div>
+
+      <div class="section-title">Stats</div>
+      <div class="info-box">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+          <div><strong>Kills:</strong> <span id="kills">0</span></div>
+          <div><strong>Enemies:</strong> <span id="enemies">0</span></div>
+          <div><strong>DPS:</strong> <span id="dps">0</span></div>
+          <div><strong>FPS:</strong> <span id="fps">60</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid #263059; font-size: 11px; color: #6b7ba8;">
+        <strong>Modern WebGL2 Brotato Clone</strong>
+        <ul style="margin-top: 8px; margin-left: 16px; line-height: 1.6;">
+          <li>Entity Component System</li>
+          <li>Auto-attacking weapons</li>
+          <li>Wave-based survival</li>
+          <li>Sprite rendering with textures</li>
+          <li>Level & XP progression</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { BrotatoGame } from './src/game/BrotatoGame.js';
+
+    let game;
+
+    async function init() {
+      const canvas = document.getElementById('game');
+      const loading = document.getElementById('loading');
+
+      try {
+        // Initialize game
+        game = new BrotatoGame(canvas);
+        await game.init();
+
+        // Setup event listeners
+        setupEventListeners();
+
+        // Start update loop
+        requestAnimationFrame(updateUI);
+
+        // Hide loading
+        setTimeout(() => {
+          loading.classList.add('hidden');
+        }, 500);
+
+      } catch (error) {
+        console.error('Failed to initialize game:', error);
+        loading.innerHTML = `
+          <div style="color: #ef4444; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Failed to initialize game</div>
+            <div style="font-size: 14px; color: #9aa3d7;">${error.message}</div>
+            <div style="font-size: 12px; color: #6b7ba8; margin-top: 16px;">Please check that your browser supports WebGL2</div>
+          </div>
+        `;
+      }
+    }
+
+    function setupEventListeners() {
+      // Start wave button
+      document.getElementById('startWave').addEventListener('click', () => {
+        if (game) {
+          game.startWave();
+        }
+      });
+
+      // Speed control
+      let speeds = [1, 2, 3];
+      let speedIndex = 0;
+      document.getElementById('speedBtn').addEventListener('click', () => {
+        speedIndex = (speedIndex + 1) % speeds.length;
+        const speed = speeds[speedIndex];
+        if (game) {
+          game.gameState.speedMultiplier = speed;
+        }
+        document.getElementById('speedBtn').textContent = `Speed: ${speed}x`;
+      });
+    }
+
+    function updateUI() {
+      if (game && game.gameState && game.playerEntity) {
+        const state = game.gameState;
+        const player = game.playerEntity.getComponent('player');
+        const health = game.playerEntity.getComponent('health');
+
+        // Update stats
+        document.getElementById('money').textContent = Math.floor(state.money);
+        document.getElementById('wave').textContent = state.wave;
+        document.getElementById('kills').textContent = state.kills;
+        document.getElementById('enemies').textContent = state.enemiesRemaining;
+        document.getElementById('fps').textContent = Math.round(game.engine.state.fps);
+
+        if (health) {
+          document.getElementById('health').textContent = `${Math.floor(health.current)}/${health.max}`;
+          const healthPercent = (health.current / health.max) * 100;
+          document.getElementById('healthMeter').style.width = `${healthPercent}%`;
+        }
+
+        if (player) {
+          document.getElementById('level').textContent = player.level;
+          const xpNeeded = player.level * 100;
+          const xpPercent = (player.xp / xpNeeded) * 100;
+          document.getElementById('xpMeter').style.width = `${xpPercent}%`;
+        }
+
+        // Update start wave button
+        const startBtn = document.getElementById('startWave');
+        startBtn.disabled = game.waveActive || state.gameOver;
+        startBtn.textContent = game.waveActive ? 'Wave in Progress...' :
+                              state.gameOver ? 'Game Over' :
+                              'Start Wave';
+
+        // Update game info
+        const enemies = game.entityManager.getEntitiesWithTag('enemy');
+        if (game.waveActive) {
+          const timeLeft = Math.max(0, Math.ceil(game.waveTimer));
+          document.getElementById('gameInfo').textContent =
+            `Wave ${state.wave} in progress! ${enemies.length} enemies remaining. Time: ${timeLeft}s`;
+        } else if (state.gameOver) {
+          document.getElementById('gameInfo').innerHTML =
+            `<strong style="color: #ef4444;">Game Over!</strong> You survived ${state.wave} waves and killed ${state.kills} enemies.`;
+        } else {
+          document.getElementById('gameInfo').textContent =
+            `Ready for wave ${state.wave + 1}. Click Start Wave to begin!`;
+        }
+      }
+
+      requestAnimationFrame(updateUI);
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
