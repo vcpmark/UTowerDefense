@@ -248,7 +248,10 @@
 <body>
   <div class="loading" id="loading">
     <div class="spinner"></div>
-    <div>Loading Brotato...</div>
+    <div id="loadingTitle">Loading Brotato...</div>
+    <div id="loadingProgress" style="margin-top: 16px; font-size: 12px; color: #9aa3d7; text-align: left; max-width: 400px;">
+      <div style="margin-bottom: 4px;">⏳ Initializing...</div>
+    </div>
   </div>
 
   <div class="container">
@@ -337,35 +340,77 @@
     import { BrotatoGame } from './src/game/BrotatoGame.js';
 
     let game;
+    const diagnostics = [];
+
+    function addDiagnostic(message, isError = false) {
+      const timestamp = Date.now();
+      diagnostics.push({ message, isError, timestamp });
+      console.log(`[${new Date().toISOString()}] ${message}`);
+
+      const progressDiv = document.getElementById('loadingProgress');
+      if (progressDiv) {
+        const icon = isError ? '❌' : '✓';
+        const color = isError ? '#ef4444' : '#22c55e';
+        const div = document.createElement('div');
+        div.style.marginBottom = '4px';
+        div.style.color = color;
+        div.innerHTML = `${icon} ${message}`;
+        progressDiv.appendChild(div);
+        progressDiv.scrollTop = progressDiv.scrollHeight;
+      }
+    }
 
     async function init() {
       const canvas = document.getElementById('game');
       const loading = document.getElementById('loading');
 
       try {
+        addDiagnostic('Starting initialization...');
+
+        // Check WebGL2 support
+        addDiagnostic('Checking WebGL2 support...');
+        const gl = canvas.getContext('webgl2');
+        if (!gl) {
+          throw new Error('WebGL2 not supported in this browser');
+        }
+        addDiagnostic('WebGL2 is supported');
+
         // Initialize game
-        game = new BrotatoGame(canvas);
+        addDiagnostic('Creating game instance...');
+        game = new BrotatoGame(canvas, addDiagnostic);
+
+        addDiagnostic('Initializing game systems...');
         await game.init();
+        addDiagnostic('Game systems initialized successfully');
 
         // Setup event listeners
+        addDiagnostic('Setting up event listeners...');
         setupEventListeners();
+        addDiagnostic('Event listeners configured');
 
         // Start update loop
+        addDiagnostic('Starting game loop...');
         requestAnimationFrame(updateUI);
+        addDiagnostic('Game loop started');
 
         // Hide loading
+        addDiagnostic('✨ Initialization complete!');
         setTimeout(() => {
           loading.classList.add('hidden');
-        }, 500);
+        }, 1000);
 
       } catch (error) {
         console.error('Failed to initialize game:', error);
-        loading.innerHTML = `
+        addDiagnostic(`Error: ${error.message}`, true);
+        addDiagnostic(`Stack: ${error.stack}`, true);
+
+        loading.querySelector('.spinner').style.display = 'none';
+        document.getElementById('loadingTitle').innerHTML = `
           <div style="color: #ef4444; text-align: center;">
             <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
             <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Failed to initialize game</div>
             <div style="font-size: 14px; color: #9aa3d7;">${error.message}</div>
-            <div style="font-size: 12px; color: #6b7ba8; margin-top: 16px;">Please check that your browser supports WebGL2</div>
+            <div style="font-size: 12px; color: #6b7ba8; margin-top: 16px;">Check the console for more details</div>
           </div>
         `;
       }
