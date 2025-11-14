@@ -1,0 +1,22 @@
+{
+  "name": "brotato-towers-webgl",
+  "version": "2.0.0",
+  "description": "Tower defense game with modern WebGL2 engine and Brotato-inspired mechanics",
+  "type": "module",
+  "scripts": {
+    "start": "python3 serve.py",
+    "serve": "python3 serve.py 8000",
+    "dev": "python3 serve.py 8080"
+  },
+  "keywords": [
+    "game",
+    "tower-defense",
+    "webgl",
+    "webgl2",
+    "brotato",
+    "ecs",
+    "javascript"
+  ],
+  "author": "Claude",
+  "license": "MIT"
+}
