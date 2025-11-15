@@ -1,6 +1,6 @@
 /**
  * Weapon Data Definitions
- * Based on Brotato weapon system
+ * Based on Motato weapon system
  */
 
 export const WeaponDefinitions = {

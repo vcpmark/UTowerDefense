@@ -1,5 +1,5 @@
 /**
- * Brotato-Style Game
+ * Motato-Style Game
  * Top-down wave survival with auto-attacking weapons
  */
 
@@ -13,7 +13,7 @@ import { PhysicsSystem } from '../systems/PhysicsSystem.js';
 import { GameState } from './GameState.js';
 import { getWeapon, calculateWeaponDamage, calculateAttackSpeed, rollCritical, getCritMultiplier } from './WeaponData.js';
 
-export class BrotatoGame {
+export class MotatoGame {
   constructor(canvas, diagnosticCallback = null) {
     this.canvas = canvas;
     this.diagnostic = diagnosticCallback || ((msg) => console.log(msg));

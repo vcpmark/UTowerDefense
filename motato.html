@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brotato - WebGL2 Edition</title>
+  <title>Motato - WebGL2 Edition</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -248,7 +248,7 @@
 <body>
   <div class="loading" id="loading">
     <div class="spinner"></div>
-    <div id="loadingTitle">Loading Brotato...</div>
+    <div id="loadingTitle">Loading Motato...</div>
     <div id="loadingProgress" style="margin-top: 16px; font-size: 12px; color: #9aa3d7; text-align: left; max-width: 400px;">
       <div style="margin-bottom: 4px;">⏳ Initializing...</div>
     </div>
@@ -263,7 +263,7 @@
       <div class="header">
         <div class="title">
           <span>🥔</span>
-          <span>Brotato</span>
+          <span>Motato</span>
         </div>
         <span class="badge">WebGL2 Edition</span>
       </div>
@@ -324,7 +324,7 @@
       </div>
 
       <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid #263059; font-size: 11px; color: #6b7ba8;">
-        <strong>Modern WebGL2 Brotato Clone</strong>
+        <strong>Modern WebGL2 Motato Clone</strong>
         <ul style="margin-top: 8px; margin-left: 16px; line-height: 1.6;">
           <li>Entity Component System</li>
           <li>Auto-attacking weapons</li>
@@ -337,7 +337,7 @@
   </div>
 
   <script type="module">
-    import { BrotatoGame } from './src/game/BrotatoGame.js';
+    import { MotatoGame } from './src/game/MotatoGame.js';
 
     let game;
     const diagnostics = [];
@@ -377,7 +377,7 @@
 
         // Initialize game
         addDiagnostic('Creating game instance...');
-        game = new BrotatoGame(canvas, addDiagnostic);
+        game = new MotatoGame(canvas, addDiagnostic);
 
         addDiagnostic('Initializing game systems...');
         await game.init();

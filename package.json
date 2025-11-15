@@ -1,7 +1,7 @@
 {
-  "name": "brotato-towers-webgl",
+  "name": "motato-towers-webgl",
   "version": "2.0.0",
-  "description": "Tower defense game with modern WebGL2 engine and Brotato-inspired mechanics",
+  "description": "Tower defense game with modern WebGL2 engine and Motato-inspired mechanics",
   "type": "module",
   "scripts": {
     "start": "python3 serve.py",
@@ -13,7 +13,7 @@
     "tower-defense",
     "webgl",
     "webgl2",
-    "brotato",
+    "motato",
     "ecs",
     "javascript"
   ],

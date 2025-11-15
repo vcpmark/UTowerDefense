@@ -1,6 +1,6 @@
 /**
  * Game State
- * Manages game state, waves, resources, and Brotato-style mechanics
+ * Manages game state, waves, resources, and Motato-style mechanics
  */
 
 export class GameState {
@@ -16,7 +16,7 @@ export class GameState {
     this.difficulty = 'Normal';
     this.speedMultiplier = 1;
 
-    // Brotato-inspired mechanics
+    // Motato-inspired mechanics
     this.hype = 0;
     this.hypeMax = 120;
     this.hypeActive = false;
