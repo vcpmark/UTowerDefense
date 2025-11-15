@@ -2,161 +2,219 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Motato MVP</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
     html, body {
       height: 100%;
+      width: 100%;
       font-family: system-ui, -apple-system, sans-serif;
       background: #0f1220;
       color: #e8eaf6;
       overflow: hidden;
+      position: fixed;
+      touch-action: none;
     }
 
     .container {
-      display: grid;
-      grid-template-columns: 820px 1fr;
-      gap: 16px;
-      padding: 16px;
-      height: 100vh;
-    }
-
-    .game-panel {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      height: 100vh;
+      height: 100dvh; /* Dynamic viewport height for mobile */
+      width: 100vw;
+      padding: 8px;
+      gap: 8px;
+    }
+
+    .game-wrapper {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    canvas {
+      background: #0b0f1f;
+      border-radius: 8px;
+      border: 1px solid #273057;
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      touch-action: none;
+    }
+
+    /* Virtual Joystick */
+    .joystick-zone {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 140px;
+      height: 140px;
+      pointer-events: all;
+      z-index: 100;
+    }
+
+    .joystick-base {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(44, 55, 112, 0.3);
+      border: 2px solid rgba(91, 114, 255, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .joystick-stick {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #5b72ff, #7c9eff);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 2px 10px rgba(91, 114, 255, 0.5);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.1s ease-out;
+      pointer-events: none;
     }
 
     .ui-panel {
       background: #141830;
       border: 1px solid #263059;
-      border-radius: 16px;
-      padding: 12px 14px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.25);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: auto;
-    }
-
-    canvas {
-      background: #0b0f1f;
       border-radius: 12px;
-      border: 1px solid #273057;
-      display: block;
-      cursor: crosshair;
+      padding: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.25);
+      flex-shrink: 0;
     }
 
-    .header {
+    .stats-row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .title {
-      font-weight: 800;
-      font-size: 20px;
-    }
-
-    .badge {
-      background: #1a2047;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid #2c3770;
-      font-size: 12px;
-      text-transform: uppercase;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
     .stat-card {
       background: rgba(15,20,43,0.45);
       border: 1px solid #2a3470;
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 6px 10px;
+      flex: 1;
+      min-width: 70px;
     }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 10px;
       color: #9aa3d7;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .stat-value {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 700;
       color: #7c9eff;
     }
 
     .btn {
-      background: #2a3470;
+      background: linear-gradient(135deg, #5b72ff, #7c9eff);
       color: #fff;
       border: 0;
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       font-size: 14px;
-      transition: all .2s ease;
       width: 100%;
-    }
-
-    .btn:hover {
-      background: #374298;
-      transform: translateY(-1px);
+      touch-action: manipulation;
     }
 
     .btn:disabled {
       opacity: .5;
       cursor: not-allowed;
-      transform: none;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #5b72ff, #7c9eff);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #6e84ff, #8daeff);
-    }
-
-    .info-box {
+    .game-info {
+      font-size: 12px;
+      color: #a6b3f5;
+      text-align: center;
+      padding: 8px;
       background: rgba(23,30,68,0.55);
       border: 1px solid rgba(112,129,255,0.25);
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #a6b3f5;
+      border-radius: 8px;
+      margin-top: 8px;
     }
 
-    @media (max-width: 1320px) {
+    /* Desktop layout */
+    @media (min-width: 768px) {
       .container {
-        grid-template-columns: 1fr;
+        flex-direction: row;
+        padding: 16px;
+        gap: 16px;
       }
+
+      .game-wrapper {
+        flex: 1;
+      }
+
+      .ui-panel {
+        width: 320px;
+        flex-shrink: 0;
+        overflow-y: auto;
+      }
+
+      .joystick-zone {
+        display: none;
+      }
+
+      .stat-card {
+        min-width: auto;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Prevent pull-to-refresh on iOS */
+    body {
+      overscroll-behavior-y: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="game-panel">
+    <div class="game-wrapper">
       <canvas id="game" width="800" height="480"></canvas>
+
+      <!-- Virtual Joystick for Mobile -->
+      <div class="joystick-zone" id="joystickZone">
+        <div class="joystick-base"></div>
+        <div class="joystick-stick" id="joystickStick"></div>
+      </div>
     </div>
 
     <div class="ui-panel">
-      <div class="header">
-        <div class="title">🥔 Motato MVP</div>
-        <span class="badge">Bare Bones</span>
-      </div>
-
-      <div class="stats-grid">
+      <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-label">❤️ Health</div>
+          <div class="stat-label">❤️ HP</div>
           <div class="stat-value" id="health">100</div>
         </div>
         <div class="stat-card">
@@ -168,27 +226,27 @@
           <div class="stat-value" id="score">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">👾 Enemies</div>
+          <div class="stat-label">👾 Foes</div>
           <div class="stat-value" id="enemies">0</div>
         </div>
       </div>
 
-      <button id="startWave" class="btn btn-primary">Start Wave</button>
+      <button id="startWave" class="btn">Start Wave</button>
 
-      <div class="info-box">
-        <strong>Controls:</strong><br>
-        • WASD or Arrow Keys - Move<br>
-        • Auto-shoots nearest enemy<br>
-        • Survive waves to win!
-      </div>
-
-      <div class="info-box" id="gameInfo">
-        Click "Start Wave" to begin!
+      <div class="game-info" id="gameInfo">
+        Tap "Start Wave" to begin!
       </div>
     </div>
   </div>
 
   <script>
+    // Prevent iOS Safari bounce scrolling
+    document.addEventListener('touchmove', (e) => {
+      if (e.target === document.body || e.target === document.documentElement) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
     // Simple game state
     const game = {
       canvas: null,
@@ -204,17 +262,92 @@
       shootTimer: 0,
       keys: {},
       lastTime: 0,
-      gameOver: false
+      gameOver: false,
+      // Touch controls
+      joystick: { active: false, x: 0, y: 0, startX: 0, startY: 0 }
     };
+
+    // Virtual Joystick
+    const joystickZone = document.getElementById('joystickZone');
+    const joystickStick = document.getElementById('joystickStick');
+    let joystickTouchId = null;
+
+    function setupJoystick() {
+      joystickZone.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        joystickTouchId = touch.identifier;
+
+        const rect = joystickZone.getBoundingClientRect();
+        game.joystick.active = true;
+        game.joystick.startX = rect.left + rect.width / 2;
+        game.joystick.startY = rect.top + rect.height / 2;
+        updateJoystick(touch.clientX, touch.clientY);
+      }, { passive: false });
+
+      document.addEventListener('touchmove', (e) => {
+        if (!game.joystick.active) return;
+
+        for (let touch of e.changedTouches) {
+          if (touch.identifier === joystickTouchId) {
+            e.preventDefault();
+            updateJoystick(touch.clientX, touch.clientY);
+            break;
+          }
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', (e) => {
+        for (let touch of e.changedTouches) {
+          if (touch.identifier === joystickTouchId) {
+            game.joystick.active = false;
+            game.joystick.x = 0;
+            game.joystick.y = 0;
+            joystickTouchId = null;
+            joystickStick.style.transform = 'translate(-50%, -50%)';
+            break;
+          }
+        }
+      }, { passive: false });
+    }
+
+    function updateJoystick(touchX, touchY) {
+      const dx = touchX - game.joystick.startX;
+      const dy = touchY - game.joystick.startY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = 40;
+
+      if (distance > 0) {
+        const angle = Math.atan2(dy, dx);
+        const clampedDistance = Math.min(distance, maxDistance);
+
+        game.joystick.x = Math.cos(angle) * (clampedDistance / maxDistance);
+        game.joystick.y = Math.sin(angle) * (clampedDistance / maxDistance);
+
+        // Update visual position
+        const offsetX = game.joystick.x * maxDistance;
+        const offsetY = game.joystick.y * maxDistance;
+        joystickStick.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+      }
+    }
 
     // Initialize
     function init() {
       game.canvas = document.getElementById('game');
       game.ctx = game.canvas.getContext('2d');
 
-      // Input listeners
-      window.addEventListener('keydown', (e) => game.keys[e.key.toLowerCase()] = true);
-      window.addEventListener('keyup', (e) => game.keys[e.key.toLowerCase()] = false);
+      // Keyboard input (for desktop)
+      window.addEventListener('keydown', (e) => {
+        game.keys[e.key.toLowerCase()] = true;
+        e.preventDefault();
+      });
+      window.addEventListener('keyup', (e) => {
+        game.keys[e.key.toLowerCase()] = false;
+        e.preventDefault();
+      });
+
+      // Setup touch controls
+      setupJoystick();
 
       // Start wave button
       document.getElementById('startWave').addEventListener('click', startWave);
@@ -253,20 +386,29 @@
 
     // Update game logic
     function update(dt) {
-      // Update player movement
+      // Update player movement (keyboard or touch)
       let moveX = 0;
       let moveY = 0;
 
+      // Keyboard input
       if (game.keys['w'] || game.keys['arrowup']) moveY -= 1;
       if (game.keys['s'] || game.keys['arrowdown']) moveY += 1;
       if (game.keys['a'] || game.keys['arrowleft']) moveX -= 1;
       if (game.keys['d'] || game.keys['arrowright']) moveX += 1;
 
-      // Normalize diagonal movement
-      const mag = Math.sqrt(moveX * moveX + moveY * moveY);
-      if (mag > 0) {
-        moveX /= mag;
-        moveY /= mag;
+      // Touch input (joystick)
+      if (game.joystick.active) {
+        moveX = game.joystick.x;
+        moveY = game.joystick.y;
+      }
+
+      // Normalize diagonal movement (only for keyboard)
+      if (!game.joystick.active) {
+        const mag = Math.sqrt(moveX * moveX + moveY * moveY);
+        if (mag > 0) {
+          moveX /= mag;
+          moveY /= mag;
+        }
       }
 
       // Move player
@@ -477,18 +619,18 @@
 
       const startBtn = document.getElementById('startWave');
       startBtn.disabled = game.waveActive || game.gameOver;
-      startBtn.textContent = game.waveActive ? 'Wave in Progress...' :
+      startBtn.textContent = game.waveActive ? 'Wave Active...' :
                             game.gameOver ? 'Game Over' :
                             'Start Wave';
 
       const info = document.getElementById('gameInfo');
       if (game.gameOver) {
-        info.innerHTML = `<strong style="color: #ef4444;">Game Over!</strong> You survived ${game.wave} waves with score ${game.score}.`;
+        info.innerHTML = `<strong style="color: #ef4444;">Game Over!</strong> Wave ${game.wave} • Score ${game.score}`;
       } else if (game.waveActive) {
         const timeLeft = Math.max(0, Math.ceil(game.waveTimer));
-        info.textContent = `Wave ${game.wave} in progress! ${game.enemies.length} enemies. Time: ${timeLeft}s`;
+        info.textContent = `Wave ${game.wave} • ${game.enemies.length} enemies • ${timeLeft}s`;
       } else {
-        info.textContent = `Ready for wave ${game.wave + 1}. Click Start Wave!`;
+        info.textContent = `Ready for wave ${game.wave + 1}. Tap Start!`;
       }
     }
 
