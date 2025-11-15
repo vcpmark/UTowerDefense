@@ -11,15 +11,32 @@ import { ComponentType, Transform, Circle, Health, Velocity, Player, Enemy, Bull
 import { RenderSystem } from '../systems/RenderSystem.js';
 import { PhysicsSystem } from '../systems/PhysicsSystem.js';
 import { GameState } from './GameState.js';
+import { getWeapon, calculateWeaponDamage, calculateAttackSpeed, rollCritical, getCritMultiplier } from './WeaponData.js';
 
 export class BrotatoGame {
-  constructor(canvas) {
+  constructor(canvas, diagnosticCallback = null) {
     this.canvas = canvas;
+    this.diagnostic = diagnosticCallback || ((msg) => console.log(msg));
+
+    this.diagnostic('Initializing WebGL renderer...');
     this.renderer = new WebGLRenderer(canvas);
+    this.diagnostic('WebGL renderer created');
+
+    this.diagnostic('Creating texture loader...');
     this.textureLoader = new TextureLoader(this.renderer.gl);
+    this.diagnostic('Texture loader created');
+
+    this.diagnostic('Creating game engine...');
     this.engine = new Engine(canvas);
+    this.diagnostic('Game engine created');
+
+    this.diagnostic('Creating entity manager...');
     this.entityManager = new EntityManager();
+    this.diagnostic('Entity manager created');
+
+    this.diagnostic('Creating game state...');
     this.gameState = new GameState();
+    this.diagnostic('Game state created');
 
     // Game bounds
     this.bounds = {
@@ -48,24 +65,39 @@ export class BrotatoGame {
 
   async init() {
     // Load textures
+    this.diagnostic('Loading game assets...');
     await this.loadAssets();
+    this.diagnostic('Assets loaded successfully');
 
     // Add systems
+    this.diagnostic('Creating physics system...');
     this.physicsSystem = new PhysicsSystem(this.entityManager);
-    this.renderSystem = new RenderSystem(this.renderer, this.entityManager);
+    this.diagnostic('Physics system created');
 
+    this.diagnostic('Creating render system...');
+    this.renderSystem = new RenderSystem(this.renderer, this.entityManager);
+    this.diagnostic('Render system created');
+
+    this.diagnostic('Registering game systems...');
     this.engine.addSystem(this.physicsSystem, 'update');
     this.engine.addSystem(this, 'update'); // Add game logic
     this.engine.addSystem(this.renderSystem, 'render');
+    this.diagnostic('Systems registered with engine');
 
     // Create player
+    this.diagnostic('Creating player entity...');
     this.createPlayer();
+    this.diagnostic('Player entity created');
 
     // Set up input
+    this.diagnostic('Setting up input handlers...');
     this.setupInput();
+    this.diagnostic('Input handlers configured');
 
     // Start engine
+    this.diagnostic('Starting game engine...');
     this.engine.start();
+    this.diagnostic('Game engine running');
   }
 
   async loadAssets() {
@@ -76,17 +108,20 @@ export class BrotatoGame {
       { key: 'bullet', path: 'assets/sprites/bullets/frame0000.png' }
     ];
 
+    this.diagnostic(`Loading ${assetsToLoad.length} assets...`);
+
     for (const asset of assetsToLoad) {
       try {
+        this.diagnostic(`Loading ${asset.key} from ${asset.path}...`);
         this.textures[asset.key] = await this.textureLoader.loadTexture(asset.path);
-        console.log(`✓ Loaded ${asset.key}`);
+        this.diagnostic(`✓ Loaded ${asset.key}`);
       } catch (error) {
-        console.warn(`✗ Failed to load ${asset.key} from ${asset.path}, using fallback`);
+        this.diagnostic(`⚠ Failed to load ${asset.key}, using fallback (${error.message})`);
         this.textures[asset.key] = null; // Will use colored circles as fallback
       }
     }
 
-    console.log('Asset loading complete!');
+    this.diagnostic('All assets processed');
   }
 
   createPlayer() {
@@ -94,30 +129,59 @@ export class BrotatoGame {
     const centerY = this.canvas.height / 2;
 
     this.playerEntity = this.entityManager.createEntity();
+    const playerStats = Player(200, 100, 100);
+
+    // Set initial stats
+    playerStats.stats.maxHP = 100;
+    playerStats.stats.rangedDamage = 5;
+    playerStats.stats.attackSpeed = 1.2;
+
     this.playerEntity
       .addComponent(ComponentType.TRANSFORM, Transform(centerX, centerY))
       .addComponent(ComponentType.VELOCITY, Velocity(0, 0, 200))
-      .addComponent(ComponentType.HEALTH, Health(100, 100))
+      .addComponent(ComponentType.HEALTH, Health(playerStats.stats.maxHP, playerStats.stats.maxHP))
       .addComponent(ComponentType.CIRCLE, Circle(16, '#fbbf24', true))
-      .addComponent(ComponentType.PLAYER, Player(200, 100, 100))
+      .addComponent(ComponentType.PLAYER, playerStats)
       .addTag('player');
 
-    // Add starter weapons (two guns like in Unity version)
-    this.addWeaponToPlayer('minigun', 15, 0.3, 250, 400, 0, 12, -6);
-    this.addWeaponToPlayer('minigun', 15, 0.3, 250, 400, 0, 12, 6);
+    // Add starter weapons
+    this.addWeaponToPlayer('stick', 12, -6);
+    this.addWeaponToPlayer('stick', 12, 6);
   }
 
-  addWeaponToPlayer(type, damage, rate, range, projectileSpeed, pierce, offsetX, offsetY) {
+  addWeaponToPlayer(weaponKey, offsetX, offsetY) {
+    const weaponDef = getWeapon(weaponKey);
+    if (!weaponDef) {
+      console.warn(`Unknown weapon: ${weaponKey}`);
+      return null;
+    }
+
     const weaponEntity = this.entityManager.createEntity();
+    const weaponComp = Weapon(
+      weaponDef.name,
+      weaponDef.weaponType,
+      weaponDef.damage,
+      weaponDef.rate,
+      weaponDef.range,
+      weaponDef.projectileSpeed,
+      weaponDef.pierce
+    );
+
+    // Copy additional properties from definition
+    weaponComp.tier = weaponDef.tier;
+    weaponComp.critChance = weaponDef.critChance;
+    weaponComp.critDamage = weaponDef.critDamage;
+    weaponComp.knockback = weaponDef.knockback;
+    weaponComp.lifesteal = weaponDef.lifesteal;
+    weaponComp.scaling = weaponDef.scaling;
+    weaponComp.offsetX = offsetX;
+    weaponComp.offsetY = offsetY;
+
     weaponEntity
       .addComponent(ComponentType.TRANSFORM, Transform(0, 0, 0, 0.8))
-      .addComponent(ComponentType.WEAPON, Weapon(type, damage, rate, range, projectileSpeed, pierce))
-      .addComponent(ComponentType.CIRCLE, Circle(6, '#94a3b8', true))
+      .addComponent(ComponentType.WEAPON, weaponComp)
+      .addComponent(ComponentType.CIRCLE, Circle(6, weaponDef.color, true))
       .addTag('weapon');
-
-    const weapon = weaponEntity.getComponent(ComponentType.WEAPON);
-    weapon.offsetX = offsetX;
-    weapon.offsetY = offsetY;
 
     const player = this.playerEntity.getComponent(ComponentType.PLAYER);
     player.weaponEntities.push(weaponEntity);
@@ -142,6 +206,9 @@ export class BrotatoGame {
 
     // Update game state
     this.gameState.update(dt);
+
+    // Update player stats and regeneration
+    this.updatePlayerStats(dt);
 
     // Update player movement
     this.updatePlayerMovement(dt);
@@ -171,6 +238,24 @@ export class BrotatoGame {
     if (this.waveActive && enemies.length === 0 && this.waveTimer <= 0) {
       this.onWaveComplete();
     }
+  }
+
+  updatePlayerStats(dt) {
+    if (!this.playerEntity) return;
+
+    const player = this.playerEntity.getComponent(ComponentType.PLAYER);
+    const health = this.playerEntity.getComponent(ComponentType.HEALTH);
+
+    // Update max HP from stats
+    health.max = player.stats.maxHP;
+
+    // Apply HP regeneration
+    if (player.stats.hpRegen > 0) {
+      health.current = Math.min(health.max, health.current + player.stats.hpRegen * dt);
+    }
+
+    // Update armor from stats
+    health.armor = player.stats.armor;
   }
 
   updateLifetimeEntities(dt) {
@@ -239,9 +324,15 @@ export class BrotatoGame {
       weaponTransform.y = playerTransform.y + weapon.offsetX * sin + weapon.offsetY * cos;
       weaponTransform.rotation = weapon.rotation;
 
-      // Find target and aim weapon
-      weapon.cooldown -= dt * this.gameState.speedMultiplier * player.stats.attackSpeed;
-      const target = this.findNearestEnemy(weaponTransform, weapon.aimingRange, enemies);
+      // Apply attack speed to cooldown
+      const attackSpeedMult = player.stats.attackSpeed;
+      weapon.cooldown -= dt * this.gameState.speedMultiplier * attackSpeedMult;
+
+      // Calculate effective range with player range bonus
+      const effectiveRange = weapon.range + player.stats.range;
+      const effectiveAimRange = effectiveRange * 1.2;
+
+      const target = this.findNearestEnemy(weaponTransform, effectiveAimRange, enemies);
 
       if (target) {
         const targetTransform = target.getComponent(ComponentType.TRANSFORM);
@@ -254,7 +345,7 @@ export class BrotatoGame {
         weapon.target = target;
 
         // Fire if in range and cooldown ready
-        if (weapon.cooldown <= 0 && dist <= weapon.range) {
+        if (weapon.cooldown <= 0 && dist <= effectiveRange) {
           this.fireWeapon(weaponTransform, weapon, target, player);
           weapon.cooldown = weapon.rate;
         }
@@ -285,7 +376,7 @@ export class BrotatoGame {
     return nearest;
   }
 
-  fireWeapon(weaponTransform, weapon, target, playerStats) {
+  fireWeapon(weaponTransform, weapon, target, player) {
     const targetTransform = target.getComponent(ComponentType.TRANSFORM);
 
     // Calculate direction
@@ -295,28 +386,64 @@ export class BrotatoGame {
     const dirX = dx / dist;
     const dirY = dy / dist;
 
-    // Apply player damage stats
-    const finalDamage = weapon.damage * playerStats.stats.damage;
+    // Calculate base damage with scaling
+    let finalDamage = weapon.damage;
+
+    // Apply stat-based scaling
+    const stats = player.stats;
+    const meleeDamageBonus = (weapon.scaling.melee / 100) * stats.meleeDamage;
+    const rangedDamageBonus = (weapon.scaling.ranged / 100) * stats.rangedDamage;
+    const elementalDamageBonus = (weapon.scaling.elemental / 100) * stats.elementalDamage;
+
+    finalDamage += meleeDamageBonus + rangedDamageBonus + elementalDamageBonus;
+
+    // Apply global damage multiplier
+    finalDamage *= (1 + stats.damage / 100);
+
+    // Check for critical hit
+    const isCrit = rollCritical(weapon.critChance, stats.critChance);
+    if (isCrit) {
+      const critMult = getCritMultiplier(weapon.critDamage, stats.critDamage);
+      finalDamage *= critMult;
+    }
+
+    // Calculate final pierce
+    const finalPierce = weapon.pierce + stats.pierce;
+
+    // Determine bullet color based on weapon type and crit
+    let bulletColor = '#facc15';
+    if (isCrit) {
+      bulletColor = '#ff6b6b';
+    } else if (weapon.weaponType === 'elemental') {
+      bulletColor = '#8b5cf6';
+    } else if (weapon.weaponType === 'melee') {
+      bulletColor = '#94a3b8';
+    }
 
     // Create bullet
     const bullet = this.entityManager.createEntity();
     bullet
       .addComponent(ComponentType.TRANSFORM, Transform(weaponTransform.x, weaponTransform.y))
       .addComponent(ComponentType.VELOCITY, Velocity(dirX * weapon.projectileSpeed, dirY * weapon.projectileSpeed))
-      .addComponent(ComponentType.BULLET, Bullet(finalDamage, weapon.projectileSpeed, weapon.pierce, target))
-      .addComponent(ComponentType.CIRCLE, Circle(4, '#facc15', true))
+      .addComponent(ComponentType.BULLET, Bullet(finalDamage, weapon.projectileSpeed, finalPierce, target))
+      .addComponent(ComponentType.CIRCLE, Circle(isCrit ? 6 : 4, bulletColor, true))
       .addComponent(ComponentType.LIFETIME, Lifetime(3)) // Bullets last 3 seconds max
       .addTag('bullet');
 
+    // Add lifesteal property
+    const bulletComp = bullet.getComponent(ComponentType.BULLET);
+    bulletComp.lifesteal = weapon.lifesteal + stats.lifesteal;
+    bulletComp.isCrit = isCrit;
+
     // Add muzzle flash effect
-    this.createMuzzleFlash(weaponTransform.x, weaponTransform.y);
+    this.createMuzzleFlash(weaponTransform.x, weaponTransform.y, isCrit ? '#ff6b6b' : '#fef08a');
   }
 
-  createMuzzleFlash(x, y) {
+  createMuzzleFlash(x, y, color = '#fef08a') {
     const flash = this.entityManager.createEntity();
     flash
       .addComponent(ComponentType.TRANSFORM, Transform(x, y))
-      .addComponent(ComponentType.CIRCLE, Circle(8, '#fef08a', true))
+      .addComponent(ComponentType.CIRCLE, Circle(8, color, true))
       .addComponent(ComponentType.LIFETIME, Lifetime(0.1))
       .addTag('effect');
   }
@@ -429,13 +556,23 @@ export class BrotatoGame {
 
     bulletComp.hitEnemies.add(enemy.id);
 
-    // Apply damage
-    const actualDamage = Math.max(1, bulletComp.damage - (health.armor || 0));
+    // Apply damage with armor reduction
+    const armorReduction = health.armor / (health.armor + 100);
+    const actualDamage = Math.max(1, bulletComp.damage * (1 - armorReduction));
     health.current -= actualDamage;
     health.lastDamageTime = performance.now() / 1000;
 
+    // Apply lifesteal
+    if (bulletComp.lifesteal > 0 && this.playerEntity) {
+      const roll = Math.random() * 100;
+      if (roll < bulletComp.lifesteal) {
+        const playerHealth = this.playerEntity.getComponent(ComponentType.HEALTH);
+        playerHealth.current = Math.min(playerHealth.max, playerHealth.current + 1);
+      }
+    }
+
     // Create hit effect
-    this.createHitEffect(enemyTransform.x, enemyTransform.y);
+    this.createHitEffect(enemyTransform.x, enemyTransform.y, bulletComp.isCrit);
 
     // Apply slow
     if (bulletComp.slow) {
@@ -456,12 +593,12 @@ export class BrotatoGame {
     }
   }
 
-  createHitEffect(x, y) {
+  createHitEffect(x, y, isCrit = false) {
     const hit = this.entityManager.createEntity();
     hit
       .addComponent(ComponentType.TRANSFORM, Transform(x, y))
-      .addComponent(ComponentType.CIRCLE, Circle(10, '#ef4444', false, 3))
-      .addComponent(ComponentType.LIFETIME, Lifetime(0.2))
+      .addComponent(ComponentType.CIRCLE, Circle(isCrit ? 14 : 10, isCrit ? '#ff6b6b' : '#ef4444', false, isCrit ? 4 : 3))
+      .addComponent(ComponentType.LIFETIME, Lifetime(isCrit ? 0.3 : 0.2))
       .addTag('effect');
   }
 

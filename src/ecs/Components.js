@@ -110,40 +110,70 @@ export function Player(speed, health, maxHealth) {
     maxHealth,
     xp: 0,
     level: 1,
+    weaponSlots: 6,
     weapons: [],
     weaponEntities: [], // Weapon entity references
     items: [],
     stats: {
-      damage: 1,
-      attackSpeed: 1,
-      critChance: 0,
-      critDamage: 1.5,
-      armor: 0,
-      dodge: 0,
-      lifesteal: 0,
-      speed: 1,
-      luck: 1,
-      harvesting: 1,
-      engineering: 0
+      // Damage stats
+      damage: 0,              // % damage increase to all weapons
+      meleeDamage: 0,         // Bonus damage for melee weapons
+      rangedDamage: 0,        // Bonus damage for ranged weapons
+      elementalDamage: 0,     // Bonus damage for elemental weapons
+      critChance: 0,          // % chance to crit (0-100)
+      critDamage: 1.5,        // Crit damage multiplier
+      attackSpeed: 1,         // Attack speed multiplier
+
+      // Defense stats
+      maxHP: 100,
+      armor: 0,               // Damage reduction
+      dodge: 0,               // % chance to dodge (0-60)
+      hpRegen: 0,             // HP regeneration per second
+      lifesteal: 0,           // % chance to heal 1 HP on hit
+
+      // Utility stats
+      speed: 1,               // Movement speed multiplier
+      range: 0,               // Range bonus for all weapons
+      luck: 0,                // Affects drops and shop
+      harvesting: 1,          // XP and materials multiplier
+      engineering: 0,         // Structure/turret bonus
+
+      // Secondary stats
+      pierce: 0,              // Additional pierce for projectiles
+      knockback: 0,           // Knockback force
+      pickup: 0,              // Pickup range bonus
+      bounce: 0              // Projectile bounce count
     }
   };
 }
 
 // Weapon component (attached weapons)
-export function Weapon(type, damage, rate, range, projectileSpeed, pierce = 0) {
+export function Weapon(name, weaponType, damage, rate, range, projectileSpeed, pierce = 0) {
   return {
-    type,
-    damage,
-    rate,
-    range,
-    projectileSpeed,
-    pierce,
-    cooldown: 0,
-    target: null,
-    aimingRange: range * 1.2, // Slightly larger than attack range
-    rotation: 0,
-    offsetX: 10, // Offset from player
-    offsetY: 0
+    name,               // Weapon name (e.g., "Stick", "Ghost Flint")
+    weaponType,         // 'melee', 'ranged', or 'elemental'
+    attackType: 'ranged', // 'melee' or 'ranged' (how it fires)
+    damage,             // Base damage
+    rate,               // Attack rate (seconds between attacks)
+    range,              // Attack range
+    projectileSpeed,    // Speed of projectiles
+    pierce,             // Pierce count
+    cooldown: 0,        // Current cooldown
+    target: null,       // Current target
+    aimingRange: range * 1.2, // Detection range
+    rotation: 0,        // Current rotation
+    offsetX: 10,        // Offset from player X
+    offsetY: 0,         // Offset from player Y
+    tier: 1,            // Weapon tier (1-4)
+    critChance: 0,      // Weapon-specific crit chance bonus
+    critDamage: 0,      // Weapon-specific crit damage bonus
+    lifesteal: 0,       // Weapon-specific lifesteal
+    knockback: 0,       // Weapon knockback
+    scaling: {          // Stat scaling percentages
+      melee: 100,       // % of melee damage to apply
+      ranged: 100,      // % of ranged damage to apply
+      elemental: 0      // % of elemental damage to apply
+    }
   };
 }
 
