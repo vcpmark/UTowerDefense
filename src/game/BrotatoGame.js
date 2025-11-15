@@ -108,20 +108,31 @@ export class BrotatoGame {
       { key: 'bullet', path: 'assets/sprites/bullets/frame0000.png' }
     ];
 
-    this.diagnostic(`Loading ${assetsToLoad.length} assets...`);
+    this.diagnostic(`Loading ${assetsToLoad.length} assets in parallel...`);
 
-    for (const asset of assetsToLoad) {
+    // Load all assets in parallel for better performance
+    const loadPromises = assetsToLoad.map(async (asset) => {
       try {
         this.diagnostic(`Loading ${asset.key} from ${asset.path}...`);
-        this.textures[asset.key] = await this.textureLoader.loadTexture(asset.path);
+        const texture = await this.textureLoader.loadTexture(asset.path);
         this.diagnostic(`✓ Loaded ${asset.key}`);
+        return { key: asset.key, texture, success: true };
       } catch (error) {
         this.diagnostic(`⚠ Failed to load ${asset.key}, using fallback (${error.message})`);
-        this.textures[asset.key] = null; // Will use colored circles as fallback
+        return { key: asset.key, texture: null, success: false };
       }
+    });
+
+    // Wait for all assets to load (or fail)
+    const results = await Promise.all(loadPromises);
+
+    // Store the results
+    for (const result of results) {
+      this.textures[result.key] = result.texture;
     }
 
-    this.diagnostic('All assets processed');
+    const successCount = results.filter(r => r.success).length;
+    this.diagnostic(`All assets processed: ${successCount}/${assetsToLoad.length} loaded successfully`);
   }
 
   createPlayer() {

@@ -36,13 +36,30 @@ export class TextureLoader {
     }
   }
 
-  async _loadTextureInternal(url) {
+  async _loadTextureInternal(url, timeoutMs = 10000) {
     const gl = this.gl;
 
     return new Promise((resolve, reject) => {
       const image = new Image();
+      let timeoutId = null;
+      let resolved = false;
+
+      // Timeout handler
+      const timeout = () => {
+        if (!resolved) {
+          resolved = true;
+          image.onload = null;
+          image.onerror = null;
+          image.src = '';
+          reject(new Error(`Timeout loading texture: ${url}`));
+        }
+      };
 
       image.onload = () => {
+        if (resolved) return;
+        resolved = true;
+        clearTimeout(timeoutId);
+
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -64,8 +81,14 @@ export class TextureLoader {
       };
 
       image.onerror = () => {
+        if (resolved) return;
+        resolved = true;
+        clearTimeout(timeoutId);
         reject(new Error(`Failed to load texture: ${url}`));
       };
+
+      // Start timeout
+      timeoutId = setTimeout(timeout, timeoutMs);
 
       // Handle relative paths for GitHub Pages
       image.src = url;
