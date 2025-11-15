@@ -39,6 +39,8 @@ export class TextureLoader {
   async _loadTextureInternal(url, timeoutMs = 10000) {
     const gl = this.gl;
 
+    console.log(`[TextureLoader] Starting to load: ${url}`);
+
     return new Promise((resolve, reject) => {
       const image = new Image();
       let timeoutId = null;
@@ -51,6 +53,7 @@ export class TextureLoader {
           image.onload = null;
           image.onerror = null;
           image.src = '';
+          console.error(`[TextureLoader] Timeout loading texture: ${url} (waited ${timeoutMs}ms)`);
           reject(new Error(`Timeout loading texture: ${url}`));
         }
       };
@@ -60,30 +63,49 @@ export class TextureLoader {
         resolved = true;
         clearTimeout(timeoutId);
 
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
+        console.log(`[TextureLoader] Image loaded successfully: ${url} (${image.width}x${image.height})`);
 
-        // Set texture parameters
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        try {
+          const texture = gl.createTexture();
+          if (!texture) {
+            throw new Error('Failed to create WebGL texture');
+          }
 
-        // Upload image data
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+          gl.bindTexture(gl.TEXTURE_2D, texture);
 
-        // Store texture metadata
-        texture.width = image.width;
-        texture.height = image.height;
-        texture.url = url;
+          // Set texture parameters
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-        resolve(texture);
+          // Upload image data
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+          // Check for GL errors
+          const error = gl.getError();
+          if (error !== gl.NO_ERROR) {
+            throw new Error(`WebGL error while creating texture: ${error}`);
+          }
+
+          // Store texture metadata
+          texture.width = image.width;
+          texture.height = image.height;
+          texture.url = url;
+
+          console.log(`[TextureLoader] WebGL texture created successfully for: ${url}`);
+          resolve(texture);
+        } catch (error) {
+          console.error(`[TextureLoader] Error creating WebGL texture for ${url}:`, error);
+          reject(error);
+        }
       };
 
-      image.onerror = () => {
+      image.onerror = (event) => {
         if (resolved) return;
         resolved = true;
         clearTimeout(timeoutId);
+        console.error(`[TextureLoader] Image load error for: ${url}`, event);
         reject(new Error(`Failed to load texture: ${url}`));
       };
 
@@ -91,6 +113,7 @@ export class TextureLoader {
       timeoutId = setTimeout(timeout, timeoutMs);
 
       // Handle relative paths for GitHub Pages
+      console.log(`[TextureLoader] Setting image.src to: ${url}`);
       image.src = url;
     });
   }

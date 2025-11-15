@@ -64,40 +64,46 @@ export class MotatoGame {
   }
 
   async init() {
-    // Load textures
-    this.diagnostic('Loading game assets...');
-    await this.loadAssets();
-    this.diagnostic('Assets loaded successfully');
+    try {
+      // Load textures
+      this.diagnostic('Loading game assets...');
+      await this.loadAssets();
+      this.diagnostic('Assets loaded successfully');
 
-    // Add systems
-    this.diagnostic('Creating physics system...');
-    this.physicsSystem = new PhysicsSystem(this.entityManager);
-    this.diagnostic('Physics system created');
+      // Add systems
+      this.diagnostic('Creating physics system...');
+      this.physicsSystem = new PhysicsSystem(this.entityManager);
+      this.diagnostic('Physics system created');
 
-    this.diagnostic('Creating render system...');
-    this.renderSystem = new RenderSystem(this.renderer, this.entityManager);
-    this.diagnostic('Render system created');
+      this.diagnostic('Creating render system...');
+      this.renderSystem = new RenderSystem(this.renderer, this.entityManager);
+      this.diagnostic('Render system created');
 
-    this.diagnostic('Registering game systems...');
-    this.engine.addSystem(this.physicsSystem, 'update');
-    this.engine.addSystem(this, 'update'); // Add game logic
-    this.engine.addSystem(this.renderSystem, 'render');
-    this.diagnostic('Systems registered with engine');
+      this.diagnostic('Registering game systems...');
+      this.engine.addSystem(this.physicsSystem, 'update');
+      this.engine.addSystem(this, 'update'); // Add game logic
+      this.engine.addSystem(this.renderSystem, 'render');
+      this.diagnostic('Systems registered with engine');
 
-    // Create player
-    this.diagnostic('Creating player entity...');
-    this.createPlayer();
-    this.diagnostic('Player entity created');
+      // Create player
+      this.diagnostic('Creating player entity...');
+      this.createPlayer();
+      this.diagnostic('Player entity created');
 
-    // Set up input
-    this.diagnostic('Setting up input handlers...');
-    this.setupInput();
-    this.diagnostic('Input handlers configured');
+      // Set up input
+      this.diagnostic('Setting up input handlers...');
+      this.setupInput();
+      this.diagnostic('Input handlers configured');
 
-    // Start engine
-    this.diagnostic('Starting game engine...');
-    this.engine.start();
-    this.diagnostic('Game engine running');
+      // Start engine
+      this.diagnostic('Starting game engine...');
+      this.engine.start();
+      this.diagnostic('✅ Game engine running - initialization complete!');
+    } catch (error) {
+      this.diagnostic(`❌ CRITICAL ERROR during init: ${error.message}`, true);
+      this.diagnostic(`   Stack trace: ${error.stack}`, true);
+      throw error; // Re-throw to be caught by HTML error handler
+    }
   }
 
   async loadAssets() {
@@ -109,30 +115,47 @@ export class MotatoGame {
     ];
 
     this.diagnostic(`Loading ${assetsToLoad.length} assets in parallel...`);
+    this.diagnostic(`Texture loader status: ${this.textureLoader ? 'initialized' : 'NOT initialized'}`);
+    this.diagnostic(`WebGL context status: ${this.renderer.gl ? 'available' : 'NOT available'}`);
 
     // Load all assets in parallel for better performance
-    const loadPromises = assetsToLoad.map(async (asset) => {
+    const loadPromises = assetsToLoad.map(async (asset, index) => {
       try {
-        this.diagnostic(`Loading ${asset.key} from ${asset.path}...`);
+        this.diagnostic(`[${index + 1}/${assetsToLoad.length}] Starting load: ${asset.key} from ${asset.path}...`);
+        const startTime = performance.now();
         const texture = await this.textureLoader.loadTexture(asset.path);
-        this.diagnostic(`✓ Loaded ${asset.key}`);
-        return { key: asset.key, texture, success: true };
+        const loadTime = (performance.now() - startTime).toFixed(2);
+        this.diagnostic(`✓ Loaded ${asset.key} in ${loadTime}ms`);
+        return { key: asset.key, texture, success: true, error: null };
       } catch (error) {
-        this.diagnostic(`⚠ Failed to load ${asset.key}, using fallback (${error.message})`);
-        return { key: asset.key, texture: null, success: false };
+        this.diagnostic(`❌ Failed to load ${asset.key}: ${error.message}`, true);
+        this.diagnostic(`   Error stack: ${error.stack}`, true);
+        return { key: asset.key, texture: null, success: false, error: error.message };
       }
     });
+
+    this.diagnostic(`Waiting for all ${assetsToLoad.length} assets to complete...`);
 
     // Wait for all assets to load (or fail)
     const results = await Promise.all(loadPromises);
 
+    this.diagnostic(`All promises resolved. Processing results...`);
+
     // Store the results
     for (const result of results) {
       this.textures[result.key] = result.texture;
+      if (!result.success) {
+        this.diagnostic(`⚠ Asset ${result.key} failed: ${result.error}`, true);
+      }
     }
 
     const successCount = results.filter(r => r.success).length;
-    this.diagnostic(`All assets processed: ${successCount}/${assetsToLoad.length} loaded successfully`);
+    const failureCount = results.filter(r => !r.success).length;
+    this.diagnostic(`Asset loading complete: ${successCount} succeeded, ${failureCount} failed`);
+
+    if (failureCount > 0) {
+      this.diagnostic(`⚠ Warning: ${failureCount} assets failed to load. Game may have visual issues.`);
+    }
   }
 
   createPlayer() {
