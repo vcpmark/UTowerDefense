@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brotato Towers - Arena Defense</title>
+  <title>Motato Towers - Arena Defense</title>
   <style>
     html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: #0f1220; color: #e8eaf6; }
     .wrap { display: grid; grid-template-columns: 820px 1fr; gap: 16px; padding: 16px; align-items: start; }
@@ -59,7 +59,7 @@
 
     <div class="panel">
       <div class="row" style="justify-content: space-between;">
-        <div style="font-weight:800; font-size:20px;">🥔 Brotato Towers</div>
+        <div style="font-weight:800; font-size:20px;">🥔 Motato Towers</div>
         <div class="badge">Arena Defense</div>
       </div>
 
@@ -1633,7 +1633,7 @@
         const g=worldToGrid(t.x,t.y);
         if(g.gx===gx&&g.gy===gy) return false;
       }
-      // No path constraints in Brotato mode - can place anywhere!
+      // No path constraints in Motato mode - can place anywhere!
       return true;
     }
     canvas.addEventListener('click', e=>{ if(state.gameOver) return; const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const {gx,gy}=worldToGrid(x,y); if(state.selling){ for(let i=0;i<state.towers.length;i++){ const t=state.towers[i]; const tg=worldToGrid(t.x,t.y); if(tg.gx===gx&&tg.gy===gy){ state.money+=t.sellValue; state.towers.splice(i,1); return; } } return; } if(state.build){ const def=TOWER_TYPES[state.selectedTowerType]||TOWER_TYPES.basic; const cost=def.cost; if(state.money>=cost && canPlaceAt(gx,gy)){ const pos=gridToWorld(gx,gy); const t=new Tower(pos.x,pos.y,state.selectedTowerType); state.towers.push(t); state.towersBuilt++; state.money-=cost; notifyCrowd('build', { tower: t, auto: false }); } return; } });

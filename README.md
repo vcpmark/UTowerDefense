@@ -1,16 +1,16 @@
-# Brotato Towers - Modern WebGL Edition
+# Motato Towers - Modern WebGL Edition
 
-A dual-mode game featuring both a Brotato clone and tower defense, built with a modern WebGL2 engine, actual Brotato sprites, and an Entity Component System architecture.
+A dual-mode game featuring both a Motato clone and tower defense, built with a modern WebGL2 engine, actual Motato sprites, and an Entity Component System architecture.
 
 ## 🎮 Two Game Modes
 
-### 🥔 Brotato Mode (Recommended)
-A faithful recreation of Brotato with:
+### 🥔 Motato Mode (Recommended)
+A faithful recreation of Motato with:
 - Player-controlled character (WASD movement)
 - Auto-attacking weapons
 - Wave-based survival
 - XP and level progression
-- Real sprites from BrotatoWithUnity
+- Real sprites from MotatoWithUnity
 
 ### 🗼 Tower Defense Mode
 Strategic tower placement with:
@@ -35,7 +35,7 @@ Strategic tower placement with:
 - **Enemy System**: Path-following AI with various enemy types
 - **Bullet System**: Projectile physics with homing and special effects
 
-### Brotato-Inspired Mechanics
+### Motato-Inspired Mechanics
 - **Hype Burst**: Build hype from kills and unleash for massive damage boost
 - **Momentum Frenzy**: Chain kills rapidly to trigger a speed/power frenzy
 - **Wave Events**: Dynamic modifiers that change gameplay each wave
@@ -47,11 +47,11 @@ Strategic tower placement with:
 ```
 UTowerDefense/
 ├── index.html                  # Landing page / game mode selector
-├── brotato.html                # Brotato game mode
+├── motato.html                 # Motato game mode
 ├── go.html                     # Tower defense (original)
 ├── towers.html                 # Tower defense (WebGL2 version)
 ├── assets/
-│   └── sprites/                # Brotato sprites from Unity
+│   └── sprites/                # Motato sprites from Unity
 │       ├── player/             # potato.png, legs.png, highlight.png
 │       ├── enemies/            # Enemy sprites
 │       ├── weapons/            # Weapon sprites
@@ -70,14 +70,14 @@ UTowerDefense/
 │   │   └── PhysicsSystem.js    # Physics and movement
 │   └── game/
 │       ├── Game.js             # Tower defense logic
-│       ├── BrotatoGame.js      # Brotato game logic
+│       ├── MotatoGame.js       # Motato game logic
 │       └── GameState.js        # Game state management
 └── README.md
 ```
 
 ## 🎮 How to Play
 
-### Brotato Mode (`brotato.html`)
+### Motato Mode (`motato.html`)
 1. **Move**: Use WASD or Arrow Keys
 2. **Attack**: Weapons automatically shoot nearest enemies
 3. **Survive**: Complete waves to earn money and XP
@@ -94,7 +94,7 @@ UTowerDefense/
 ### GitHub Pages Deployment
 The game works on GitHub Pages! Access via:
 - Main page: `https://[username].github.io/UTowerDefense/`
-- Brotato: `https://[username].github.io/UTowerDefense/brotato.html`
+- Motato: `https://[username].github.io/UTowerDefense/motato.html`
 - Tower Defense: `https://[username].github.io/UTowerDefense/go.html`
 
 ## 🏗️ Architecture
@@ -135,8 +135,8 @@ Systems process entities with specific components:
 - Fixed timestep prevents physics issues
 - Component-based architecture for cache efficiency
 
-### Brotato Mechanics Integration
-Based on the BrotatoWithUnity repository analysis:
+### Motato Mechanics Integration
+Based on the MotatoWithUnity repository analysis:
 - Player-like progression systems
 - Wave-based difficulty scaling
 - Item and stat modifiers
@@ -173,7 +173,7 @@ npx http-server
 
 ## 🎯 Future Enhancements
 
-### Brotato Mode
+### Motato Mode
 - [ ] Item shop between waves
 - [ ] Multiple weapon types
 - [ ] Stat modifiers and items
@@ -201,8 +201,8 @@ This project is open source and available for educational purposes.
 
 ## 🙏 Credits
 
-- Inspired by Brotato by Blobfish
-- BrotatoWithUnity reference implementation
+- Inspired by Motato by Blobfish
+- MotatoWithUnity reference implementation
 - WebGL2 rendering techniques from various sources
 
 ---

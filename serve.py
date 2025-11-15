@@ -28,7 +28,7 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
-    print(f"🎮 Brotato Towers Server")
+    print(f"🎮 Motato Towers Server")
     print(f"📡 Server running at http://localhost:{PORT}")
     print(f"🌐 Open http://localhost:{PORT} in your browser")
     print(f"⚡ Press Ctrl+C to stop the server\n")

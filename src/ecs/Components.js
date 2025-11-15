@@ -102,7 +102,7 @@ export function Bullet(damage, speed, pierce = 0, target = null) {
   };
 }
 
-// Player component (for Brotato-style gameplay)
+// Player component (for Motato-style gameplay)
 export function Player(speed, health, maxHealth) {
   return {
     speed,
