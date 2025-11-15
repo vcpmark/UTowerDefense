@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Motato MVP</title>
+  <title>Motato</title>
   <style>
     * {
       margin: 0;
@@ -32,7 +32,7 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      height: 100dvh; /* Dynamic viewport height for mobile */
+      height: 100dvh;
       width: 100vw;
       padding: 8px;
       gap: 8px;
@@ -57,42 +57,6 @@
       width: auto;
       height: auto;
       touch-action: none;
-    }
-
-    /* Virtual Joystick */
-    .joystick-zone {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      width: 140px;
-      height: 140px;
-      pointer-events: all;
-      z-index: 100;
-    }
-
-    .joystick-base {
-      position: absolute;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: rgba(44, 55, 112, 0.3);
-      border: 2px solid rgba(91, 114, 255, 0.4);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .joystick-stick {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #5b72ff, #7c9eff);
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 2px 10px rgba(91, 114, 255, 0.5);
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      transition: all 0.1s ease-out;
-      pointer-events: none;
     }
 
     .ui-panel {
@@ -161,7 +125,99 @@
       margin-top: 8px;
     }
 
-    /* Desktop layout */
+    /* Shop Modal */
+    .shop-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .shop-modal.active {
+      display: flex;
+    }
+
+    .shop-content {
+      background: #141830;
+      border: 2px solid #5b72ff;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .shop-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #7c9eff;
+      text-align: center;
+    }
+
+    .shop-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .shop-item {
+      background: rgba(15,20,43,0.45);
+      border: 2px solid #2a3470;
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .shop-item:hover {
+      border-color: #5b72ff;
+      transform: translateY(-2px);
+    }
+
+    .shop-item.cant-afford {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #e8eaf6;
+    }
+
+    .item-tier {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .tier-common { background: #6b7280; }
+    .tier-uncommon { background: #10b981; }
+    .tier-rare { background: #3b82f6; }
+    .tier-legendary { background: #f59e0b; }
+
+    .item-effect {
+      font-size: 11px;
+      color: #9aa3d7;
+      margin-bottom: 8px;
+    }
+
+    .item-cost {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
     @media (min-width: 768px) {
       .container {
         flex-direction: row;
@@ -179,21 +235,12 @@
         overflow-y: auto;
       }
 
-      .joystick-zone {
-        display: none;
-      }
-
-      .stat-card {
-        min-width: auto;
-      }
-
       .stats-row {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    /* Prevent pull-to-refresh on iOS */
     body {
       overscroll-behavior-y: none;
     }
@@ -203,12 +250,6 @@
   <div class="container">
     <div class="game-wrapper">
       <canvas id="game" width="800" height="480"></canvas>
-
-      <!-- Virtual Joystick for Mobile -->
-      <div class="joystick-zone" id="joystickZone">
-        <div class="joystick-base"></div>
-        <div class="joystick-stick" id="joystickStick"></div>
-      </div>
     </div>
 
     <div class="ui-panel">
@@ -222,11 +263,11 @@
           <div class="stat-value" id="wave">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">💰 Score</div>
-          <div class="stat-value" id="score">0</div>
+          <div class="stat-label">💰 Gold</div>
+          <div class="stat-value" id="gold">50</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">👾 Foes</div>
+          <div class="stat-label">👾 Enemies</div>
           <div class="stat-value" id="enemies">0</div>
         </div>
       </div>
@@ -239,7 +280,19 @@
     </div>
   </div>
 
-  <script>
+  <!-- Shop Modal -->
+  <div class="shop-modal" id="shopModal">
+    <div class="shop-content">
+      <h2 class="shop-title">🛒 Shop</h2>
+      <div id="shopMoney" style="text-align: center; margin-bottom: 16px; font-size: 18px; color: #fbbf24;">
+        💰 Gold: <span id="shopGold">0</span>
+      </div>
+      <div class="shop-items" id="shopItems"></div>
+      <button class="btn" onclick="closeShop()">Close Shop</button>
+    </div>
+  </div>
+
+  <script type="module">
     // Prevent iOS Safari bounce scrolling
     document.addEventListener('touchmove', (e) => {
       if (e.target === document.body || e.target === document.documentElement) {
@@ -247,391 +300,276 @@
       }
     }, { passive: false });
 
-    // Simple game state
-    const game = {
-      canvas: null,
-      ctx: null,
-      player: { x: 400, y: 240, radius: 16, speed: 200, health: 100, maxHealth: 100 },
-      enemies: [],
-      bullets: [],
-      wave: 0,
-      score: 0,
-      waveActive: false,
-      waveTimer: 0,
-      spawnTimer: 0,
-      shootTimer: 0,
-      keys: {},
-      lastTime: 0,
-      gameOver: false,
-      // Touch controls
-      joystick: { active: false, x: 0, y: 0, startX: 0, startY: 0 }
-    };
+    import { MotatoGame } from './src/game/MotatoGame.js';
 
-    // Virtual Joystick
-    const joystickZone = document.getElementById('joystickZone');
-    const joystickStick = document.getElementById('joystickStick');
-    let joystickTouchId = null;
+    let game;
 
-    function setupJoystick() {
-      joystickZone.addEventListener('touchstart', (e) => {
+    // Touch controls - anywhere on screen
+    let touchStart = null;
+    let touchCurrent = null;
+    const canvas = document.getElementById('game');
+
+    function setupTouchControls() {
+      canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        const touch = e.changedTouches[0];
-        joystickTouchId = touch.identifier;
-
-        const rect = joystickZone.getBoundingClientRect();
-        game.joystick.active = true;
-        game.joystick.startX = rect.left + rect.width / 2;
-        game.joystick.startY = rect.top + rect.height / 2;
-        updateJoystick(touch.clientX, touch.clientY);
+        const touch = e.touches[0];
+        touchStart = { x: touch.clientX, y: touch.clientY };
+        touchCurrent = { x: touch.clientX, y: touch.clientY };
       }, { passive: false });
 
-      document.addEventListener('touchmove', (e) => {
-        if (!game.joystick.active) return;
-
-        for (let touch of e.changedTouches) {
-          if (touch.identifier === joystickTouchId) {
-            e.preventDefault();
-            updateJoystick(touch.clientX, touch.clientY);
-            break;
-          }
-        }
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!touchStart) return;
+        const touch = e.touches[0];
+        touchCurrent = { x: touch.clientX, y: touch.clientY };
       }, { passive: false });
 
-      document.addEventListener('touchend', (e) => {
-        for (let touch of e.changedTouches) {
-          if (touch.identifier === joystickTouchId) {
-            game.joystick.active = false;
-            game.joystick.x = 0;
-            game.joystick.y = 0;
-            joystickTouchId = null;
-            joystickStick.style.transform = 'translate(-50%, -50%)';
-            break;
-          }
-        }
+      canvas.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        touchStart = null;
+        touchCurrent = null;
       }, { passive: false });
     }
 
-    function updateJoystick(touchX, touchY) {
-      const dx = touchX - game.joystick.startX;
-      const dy = touchY - game.joystick.startY;
+    // Get movement vector from touch
+    function getTouchMovement() {
+      if (!touchStart || !touchCurrent) return { x: 0, y: 0 };
+
+      const dx = touchCurrent.x - touchStart.x;
+      const dy = touchCurrent.y - touchStart.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      const maxDistance = 40;
 
-      if (distance > 0) {
-        const angle = Math.atan2(dy, dx);
-        const clampedDistance = Math.min(distance, maxDistance);
+      if (distance < 5) return { x: 0, y: 0 };
 
-        game.joystick.x = Math.cos(angle) * (clampedDistance / maxDistance);
-        game.joystick.y = Math.sin(angle) * (clampedDistance / maxDistance);
+      // Normalize and clamp
+      const maxDistance = 100;
+      const clampedDistance = Math.min(distance, maxDistance);
+      const factor = clampedDistance / maxDistance;
 
-        // Update visual position
-        const offsetX = game.joystick.x * maxDistance;
-        const offsetY = game.joystick.y * maxDistance;
-        joystickStick.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+      return {
+        x: (dx / distance) * factor,
+        y: (dy / distance) * factor
+      };
+    }
+
+    // Shop System
+    const ITEMS = [
+      {
+        id: 'hp_boost',
+        name: '+10 Max HP',
+        tier: 'common',
+        cost: 15,
+        effect: 'Increases maximum health by 10',
+        apply: (player) => {
+          const playerComp = player.getComponent('player');
+          const health = player.getComponent('health');
+          playerComp.stats.maxHP += 10;
+          health.max += 10;
+          health.current += 10;
+        }
+      },
+      {
+        id: 'damage_boost',
+        name: '+2 Damage',
+        tier: 'common',
+        cost: 20,
+        effect: 'Increases damage by 2',
+        apply: (player) => {
+          player.getComponent('player').stats.rangedDamage += 2;
+        }
+      },
+      {
+        id: 'attack_speed',
+        name: '+15% Speed',
+        tier: 'uncommon',
+        cost: 25,
+        effect: 'Increases attack speed by 15%',
+        apply: (player) => {
+          player.getComponent('player').stats.attackSpeed *= 1.15;
+        }
+      },
+      {
+        id: 'crit_chance',
+        name: '+5% Crit',
+        tier: 'uncommon',
+        cost: 30,
+        effect: 'Increases critical hit chance',
+        apply: (player) => {
+          player.getComponent('player').stats.critChance += 5;
+        }
+      },
+      {
+        id: 'speed_boost',
+        name: '+10% Move Speed',
+        tier: 'common',
+        cost: 18,
+        effect: 'Move faster',
+        apply: (player) => {
+          player.getComponent('player').stats.speed += 0.1;
+        }
+      },
+      {
+        id: 'hp_regen',
+        name: '+1 HP Regen',
+        tier: 'rare',
+        cost: 35,
+        effect: 'Regenerate 1 HP per second',
+        apply: (player) => {
+          player.getComponent('player').stats.hpRegen += 1;
+        }
+      }
+    ];
+
+    function openShop() {
+      const modal = document.getElementById('shopModal');
+      const itemsContainer = document.getElementById('shopItems');
+      document.getElementById('shopGold').textContent = Math.floor(game.gameState.money);
+
+      // Generate 4 random items
+      const availableItems = [...ITEMS].sort(() => Math.random() - 0.5).slice(0, 4);
+
+      itemsContainer.innerHTML = '';
+      availableItems.forEach(item => {
+        const canAfford = game.gameState.money >= item.cost;
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `shop-item ${!canAfford ? 'cant-afford' : ''}`;
+        itemDiv.innerHTML = `
+          <div class="item-tier tier-${item.tier}">${item.tier.toUpperCase()}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-effect">${item.effect}</div>
+          <div class="item-cost">💰 ${item.cost}</div>
+        `;
+
+        if (canAfford) {
+          itemDiv.onclick = () => buyItem(item);
+        }
+
+        itemsContainer.appendChild(itemDiv);
+      });
+
+      modal.classList.add('active');
+    }
+
+    function closeShop() {
+      document.getElementById('shopModal').classList.remove('active');
+    }
+
+    function buyItem(item) {
+      if (game.gameState.money >= item.cost) {
+        game.gameState.money -= item.cost;
+        item.apply(game.playerEntity);
+        document.getElementById('shopGold').textContent = Math.floor(game.gameState.money);
+
+        // Refresh shop display
+        openShop();
       }
     }
+
+    window.openShop = openShop;
+    window.closeShop = closeShop;
 
     // Initialize
-    function init() {
-      game.canvas = document.getElementById('game');
-      game.ctx = game.canvas.getContext('2d');
+    async function init() {
+      setupTouchControls();
 
-      // Keyboard input (for desktop)
-      window.addEventListener('keydown', (e) => {
-        game.keys[e.key.toLowerCase()] = true;
-        e.preventDefault();
-      });
-      window.addEventListener('keyup', (e) => {
-        game.keys[e.key.toLowerCase()] = false;
-        e.preventDefault();
-      });
+      try {
+        game = new MotatoGame(canvas);
+        await game.init();
 
-      // Setup touch controls
-      setupJoystick();
+        // Override player movement to use touch controls
+        const originalUpdate = game.updatePlayerMovement.bind(game);
+        game.updatePlayerMovement = function(dt) {
+          if (!this.playerEntity) return;
 
-      // Start wave button
-      document.getElementById('startWave').addEventListener('click', startWave);
+          const velocity = this.playerEntity.getComponent('velocity');
+          const player = this.playerEntity.getComponent('player');
+          const transform = this.playerEntity.getComponent('transform');
 
-      // Start game loop
-      game.lastTime = performance.now() / 1000;
-      requestAnimationFrame(gameLoop);
+          let moveX = 0;
+          let moveY = 0;
 
-      console.log('Game initialized successfully!');
-    }
+          // Keyboard input (desktop)
+          if (this.keys['w'] || this.keys['arrowup']) moveY -= 1;
+          if (this.keys['s'] || this.keys['arrowdown']) moveY += 1;
+          if (this.keys['a'] || this.keys['arrowleft']) moveX -= 1;
+          if (this.keys['d'] || this.keys['arrowright']) moveX += 1;
 
-    // Start a new wave
-    function startWave() {
-      if (game.waveActive || game.gameOver) return;
-
-      game.wave++;
-      game.waveActive = true;
-      game.waveTimer = 20 + game.wave * 3;
-      game.spawnTimer = 0;
-    }
-
-    // Game loop
-    function gameLoop(currentTime) {
-      currentTime /= 1000;
-      const dt = Math.min(currentTime - game.lastTime, 0.1);
-      game.lastTime = currentTime;
-
-      if (!game.gameOver) {
-        update(dt);
-      }
-      render();
-      updateUI();
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    // Update game logic
-    function update(dt) {
-      // Update player movement (keyboard or touch)
-      let moveX = 0;
-      let moveY = 0;
-
-      // Keyboard input
-      if (game.keys['w'] || game.keys['arrowup']) moveY -= 1;
-      if (game.keys['s'] || game.keys['arrowdown']) moveY += 1;
-      if (game.keys['a'] || game.keys['arrowleft']) moveX -= 1;
-      if (game.keys['d'] || game.keys['arrowright']) moveX += 1;
-
-      // Touch input (joystick)
-      if (game.joystick.active) {
-        moveX = game.joystick.x;
-        moveY = game.joystick.y;
-      }
-
-      // Normalize diagonal movement (only for keyboard)
-      if (!game.joystick.active) {
-        const mag = Math.sqrt(moveX * moveX + moveY * moveY);
-        if (mag > 0) {
-          moveX /= mag;
-          moveY /= mag;
-        }
-      }
-
-      // Move player
-      game.player.x += moveX * game.player.speed * dt;
-      game.player.y += moveY * game.player.speed * dt;
-
-      // Keep player in bounds
-      game.player.x = Math.max(30, Math.min(770, game.player.x));
-      game.player.y = Math.max(30, Math.min(450, game.player.y));
-
-      // Auto-shoot
-      game.shootTimer -= dt;
-      if (game.shootTimer <= 0 && game.enemies.length > 0) {
-        shootAtNearestEnemy();
-        game.shootTimer = 0.3;
-      }
-
-      // Update bullets
-      for (let i = game.bullets.length - 1; i >= 0; i--) {
-        const bullet = game.bullets[i];
-        bullet.x += bullet.vx * dt;
-        bullet.y += bullet.vy * dt;
-
-        // Remove if out of bounds
-        if (bullet.x < 0 || bullet.x > 800 || bullet.y < 0 || bullet.y > 480) {
-          game.bullets.splice(i, 1);
-          continue;
-        }
-
-        // Check collision with enemies
-        for (let j = game.enemies.length - 1; j >= 0; j--) {
-          const enemy = game.enemies[j];
-          const dx = enemy.x - bullet.x;
-          const dy = enemy.y - bullet.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < enemy.radius + bullet.radius) {
-            enemy.health -= bullet.damage;
-            game.bullets.splice(i, 1);
-
-            if (enemy.health <= 0) {
-              game.enemies.splice(j, 1);
-              game.score += 10;
-            }
-            break;
+          // Touch input (mobile) - anywhere on screen
+          const touchMove = getTouchMovement();
+          if (touchMove.x !== 0 || touchMove.y !== 0) {
+            moveX = touchMove.x;
+            moveY = touchMove.y;
+          } else if (moveX !== 0 || moveY !== 0) {
+            // Normalize keyboard input
+            const mag = Math.sqrt(moveX * moveX + moveY * moveY);
+            moveX /= mag;
+            moveY /= mag;
           }
-        }
-      }
 
-      // Update enemies
-      for (let i = game.enemies.length - 1; i >= 0; i--) {
-        const enemy = game.enemies[i];
+          // Apply speed
+          const speed = player.speed * player.stats.speed;
+          velocity.vx = moveX * speed;
+          velocity.vy = moveY * speed;
 
-        // Move towards player
-        const dx = game.player.x - enemy.x;
-        const dy = game.player.y - enemy.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+          // Keep player in bounds
+          transform.x = Math.max(this.bounds.minX, Math.min(this.bounds.maxX, transform.x));
+          transform.y = Math.max(this.bounds.minY, Math.min(this.bounds.maxY, transform.y));
+        };
 
-        if (dist > 20) {
-          enemy.x += (dx / dist) * enemy.speed * dt;
-          enemy.y += (dy / dist) * enemy.speed * dt;
-        } else {
-          // Damage player
-          game.player.health -= 10 * dt;
-          if (game.player.health <= 0) {
-            game.gameOver = true;
+        // Override wave completion to show shop
+        const originalWaveComplete = game.onWaveComplete.bind(game);
+        game.onWaveComplete = function() {
+          originalWaveComplete();
+          openShop();
+        };
+
+        // Setup event listeners
+        document.getElementById('startWave').addEventListener('click', () => {
+          if (game) {
+            game.startWave();
           }
-        }
-      }
-
-      // Update wave
-      if (game.waveActive) {
-        game.waveTimer -= dt;
-        game.spawnTimer -= dt;
-
-        if (game.spawnTimer <= 0 && game.waveTimer > 0) {
-          spawnEnemy();
-          game.spawnTimer = Math.max(0.5, 2 - game.wave * 0.1);
-        }
-
-        // Check wave complete
-        if (game.waveTimer <= 0 && game.enemies.length === 0) {
-          game.waveActive = false;
-        }
-      }
-    }
-
-    // Shoot at nearest enemy
-    function shootAtNearestEnemy() {
-      if (game.enemies.length === 0) return;
-
-      let nearest = null;
-      let minDist = Infinity;
-
-      for (const enemy of game.enemies) {
-        const dx = enemy.x - game.player.x;
-        const dy = enemy.y - game.player.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < minDist) {
-          minDist = dist;
-          nearest = enemy;
-        }
-      }
-
-      if (nearest) {
-        const dx = nearest.x - game.player.x;
-        const dy = nearest.y - game.player.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const speed = 300;
-
-        game.bullets.push({
-          x: game.player.x,
-          y: game.player.y,
-          vx: (dx / dist) * speed,
-          vy: (dy / dist) * speed,
-          radius: 4,
-          damage: 20
         });
+
+        // UI update loop
+        requestAnimationFrame(updateUI);
+
+      } catch (error) {
+        console.error('Failed to initialize game:', error);
       }
     }
 
-    // Spawn an enemy
-    function spawnEnemy() {
-      const side = Math.floor(Math.random() * 4);
-      let x, y;
-
-      switch (side) {
-        case 0: x = Math.random() * 800; y = -20; break;
-        case 1: x = 820; y = Math.random() * 480; break;
-        case 2: x = Math.random() * 800; y = 500; break;
-        case 3: x = -20; y = Math.random() * 480; break;
-      }
-
-      game.enemies.push({
-        x, y,
-        radius: 12,
-        speed: 40 + game.wave * 5,
-        health: 30 + game.wave * 10,
-        maxHealth: 30 + game.wave * 10
-      });
-    }
-
-    // Render
-    function render() {
-      const ctx = game.ctx;
-
-      // Clear
-      ctx.fillStyle = '#0b0f1f';
-      ctx.fillRect(0, 0, 800, 480);
-
-      // Draw player
-      ctx.fillStyle = '#fbbf24';
-      ctx.beginPath();
-      ctx.arc(game.player.x, game.player.y, game.player.radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Draw bullets
-      ctx.fillStyle = '#60a5fa';
-      for (const bullet of game.bullets) {
-        ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Draw enemies
-      for (const enemy of game.enemies) {
-        // Enemy body
-        ctx.fillStyle = '#8b5cf6';
-        ctx.beginPath();
-        ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Health bar
-        const barWidth = 24;
-        const barHeight = 3;
-        const healthPercent = enemy.health / enemy.maxHealth;
-
-        ctx.fillStyle = '#1f2937';
-        ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.radius - 8, barWidth, barHeight);
-
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.radius - 8, barWidth * healthPercent, barHeight);
-      }
-
-      // Game over overlay
-      if (game.gameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, 800, 480);
-
-        ctx.fillStyle = '#ef4444';
-        ctx.font = 'bold 48px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('GAME OVER', 400, 220);
-
-        ctx.fillStyle = '#e8eaf6';
-        ctx.font = '24px sans-serif';
-        ctx.fillText(`Wave ${game.wave} • Score ${game.score}`, 400, 260);
-      }
-    }
-
-    // Update UI
     function updateUI() {
-      document.getElementById('health').textContent = Math.max(0, Math.floor(game.player.health));
-      document.getElementById('wave').textContent = game.wave;
-      document.getElementById('score').textContent = game.score;
-      document.getElementById('enemies').textContent = game.enemies.length;
+      if (game && game.gameState && game.playerEntity) {
+        const state = game.gameState;
+        const player = game.playerEntity.getComponent('player');
+        const health = game.playerEntity.getComponent('health');
 
-      const startBtn = document.getElementById('startWave');
-      startBtn.disabled = game.waveActive || game.gameOver;
-      startBtn.textContent = game.waveActive ? 'Wave Active...' :
-                            game.gameOver ? 'Game Over' :
-                            'Start Wave';
+        document.getElementById('gold').textContent = Math.floor(state.money);
+        document.getElementById('wave').textContent = state.wave;
+        document.getElementById('enemies').textContent = state.enemiesRemaining;
 
-      const info = document.getElementById('gameInfo');
-      if (game.gameOver) {
-        info.innerHTML = `<strong style="color: #ef4444;">Game Over!</strong> Wave ${game.wave} • Score ${game.score}`;
-      } else if (game.waveActive) {
-        const timeLeft = Math.max(0, Math.ceil(game.waveTimer));
-        info.textContent = `Wave ${game.wave} • ${game.enemies.length} enemies • ${timeLeft}s`;
-      } else {
-        info.textContent = `Ready for wave ${game.wave + 1}. Tap Start!`;
+        if (health) {
+          document.getElementById('health').textContent = `${Math.floor(health.current)}/${health.max}`;
+        }
+
+        const startBtn = document.getElementById('startWave');
+        startBtn.disabled = game.waveActive || state.gameOver;
+        startBtn.textContent = game.waveActive ? 'Wave Active...' :
+                              state.gameOver ? 'Game Over' :
+                              'Start Wave';
+
+        const info = document.getElementById('gameInfo');
+        if (state.gameOver) {
+          info.innerHTML = `<strong style="color: #ef4444;">Game Over!</strong> Wave ${state.wave}`;
+        } else if (game.waveActive) {
+          const timeLeft = Math.max(0, Math.ceil(game.waveTimer));
+          info.textContent = `Wave ${state.wave} • ${game.entityManager.getEntitiesWithTag('enemy').length} enemies • ${timeLeft}s`;
+        } else {
+          info.textContent = `Ready for wave ${state.wave + 1}. Touch anywhere to move!`;
+        }
       }
+
+      requestAnimationFrame(updateUI);
     }
 
     // Start the game
