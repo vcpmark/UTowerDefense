@@ -692,12 +692,18 @@ export class MotatoGame {
   }
 
   startWave() {
-    if (this.waveActive || this.gameState.gameOver) return;
+    console.log('[GAME] startWave() called. waveActive:', this.waveActive, 'gameOver:', this.gameState.gameOver);
+    if (this.waveActive || this.gameState.gameOver) {
+      console.log('[GAME] Cannot start wave - already active or game over');
+      return;
+    }
 
+    console.log('[GAME] Starting wave', this.gameState.wave + 1);
     this.waveActive = true;
     this.gameState.wave++;
     this.waveTimer = 20 + this.gameState.wave * 5; // Wave duration
     this.spawnTimer = 0;
+    console.log('[GAME] Wave started successfully. Timer:', this.waveTimer);
   }
 
   updateWaveSpawning(dt) {

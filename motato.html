@@ -304,6 +304,8 @@
 
     let game;
 
+    console.log('[INIT] Script loaded, MotatoGame imported successfully');
+
     // Touch controls - anywhere on screen
     let touchStart = null;
     let touchCurrent = null;
@@ -470,11 +472,15 @@
 
     // Initialize
     async function init() {
+      console.log('[INIT] Starting init function...');
       setupTouchControls();
 
       try {
+        console.log('[INIT] Creating MotatoGame instance...');
         game = new MotatoGame(canvas);
+        console.log('[INIT] Calling game.init()...');
         await game.init();
+        console.log('[INIT] Game initialized successfully!');
 
         // Override player movement to use touch controls
         const originalUpdate = game.updatePlayerMovement.bind(game);
@@ -524,17 +530,30 @@
         };
 
         // Setup event listeners
-        document.getElementById('startWave').addEventListener('click', () => {
+        console.log('[INIT] Setting up start wave button...');
+        const startBtn = document.getElementById('startWave');
+        console.log('[INIT] Start button element:', startBtn);
+        startBtn.addEventListener('click', () => {
+          console.log('[BUTTON] Start Wave clicked! Game object:', game);
+          console.log('[BUTTON] waveActive:', game?.waveActive, 'gameOver:', game?.gameState?.gameOver);
           if (game) {
+            console.log('[BUTTON] Calling game.startWave()...');
             game.startWave();
+            console.log('[BUTTON] startWave() called');
+          } else {
+            console.error('[BUTTON] Game object is null!');
           }
         });
 
         // UI update loop
+        console.log('[INIT] Starting UI update loop...');
         requestAnimationFrame(updateUI);
+        console.log('[INIT] Initialization complete!');
 
       } catch (error) {
-        console.error('Failed to initialize game:', error);
+        console.error('[ERROR] Failed to initialize game:', error);
+        console.error('[ERROR] Stack trace:', error.stack);
+        alert('Game failed to load: ' + error.message + '\nCheck console for details.');
       }
     }
 
