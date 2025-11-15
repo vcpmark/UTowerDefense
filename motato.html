@@ -249,7 +249,7 @@
   <div class="loading" id="loading">
     <div class="spinner"></div>
     <div id="loadingTitle">Loading Motato...</div>
-    <div id="loadingProgress" style="margin-top: 16px; font-size: 12px; color: #9aa3d7; text-align: left; max-width: 400px;">
+    <div id="loadingProgress" style="margin-top: 16px; font-size: 11px; color: #9aa3d7; text-align: left; max-width: 600px; max-height: 400px; overflow-y: auto; background: rgba(15,20,43,0.8); border: 1px solid #2a3470; border-radius: 8px; padding: 12px;">
       <div style="margin-bottom: 4px;">⏳ Initializing...</div>
     </div>
   </div>
@@ -342,10 +342,42 @@
     let game;
     const diagnostics = [];
 
+    // Capture all console output
+    const originalConsoleLog = console.log;
+    const originalConsoleError = console.error;
+    const originalConsoleWarn = console.warn;
+
+    console.log = function(...args) {
+      originalConsoleLog.apply(console, args);
+      const message = args.join(' ');
+      addDiagnostic(message, false);
+    };
+
+    console.error = function(...args) {
+      originalConsoleError.apply(console, args);
+      const message = args.join(' ');
+      addDiagnostic(message, true);
+    };
+
+    console.warn = function(...args) {
+      originalConsoleWarn.apply(console, args);
+      const message = args.join(' ');
+      addDiagnostic('⚠ ' + message, false);
+    };
+
+    // Catch unhandled errors
+    window.addEventListener('error', (event) => {
+      addDiagnostic(`Unhandled error: ${event.message} at ${event.filename}:${event.lineno}:${event.colno}`, true);
+    });
+
+    // Catch unhandled promise rejections
+    window.addEventListener('unhandledrejection', (event) => {
+      addDiagnostic(`Unhandled promise rejection: ${event.reason}`, true);
+    });
+
     function addDiagnostic(message, isError = false) {
       const timestamp = Date.now();
       diagnostics.push({ message, isError, timestamp });
-      console.log(`[${new Date().toISOString()}] ${message}`);
 
       const progressDiv = document.getElementById('loadingProgress');
       if (progressDiv) {
@@ -354,6 +386,8 @@
         const div = document.createElement('div');
         div.style.marginBottom = '4px';
         div.style.color = color;
+        div.style.fontSize = '11px';
+        div.style.fontFamily = 'monospace';
         div.innerHTML = `${icon} ${message}`;
         progressDiv.appendChild(div);
         progressDiv.scrollTop = progressDiv.scrollHeight;
