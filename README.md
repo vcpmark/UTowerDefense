@@ -1,4 +1,22 @@
-# Motato Towers - Modern WebGL Edition
+# Potato Arena — Tower Defense × Survival
+
+## 🥔 Potato Arena (`arena.html`) — the flagship mode
+
+A polished single-file hybrid of tower defense and arena survival. Pilot the potato with WASD (or a touch joystick), build and upgrade a grid of towers around yourself, and survive escalating waves.
+
+**Features**
+- **6 tower types** — Orbit Cannon, Pulse Emitter (splash), Cryo (slow), Railgun (pierce), Storm Nexus (chain lightning), Beacon (aura buffs) — each upgradable to level 8, sellable, with a click-to-select stats panel
+- **Player progression** — enemies drop XP orbs; each level presents a 3-card perk draft (damage, fire rate, crits, split shot, regen, magnets, tower buffs, discounts…)
+- **7 enemy types** including splitters, gold carriers, and an Arena Warden boss every 5 waves with its own HP bar
+- **Wave modifiers** — every wave rolls a twist (Treasure Rush, Overcharge Grid, Frostfront, Meteor Shower, Resonant Grounds)
+- **Hype Burst & combo system** — kills charge a global overdrive; kill streaks stack damage bonuses
+- **Juice** — particles, screen shake, floating text, bullet trails, chain-lightning arcs, low-HP vignette, synth SFX and a generative soundtrack (WebAudio, no assets)
+- **Quality of life** — pause, 1×/2×/3× speed, auto-start waves, difficulty select, persistent best wave, game-over stats + instant restart, full touch/mobile support
+- **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
+
+---
+
+# Legacy modes (original project)
 
 A dual-mode game featuring both a Motato clone and tower defense, built with a modern WebGL2 engine, actual Motato sprites, and an Entity Component System architecture.
 
