@@ -11,6 +11,10 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 - **7 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons — plus **3 rotating bosses** every 5 waves, each with its own AI pattern and HP bar: the charging Grizzly, the minion-summoning Fox, and the feather-strafing Hawk
 - **Wave modifiers** — every wave rolls a twist (Farmers Market, Morning Buzz, Cold Snap, Hailstorm, Fertile Grounds)
 - **Groundhog Rage & combo system** — kills charge a global overdrive; kill streaks stack damage bonuses
+- **Armory: 4 weapon classes** — Acorn Slinger (ranged), Claws & Tail (melee arc swipes with knockback and a 360° tail-spin every 4th hit), Seed Shotgun (5-pellet spray), Thorn Rifle (slow piercing sniper)
+- **Victory & Endless** — defend the yard through wave 20 for a carrot bonus, then push into Endless Mode where shielded/swift/enraged elite pests join every wave
+- **14 achievements** — persistent, each worth bonus carrots, shown in the Burrow
+- **A living groundhog** — waddles with dust puffs, faces its target, and when idle will sniff, look around, stretch, nibble a carrot, or doze off
 - **Juice** — particles, screen shake, floating text, bullet trails, chain-lightning arcs, low-HP vignette, synth SFX and a generative soundtrack (WebAudio, no assets)
 - **Quality of life** — pause, 1×/2×/3× speed, auto-start waves, difficulty select, persistent best wave, game-over stats + instant restart, full touch/mobile support
 - **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
