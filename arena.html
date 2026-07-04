@@ -65,6 +65,36 @@
   .stat-cell b{font-family:var(--mono);font-size:20px;font-variant-numeric:tabular-nums}
   #newBest{color:var(--gold);font-weight:800;letter-spacing:.1em;margin-bottom:6px}
 
+  /* locker (meta-progression) */
+  .locker{border-top:1px solid var(--line);margin-top:18px;padding-top:14px;text-align:left}
+  .locker-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .locker-head em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--dim)}
+  #spudBal{font-family:var(--mono);font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+  .class-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ccard{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;text-align:left;color:var(--ink);transition:border-color .1s ease}
+  .ccard:hover{border-color:#4152a6}
+  .ccard.sel{border-color:var(--gold);box-shadow:0 0 10px rgba(255,201,77,.2)}
+  .ccard.locked{opacity:.75}
+  .ccard .ci{font-size:20px;float:left;margin-right:8px}
+  .ccard .cn{font-weight:800;font-size:12.5px;letter-spacing:.03em}
+  .ccard .cd{color:var(--dim);font-size:11px;line-height:1.45;margin-top:2px}
+  .ccard .cu{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);background:#2b2a18;border:1px solid #4a3d16;border-radius:6px;padding:2px 8px}
+  .ccard .cu.cant{color:var(--dim);background:var(--panel);border-color:var(--line)}
+  .ccard .csel{position:absolute;top:6px;right:8px;font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--gold)}
+  .perm-row{display:flex;gap:8px;margin-top:10px}
+  .pcard{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;text-align:center;color:var(--ink)}
+  .pcard:hover:not(:disabled){border-color:#4152a6}
+  .pcard:disabled{cursor:not-allowed;opacity:.55}
+  .pcard .pi{font-size:17px;display:block}
+  .pcard .pn{font-weight:800;font-size:10.5px;letter-spacing:.03em;margin-top:2px}
+  .pcard .pd{color:var(--dim);font-size:10px;margin-top:2px;line-height:1.4}
+  .pcard .pc{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--gold);margin-top:4px}
+  .pcard .pips{display:flex;gap:2px;justify-content:center;margin-top:5px}
+  .pcard .pips i{width:8px;height:3px;border-radius:2px;background:#252d5e}
+  .pcard .pips i.on{background:var(--good)}
+  #goSpuds{color:var(--gold);font-weight:800;font-family:var(--mono);margin-bottom:10px;font-size:15px}
+  @media (max-width:480px){.class-row{grid-template-columns:1fr}}
+
   /* level-up cards */
   .cards{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
   .card{flex:1;min-width:130px;max-width:160px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px 12px;cursor:pointer;transition:transform .12s ease,border-color .12s ease;text-align:center}
@@ -170,6 +200,11 @@
         </div>
         <button class="bigbtn" id="playBtn">ENTER ARENA</button>
         <div class="best-line" id="menuBest"></div>
+        <div class="locker">
+          <div class="locker-head"><em>LOCKER — RUNS EARN SPUDS</em><span id="spudBal">🥔 0</span></div>
+          <div class="class-row" id="classRow"></div>
+          <div class="perm-row" id="permRow"></div>
+        </div>
       </div>
     </div>
 
@@ -185,6 +220,7 @@
       <div class="sheet">
         <div class="game-title" style="font-size:34px">ARENA <span style="color:var(--danger)">FALLEN</span></div>
         <div id="newBest" hidden>★ NEW BEST WAVE ★</div>
+        <div id="goSpuds"></div>
         <div class="stats-grid">
           <div class="stat-cell"><em>WAVES SURVIVED</em><b id="goWave">0</b></div>
           <div class="stat-cell"><em>ENEMIES DEFEATED</em><b id="goKills">0</b></div>
@@ -192,6 +228,7 @@
           <div class="stat-cell"><em>LEVEL REACHED</em><b id="goLevel">0</b></div>
         </div>
         <button class="bigbtn" id="againBtn">PLAY AGAIN</button>
+        <div style="margin-top:10px"><button class="diff" id="menuBtn">LOCKER &amp; MENU</button></div>
         <div class="best-line" id="goBest"></div>
       </div>
     </div>
@@ -378,6 +415,36 @@ const PERKS=[
   {id:'gold',   icon:'💵',name:'Sponsorship',   desc:'+20% cash from kills',     max:3, apply(){state.meta.goldMult*=1.2}}
 ];
 
+/* ---------- meta-progression: classes & permanent upgrades ---------- */
+const CLASSES={
+  classic:{icon:'🥔',name:'Classic Spud',cost:0,glow:'rgba(255,201,77,0.2)',
+    desc:'Balanced all-rounder.',mods:{}},
+  tank:{icon:'🛡️',name:'Tank Spud',cost:150,glow:'rgba(110,134,255,0.25)',
+    desc:'+50 HP · +0.7 regen · −14% speed · −10% damage',
+    mods:{maxHp:50,regen:0.7,speedMult:0.86,damageMult:0.9}},
+  sniper:{icon:'🎯',name:'Sniper Spud',cost:250,glow:'rgba(249,115,22,0.25)',
+    desc:'+40% range · +15% crit · −20% fire rate · −20 HP',
+    mods:{rangeMult:1.4,crit:0.15,attackSpeedMult:0.8,maxHp:-20}},
+  tycoon:{icon:'💰',name:'Tycoon Spud',cost:400,glow:'rgba(126,231,135,0.25)',
+    desc:'Towers 15% off · +25% cash · −20% damage',
+    mods:{discount:0.85,goldMult:1.25,damageMult:0.8}}
+};
+const PERMS=[
+  {id:'cash',  icon:'💵',name:'Seed Capital', desc:'+25 starting cash', baseCost:60,growth:1.6,max:4},
+  {id:'power', icon:'💪',name:'Protein Diet', desc:'+8% potato damage', baseCost:80,growth:1.7,max:5},
+  {id:'wisdom',icon:'🧠',name:'Tuber Wisdom', desc:'+10% XP gain',      baseCost:70,growth:1.7,max:3}
+];
+const META={
+  spuds:store.get('spuds',0),
+  unlocks:store.get('unlocks',{classic:true}),
+  cls:store.get('class','classic'),
+  perm:store.get('perm',{})
+};
+if(!META.unlocks[META.cls])META.cls='classic';
+function permCost(p){return Math.round(p.baseCost*Math.pow(p.growth,META.perm[p.id]||0))}
+function permLevel(id){return META.perm[id]||0}
+function saveMeta(){store.set('spuds',META.spuds);store.set('unlocks',META.unlocks);store.set('class',META.cls);store.set('perm',META.perm)}
+
 /* ---------- difficulties ---------- */
 const DIFFS={
   Easy:  {hp:0.85,spd:0.92,count:0.85,money:130,dmg:0.85},
@@ -388,7 +455,7 @@ const DIFFS={
 /* ---------- state ---------- */
 let state=null;
 function freshState(difficulty){
-  return{
+  const s={
     mode:'playing', // playing | levelup | gameover | paused
     difficulty,
     time:0,
@@ -398,7 +465,7 @@ function freshState(difficulty){
     wavePlan:[],waveClock:0,
     autoStart:false,
     speed:1,
-    kills:0,cashEarned:0,towersBuilt:0,
+    kills:0,cashEarned:0,towersBuilt:0,bossKills:0,cls:META.cls,
     towers:[],enemies:[],bullets:[],orbs:[],particles:[],floats:[],lightning:[],pulses:[],toasts:[],
     mods:{...BASE_MODS},activeEvent:null,
     hype:0,hypeMax:100,hypeTimer:0,
@@ -407,7 +474,7 @@ function freshState(difficulty){
     armed:null,      // tower key armed for placement
     selling:false,
     selected:null,   // selected placed tower
-    meta:{towerDmg:1,discount:1,goldMult:1},
+    meta:{towerDmg:1,discount:1,goldMult:1,xpMult:1},
     perkCounts:{},
     levelupsQueued:0,
     player:{
@@ -417,6 +484,23 @@ function freshState(difficulty){
     },
     mouse:null
   };
+  // apply class modifiers
+  const cm=(CLASSES[META.cls]||CLASSES.classic).mods,p=s.player;
+  if(cm.maxHp){p.maxHp+=cm.maxHp;p.hp=p.maxHp}
+  if(cm.regen)p.regen+=cm.regen;
+  if(cm.crit)p.crit+=cm.crit;
+  if(cm.speedMult)p.speed*=cm.speedMult;
+  if(cm.damageMult)p.damage*=cm.damageMult;
+  if(cm.rangeMult)p.range*=cm.rangeMult;
+  if(cm.attackSpeedMult)p.attackSpeed*=cm.attackSpeedMult;
+  if(cm.discount)s.meta.discount*=cm.discount;
+  if(cm.goldMult)s.meta.goldMult*=cm.goldMult;
+  // apply permanent upgrades
+  s.money+=25*permLevel('cash');
+  p.damage*=1+0.08*permLevel('power');
+  s.meta.xpMult*=1+0.10*permLevel('wisdom');
+  p.damage=Math.round(p.damage*10)/10;
+  return s;
 }
 
 /* ---------- UI refs ---------- */
@@ -541,6 +625,7 @@ function killEnemy(e){
   for(let i=0;i<n;i++)state.orbs.push({x:e.x+rand(-8,8),y:e.y+rand(-8,8),v:e.xp/n,ttl:18,vx:rand(-40,40),vy:rand(-40,40)});
   spawnParticles(e.x,e.y,e.color,e.boss?50:12,e.boss?260:130,e.boss?0.9:0.55);
   if(e.boss){
+    state.bossKills++;
     shake(10);addPulse(e.x,e.y,220,'#ff5d73');
     addFloat(e.x,e.y-30,'+$'+cash,'#ffc94d',18);
     Audio2.sfx.boss();
@@ -720,7 +805,7 @@ function updatePlayer(dt){
 }
 function gainXP(v){
   const p=state.player;
-  p.xp+=v;
+  p.xp+=v*state.meta.xpMult;
   while(p.xp>=p.xpNext){
     p.xp-=p.xpNext;p.level++;
     p.xpNext=Math.round(10*Math.pow(1.3,p.level-1));
@@ -910,6 +995,10 @@ function gameOver(){
   Audio2.sfx.gameover();
   const isBest=state.wave>=bestWave&&state.wave>0;
   if(state.wave>bestWave){bestWave=state.wave;store.set('best',bestWave)}
+  // bank spuds for meta-progression
+  const spuds=state.wave*4+Math.floor(state.kills/12)+state.bossKills*10;
+  META.spuds+=spuds;saveMeta();
+  $('goSpuds').textContent=`+${spuds} 🥔 SPUDS EARNED · BALANCE ${META.spuds}`;
   UI.goWave.textContent=state.wave;
   UI.goKills.textContent=state.kills;
   UI.goCash.textContent='$'+state.cashEarned;
@@ -1111,7 +1200,7 @@ function draw(){
     // glow + body
     if(p.iframe>0&&Math.floor(state.time*18)%2===0)ctx.globalAlpha=0.35;
     ctx.globalAlpha*=1;
-    ctx.fillStyle='rgba(255,201,77,0.2)';
+    ctx.fillStyle=(CLASSES[state.cls]||CLASSES.classic).glow;
     ctx.beginPath();ctx.arc(p.x,p.y,p.r*1.5,0,TAU);ctx.fill();
     ctx.font='28px system-ui,"Apple Color Emoji","Segoe UI Emoji"';
     ctx.fillStyle='#d9a066';
@@ -1430,6 +1519,51 @@ document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&state&&state.mode==='playing')togglePause();
 });
 
+/* ---------- locker (meta-progression UI) ---------- */
+function renderLocker(){
+  $('spudBal').textContent='🥔 '+META.spuds;
+  const row=$('classRow');row.innerHTML='';
+  for(const[id,c]of Object.entries(CLASSES)){
+    const unlocked=!!META.unlocks[id];
+    const el=document.createElement('button');
+    el.className='ccard'+(META.cls===id?' sel':'')+(unlocked?'':' locked');
+    let action='';
+    if(!unlocked)action=`<span class="cu${META.spuds<c.cost?' cant':''}">UNLOCK · 🥔 ${c.cost}</span>`;
+    else if(META.cls===id)action='<span class="csel">✓ SELECTED</span>';
+    el.innerHTML=`<span class="ci">${c.icon}</span><span class="cn">${c.name}</span>${META.cls===id&&unlocked?action:''}<div class="cd">${c.desc}</div>${!unlocked?action:''}`;
+    el.addEventListener('click',()=>{
+      Audio2.ensure();
+      if(unlocked){META.cls=id;saveMeta();Audio2.sfx.click()}
+      else if(META.spuds>=c.cost){META.spuds-=c.cost;META.unlocks[id]=true;META.cls=id;saveMeta();Audio2.sfx.upgrade()}
+      else{Audio2.sfx.hit();return}
+      renderLocker();
+    });
+    row.appendChild(el);
+  }
+  const prow=$('permRow');prow.innerHTML='';
+  for(const p of PERMS){
+    const lvl=permLevel(p.id),maxed=lvl>=p.max,cost=permCost(p);
+    const el=document.createElement('button');
+    el.className='pcard';
+    el.disabled=maxed||META.spuds<cost;
+    el.innerHTML=`<span class="pi">${p.icon}</span><span class="pn">${p.name}</span><div class="pd">${p.desc}</div><div class="pc">${maxed?'MAXED':'🥔 '+cost}</div><div class="pips">${Array.from({length:p.max},(_,i)=>`<i class="${i<lvl?'on':''}"></i>`).join('')}</div>`;
+    el.addEventListener('click',()=>{
+      if(maxed||META.spuds<cost)return;
+      META.spuds-=cost;META.perm[p.id]=lvl+1;saveMeta();
+      Audio2.ensure();Audio2.sfx.upgrade();
+      renderLocker();
+    });
+    prow.appendChild(el);
+  }
+}
+$('menuBtn').addEventListener('click',()=>{
+  Audio2.sfx.click();
+  UI.gameover.hidden=true;
+  renderLocker();
+  UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
+  UI.menu.hidden=false;
+});
+
 /* menu */
 UI.diffRow.addEventListener('click',e=>{
   const b=e.target.closest('.diff');
@@ -1476,13 +1610,14 @@ function frame(ts){
   }
 }
 buildDock();
+renderLocker();
 resize();
 UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
 UI.hBest.textContent=bestWave;
 requestAnimationFrame(frame);
 
 /* test hook */
-window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t}};
+window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t},META,CLASSES,PERMS,renderLocker,saveMeta,permCost,permLevel};
 </script>
 </body>
 </html>

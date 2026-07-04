@@ -7,6 +7,7 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the pot
 **Features**
 - **6 tower types** — Orbit Cannon, Pulse Emitter (splash), Cryo (slow), Railgun (pierce), Storm Nexus (chain lightning), Beacon (aura buffs) — each upgradable to level 8, sellable, with a click-to-select stats panel
 - **Player progression** — enemies drop XP orbs; each level presents a 3-card perk draft (damage, fire rate, crits, split shot, regen, magnets, tower buffs, discounts…)
+- **Meta-progression** — runs bank 🥔 Spuds based on waves, kills, and boss takedowns; spend them in the Locker on **4 playable classes** (Classic, Tank, Sniper, Tycoon) and **3 permanent upgrade tracks** (starting cash, damage, XP gain) — all persisted between sessions
 - **7 enemy types** including splitters, gold carriers, and an Arena Warden boss every 5 waves with its own HP bar
 - **Wave modifiers** — every wave rolls a twist (Treasure Rush, Overcharge Grid, Frostfront, Meteor Shower, Resonant Grounds)
 - **Hype Burst & combo system** — kills charge a global overdrive; kill streaks stack damage bonuses
