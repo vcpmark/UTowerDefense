@@ -5,8 +5,8 @@
 A polished single-file hybrid of tower defense and arena survival. Pilot the groundhog with WASD (or a touch joystick), build and upgrade garden defenses around yourself, and survive escalating waves of backyard pests.
 
 **Features**
-- **6 defense types** — Acorn Turret, Beehive (splash), Sprinkler (slow), Thorn Launcher (pierce), Storm Totem (chain lightning), Sunflower (aura buffs) — each upgradable to level 8, sellable, with a click-to-select stats panel
-- **Player progression** — enemies drop XP orbs; each level presents a 3-card perk draft (damage, fire rate, crits, split shot, regen, magnets, tower buffs, discounts…)
+- **8 defense types** — Acorn Turret, Beehive (splash), Sprinkler (slow), Thorn Launcher (pierce), Storm Totem (chain lightning), Sunflower (aura buffs), Melon Mortar (long-range arcing artillery with a blind spot up close), and Cash Crop (harvests passive income) — each upgradable to level 8, sellable, with a click-to-select stats panel
+- **Player progression** — enemies drop XP orbs; each level presents a 3-card perk draft from 16 perks (damage, crits, split shot, regen, magnets, tower buffs — plus Orbiting Acorns, a loyal Bee Friend companion, and retaliating Thorn Coat)
 - **Meta-progression** — runs bank 🥕 Carrots based on waves, kills, and boss takedowns; spend them in the Burrow on **4 playable classes** (Classic, Burly, Hawkeye, Hoarder Chuck) and **3 permanent upgrade tracks** (starting cash, damage, XP gain) — all persisted between sessions
 - **7 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons — plus **3 rotating bosses** every 5 waves, each with its own AI pattern and HP bar: the charging Grizzly, the minion-summoning Fox, and the feather-strafing Hawk
 - **Wave modifiers** — every wave rolls a twist (Farmers Market, Morning Buzz, Cold Snap, Hailstorm, Fertile Grounds)
