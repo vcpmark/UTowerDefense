@@ -2,11 +2,11 @@
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"></head>
 <body>
-<title>Potato Arena — Tower Defense Survival</title>
+<title>Groundhog Arena — Tower Defense Survival</title>
 <style>
   :root{
-    --bg:#070b18; --panel:#0f1530; --panel2:#161e46; --line:#2a366e;
-    --ink:#dfe6ff; --dim:#8d99cc; --gold:#ffc94d; --blue:#6e86ff; --danger:#ff5d73;
+    --bg:#0a1007; --panel:#121a0c; --panel2:#1c2711; --line:#3a5122;
+    --ink:#eef4e0; --dim:#9cb086; --gold:#ffb347; --blue:#8bc34a; --danger:#ff6b5d;
     --frost:#55c8f0; --good:#7ee787;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
@@ -16,7 +16,7 @@
   #app{height:100%;height:100dvh;display:flex;flex-direction:column}
 
   /* ---------- HUD ---------- */
-  #hud{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(180deg,#0c1228,#0a0f22);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  #hud{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(180deg,#111a09,#0b1106);border-bottom:1px solid var(--line);flex-wrap:wrap}
   .hud-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
   .chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:13px;color:var(--ink)}
   .chip em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--dim)}
@@ -26,37 +26,37 @@
   .chip.btn{cursor:pointer;font-weight:800;letter-spacing:.08em;font-size:12px}
   .chip.btn:hover{border-color:var(--blue)}
   .chip.btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
-  .chip.btn.on{background:#232f6d;border-color:var(--blue)}
+  .chip.btn.on{background:#2e4318;border-color:var(--blue)}
   #hypeBtn{position:relative;overflow:hidden;min-width:120px;justify-content:center;border-color:#4a3d16}
   #hypeFill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,#7a5a12,#c99a25);transition:width .2s ease;z-index:0}
   #hypeBtn .hype-label{position:relative;z-index:1;display:flex;gap:6px;align-items:center;color:#ffe4a0}
   #hypeBtn.ready{border-color:var(--gold);animation:hypepulse 1s infinite}
   #hypeBtn.active .hype-label{color:#fff}
-  @keyframes hypepulse{0%,100%{box-shadow:0 0 0 0 rgba(255,201,77,.5)}50%{box-shadow:0 0 12px 2px rgba(255,201,77,.55)}}
+  @keyframes hypepulse{0%,100%{box-shadow:0 0 0 0 rgba(255,179,71,.5)}50%{box-shadow:0 0 12px 2px rgba(255,179,71,.55)}}
   @media (prefers-reduced-motion:reduce){#hypeBtn.ready{animation:none}}
 
   /* ---------- Stage ---------- */
-  #stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;background:radial-gradient(ellipse at 50% 40%,#0a1128 0%,#060a16 75%)}
+  #stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;background:radial-gradient(ellipse at 50% 40%,#0e1807 0%,#050803 75%)}
   canvas{display:block;border-radius:4px;touch-action:none}
-  #xpbar{position:absolute;top:0;left:0;right:0;height:5px;background:#101635;z-index:5}
-  #xpfill{height:100%;width:0%;background:linear-gradient(90deg,#6e86ff,#a78bfa);transition:width .15s ease}
-  #lvlBadge{position:absolute;top:8px;left:10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;color:#a5b4fc;background:rgba(15,21,48,.8);border:1px solid var(--line);border-radius:6px;padding:2px 8px;z-index:5}
+  #xpbar{position:absolute;top:0;left:0;right:0;height:5px;background:#14200c;z-index:5}
+  #xpfill{height:100%;width:0%;background:linear-gradient(90deg,#8bc34a,#d4e157);transition:width .15s ease}
+  #lvlBadge{position:absolute;top:8px;left:10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;color:#c5e1a5;background:rgba(18,26,12,.8);border:1px solid var(--line);border-radius:6px;padding:2px 8px;z-index:5}
 
   /* ---------- Overlays ---------- */
-  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,7,16,.78);backdrop-filter:blur(3px);z-index:20;padding:16px}
+  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,8,3,.78);backdrop-filter:blur(3px);z-index:20;padding:16px}
   .overlay[hidden]{display:none}
   .sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;max-width:520px;width:100%;max-height:100%;overflow-y:auto;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.6)}
   .game-title{font-size:clamp(30px,6vw,44px);font-weight:900;letter-spacing:.02em;line-height:1.05;text-wrap:balance}
-  .game-title .glow{color:var(--gold);text-shadow:0 0 24px rgba(255,201,77,.4)}
+  .game-title .glow{color:var(--gold);text-shadow:0 0 24px rgba(255,179,71,.4)}
   .tagline{color:var(--dim);font-size:14px;margin-top:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
-  .howto{margin:18px auto;text-align:left;max-width:400px;color:#b9c3f2;font-size:13.5px;line-height:1.75}
+  .howto{margin:18px auto;text-align:left;max-width:400px;color:#c2d4a8;font-size:13.5px;line-height:1.75}
   .howto b{color:var(--ink)}
-  .key{display:inline-block;font-family:var(--mono);font-size:11px;background:#1b2452;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:#cdd6ff}
+  .key{display:inline-block;font-family:var(--mono);font-size:11px;background:#263616;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:#d7e6c0}
   .diff-row{display:flex;gap:8px;justify-content:center;margin:14px 0 20px}
   .diff{background:var(--panel2);border:1px solid var(--line);color:var(--dim);border-radius:10px;padding:9px 18px;font-weight:800;letter-spacing:.08em;font-size:13px;cursor:pointer}
-  .diff.on{color:var(--ink);border-color:var(--blue);background:#232f6d}
+  .diff.on{color:var(--ink);border-color:var(--blue);background:#2e4318}
   .diff:focus-visible,.card:focus-visible,.dockbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-  .bigbtn{display:inline-block;background:linear-gradient(135deg,#e0a832,#ffc94d);color:#241a02;border:0;border-radius:12px;padding:14px 44px;font-size:17px;font-weight:900;letter-spacing:.1em;cursor:pointer;box-shadow:0 6px 24px rgba(255,201,77,.25)}
+  .bigbtn{display:inline-block;background:linear-gradient(135deg,#e09a32,#ffb347);color:#241a02;border:0;border-radius:12px;padding:14px 44px;font-size:17px;font-weight:900;letter-spacing:.1em;cursor:pointer;box-shadow:0 6px 24px rgba(255,179,71,.25)}
   .bigbtn:hover{filter:brightness(1.08)}
   .best-line{margin-top:14px;color:var(--dim);font-size:12px;letter-spacing:.1em;font-family:var(--mono)}
   .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:20px 0;text-align:left}
@@ -64,6 +64,36 @@
   .stat-cell em{display:block;font-style:normal;font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--dim)}
   .stat-cell b{font-family:var(--mono);font-size:20px;font-variant-numeric:tabular-nums}
   #newBest{color:var(--gold);font-weight:800;letter-spacing:.1em;margin-bottom:6px}
+
+  /* locker (meta-progression) */
+  .locker{border-top:1px solid var(--line);margin-top:18px;padding-top:14px;text-align:left}
+  .locker-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .locker-head em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--dim)}
+  #spudBal{font-family:var(--mono);font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+  .class-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ccard{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;text-align:left;color:var(--ink);transition:border-color .1s ease}
+  .ccard:hover{border-color:#567a2e}
+  .ccard.sel{border-color:var(--gold);box-shadow:0 0 10px rgba(255,179,71,.2)}
+  .ccard.locked{opacity:.75}
+  .ccard .ci{font-size:20px;float:left;margin-right:8px}
+  .ccard .cn{font-weight:800;font-size:12.5px;letter-spacing:.03em}
+  .ccard .cd{color:var(--dim);font-size:11px;line-height:1.45;margin-top:2px}
+  .ccard .cu{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);background:#2b2a18;border:1px solid #4a3d16;border-radius:6px;padding:2px 8px}
+  .ccard .cu.cant{color:var(--dim);background:var(--panel);border-color:var(--line)}
+  .ccard .csel{position:absolute;top:6px;right:8px;font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--gold)}
+  .perm-row{display:flex;gap:8px;margin-top:10px}
+  .pcard{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;text-align:center;color:var(--ink)}
+  .pcard:hover:not(:disabled){border-color:#567a2e}
+  .pcard:disabled{cursor:not-allowed;opacity:.55}
+  .pcard .pi{font-size:17px;display:block}
+  .pcard .pn{font-weight:800;font-size:10.5px;letter-spacing:.03em;margin-top:2px}
+  .pcard .pd{color:var(--dim);font-size:10px;margin-top:2px;line-height:1.4}
+  .pcard .pc{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--gold);margin-top:4px}
+  .pcard .pips{display:flex;gap:2px;justify-content:center;margin-top:5px}
+  .pcard .pips i{width:8px;height:3px;border-radius:2px;background:#2c4116}
+  .pcard .pips i.on{background:var(--good)}
+  #goSpuds{color:var(--gold);font-weight:800;font-family:var(--mono);margin-bottom:10px;font-size:15px}
+  @media (max-width:480px){.class-row{grid-template-columns:1fr}}
 
   /* level-up cards */
   .cards{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
@@ -74,41 +104,41 @@
   .card .ds{display:block;color:var(--dim);font-size:12px;margin-top:6px;line-height:1.5}
 
   /* ---------- Tower select panel ---------- */
-  #towerPanel{position:absolute;right:10px;bottom:10px;z-index:15;background:rgba(15,21,48,.94);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:210px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  #towerPanel{position:absolute;right:10px;bottom:10px;z-index:15;background:rgba(18,26,12,.94);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:210px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
   #towerPanel h4{font-size:14px;letter-spacing:.03em}
   #towerPanel .tstats{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin:6px 0 10px;line-height:1.7;font-variant-numeric:tabular-nums}
   #towerPanel .row{display:flex;gap:8px}
   .pbtn{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:8px;padding:8px 6px;font-weight:800;font-size:12px;cursor:pointer;letter-spacing:.04em}
-  .pbtn.up{border-color:#3a4b96}
-  .pbtn.up:hover:not(:disabled){background:#263172}
+  .pbtn.up{border-color:#4d6b2a}
+  .pbtn.up:hover:not(:disabled){background:#2c4116}
   .pbtn.sell{color:var(--danger)}
-  .pbtn.sell:hover{background:#3a1b28}
+  .pbtn.sell:hover{background:#3a1f1b}
   .pbtn:disabled{opacity:.4;cursor:not-allowed}
 
   /* ---------- Dock ---------- */
-  #dock{display:flex;gap:10px;align-items:stretch;padding:8px 12px;background:linear-gradient(0deg,#0c1228,#0a0f22);border-top:1px solid var(--line)}
+  #dock{display:flex;gap:10px;align-items:stretch;padding:8px 12px;background:linear-gradient(0deg,#111a09,#0b1106);border-top:1px solid var(--line)}
   #towerDock{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
   #towerDock::-webkit-scrollbar{display:none}
   .tcard{position:relative;flex:0 0 auto;width:76px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 4px 5px;cursor:pointer;text-align:center;transition:border-color .1s ease}
-  .tcard:hover{border-color:#4152a6}
-  .tcard.armed{border-color:var(--gold);background:#2b2a18;box-shadow:0 0 10px rgba(255,201,77,.25)}
+  .tcard:hover{border-color:#567a2e}
+  .tcard.armed{border-color:var(--gold);background:#2b2410;box-shadow:0 0 10px rgba(255,179,71,.25)}
   .tcard.poor{opacity:.45}
   .tcard .ti{font-size:20px;line-height:1.2}
-  .tcard .tn{font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#c3cdfd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tcard .tn{font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#cfe3b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tcard .tc{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:700}
   .tcard .hk{position:absolute;top:2px;left:5px;font-family:var(--mono);font-size:9px;color:var(--dim)}
   .dock-right{display:flex;gap:8px;align-items:stretch}
   .dockbtn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:10px;padding:0 16px;font-weight:900;letter-spacing:.08em;font-size:13px;cursor:pointer;white-space:nowrap}
   .dockbtn.on{border-color:var(--danger);color:var(--danger);background:#2b1622}
-  .dockbtn.primary{background:linear-gradient(135deg,#2e3f9e,#4a5fd0);border-color:#5b72ff;min-width:150px}
+  .dockbtn.primary{background:linear-gradient(135deg,#3e5a1e,#5c8430);border-color:#8bc34a;min-width:150px}
   .dockbtn.primary:not(:disabled){animation:wavepulse 1.6s infinite}
   .dockbtn.primary:disabled{animation:none;opacity:.45;cursor:not-allowed;background:var(--panel2);border-color:var(--line)}
-  @keyframes wavepulse{0%,100%{box-shadow:0 0 0 0 rgba(91,114,255,.4)}50%{box-shadow:0 0 14px 2px rgba(91,114,255,.45)}}
+  @keyframes wavepulse{0%,100%{box-shadow:0 0 0 0 rgba(139,195,74,.4)}50%{box-shadow:0 0 14px 2px rgba(139,195,74,.45)}}
   @media (prefers-reduced-motion:reduce){.dockbtn.primary:not(:disabled){animation:none}}
 
   /* joystick */
-  #joy{position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid rgba(110,134,255,.35);background:rgba(110,134,255,.08);z-index:12;pointer-events:none}
-  #joyKnob{position:absolute;left:50%;top:50%;width:44px;height:44px;border-radius:50%;background:rgba(110,134,255,.35);border:2px solid rgba(160,178,255,.6);transform:translate(-50%,-50%)}
+  #joy{position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid rgba(139,195,74,.35);background:rgba(139,195,74,.08);z-index:12;pointer-events:none}
+  #joyKnob{position:absolute;left:50%;top:50%;width:44px;height:44px;border-radius:50%;background:rgba(139,195,74,.35);border:2px solid rgba(190,220,150,.6);transform:translate(-50%,-50%)}
 
   @media (max-width:700px){
     .chip{padding:4px 7px;font-size:11.5px}
@@ -131,7 +161,7 @@
       <span class="chip stat" id="hEventChip" hidden><em>EVENT</em><b id="hEvent" style="min-width:0">—</b></span>
     </div>
     <div class="hud-group">
-      <button id="hypeBtn" class="chip btn" title="Hype Burst — supercharges everything (Space)"><span id="hypeFill"></span><span class="hype-label">HYPE <b id="hypePct">0%</b></span></button>
+      <button id="hypeBtn" class="chip btn" title="Groundhog Rage — supercharges everything (Space)"><span id="hypeFill"></span><span class="hype-label">RAGE <b id="hypePct">0%</b></span></button>
       <button id="autoBtn" class="chip btn" title="Auto-start next wave">AUTO&nbsp;OFF</button>
       <button id="speedBtn" class="chip btn" title="Game speed (F)">1×</button>
       <button id="pauseBtn" class="chip btn" title="Pause (P)">⏸</button>
@@ -155,21 +185,26 @@
 
     <div class="overlay" id="menu">
       <div class="sheet">
-        <div class="game-title">🥔 POTATO <span class="glow">ARENA</span></div>
-        <div class="tagline">Tower Defense × Survival</div>
+        <div class="game-title">🦫 GROUNDHOG <span class="glow">ARENA</span></div>
+        <div class="tagline">Backyard Tower Defense × Survival</div>
         <div class="howto">
-          <b>Move</b> with <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> — your potato auto-fires at the nearest enemy.<br>
-          <b>Build towers</b> from the dock (<span class="key">1</span>–<span class="key">6</span>), then click the arena to place them.<br>
-          <b>Click a tower</b> to upgrade or sell it. Kills earn <b style="color:var(--gold)">cash</b> for towers and <b style="color:#a5b4fc">XP</b> for level-up perks.<br>
-          <b>Hype Burst</b> <span class="key">Space</span> when the meter is full. Boss every 5 waves. Survive.
+          <b>Move</b> with <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> — your groundhog auto-fires at the nearest pest.<br>
+          <b>Build defenses</b> from the dock (<span class="key">1</span>–<span class="key">6</span>), then click the yard to place them.<br>
+          <b>Click a tower</b> to upgrade or sell it. Kills earn <b style="color:var(--gold)">cash</b> for towers and <b style="color:#c5e1a5">XP</b> for level-up perks.<br>
+          <b>Groundhog Rage</b> <span class="key">Space</span> when the meter is full. The Grizzly comes every 5 waves. Defend the burrow.
         </div>
         <div class="diff-row" id="diffRow">
           <button class="diff" data-d="Easy">EASY</button>
           <button class="diff on" data-d="Normal">NORMAL</button>
           <button class="diff" data-d="Hard">HARD</button>
         </div>
-        <button class="bigbtn" id="playBtn">ENTER ARENA</button>
+        <button class="bigbtn" id="playBtn">ENTER THE YARD</button>
         <div class="best-line" id="menuBest"></div>
+        <div class="locker">
+          <div class="locker-head"><em>BURROW — RUNS EARN CARROTS</em><span id="spudBal">🥕 0</span></div>
+          <div class="class-row" id="classRow"></div>
+          <div class="perm-row" id="permRow"></div>
+        </div>
       </div>
     </div>
 
@@ -183,8 +218,9 @@
 
     <div class="overlay" id="gameover" hidden>
       <div class="sheet">
-        <div class="game-title" style="font-size:34px">ARENA <span style="color:var(--danger)">FALLEN</span></div>
+        <div class="game-title" style="font-size:34px">BURROW <span style="color:var(--danger)">OVERRUN</span></div>
         <div id="newBest" hidden>★ NEW BEST WAVE ★</div>
+        <div id="goSpuds"></div>
         <div class="stats-grid">
           <div class="stat-cell"><em>WAVES SURVIVED</em><b id="goWave">0</b></div>
           <div class="stat-cell"><em>ENEMIES DEFEATED</em><b id="goKills">0</b></div>
@@ -192,6 +228,7 @@
           <div class="stat-cell"><em>LEVEL REACHED</em><b id="goLevel">0</b></div>
         </div>
         <button class="bigbtn" id="againBtn">PLAY AGAIN</button>
+        <div style="margin-top:10px"><button class="diff" id="menuBtn">BURROW &amp; MENU</button></div>
         <div class="best-line" id="goBest"></div>
       </div>
     </div>
@@ -222,7 +259,7 @@
 <script>
 'use strict';
 /* ============================================================
-   POTATO ARENA — tower defense × survival
+   GROUNDHOG ARENA — backyard tower defense × survival
    ============================================================ */
 const $=id=>document.getElementById(id);
 const canvas=$('game'), ctx=canvas.getContext('2d');
@@ -301,26 +338,26 @@ const Audio2=(()=>{
 
 /* ---------- tower definitions ---------- */
 const TOWER_TYPES={
-  cannon:{name:'Orbit Cannon',icon:'🛰️',color:'#6e86ff',cost:50,range:150,rate:0.45,damage:16,pierce:0,
-    desc:'Reliable single-target fire.',
-    bullet:{speed:400,r:3.5,color:'#cdd9ff'},
+  cannon:{name:'Acorn Turret',icon:'🌰',color:'#c98d4b',cost:50,range:150,rate:0.45,damage:16,pierce:0,
+    desc:'Reliable single-target acorn fire.',
+    bullet:{speed:400,r:3.5,color:'#e8c9a0'},
     upgrade(t){t.damage=Math.round(t.damage*1.24);t.rate=Math.max(0.16,t.rate*0.92);t.range=Math.min(230,t.range+10);if(t.level%3===0)t.pierce++}},
-  pulse:{name:'Pulse Emitter',icon:'💥',color:'#f472b6',cost:90,range:135,rate:0.85,damage:24,pierce:0,
-    desc:'Splash damage for clusters.',
-    bullet:{speed:320,r:4.5,color:'#f9a8d4',splashRadius:58,splashFalloff:0.6},
+  pulse:{name:'Beehive',icon:'🐝',color:'#fbbf24',cost:90,range:135,rate:0.85,damage:24,pierce:0,
+    desc:'Sting bursts hit clustered pests.',
+    bullet:{speed:320,r:4.5,color:'#fde68a',splashRadius:58,splashFalloff:0.6},
     upgrade(t){t.damage=Math.round(t.damage*1.27);t.range=Math.min(195,t.range+9);t.rate=Math.max(0.5,t.rate*0.93);t.bullet.splashRadius+=7}},
-  frost:{name:'Cryo Tower',icon:'❄️',color:'#55c8f0',cost:80,range:150,rate:0.55,damage:9,pierce:0,
-    desc:'Chills and slows enemies.',
+  frost:{name:'Sprinkler',icon:'💦',color:'#55c8f0',cost:80,range:150,rate:0.55,damage:9,pierce:0,
+    desc:'Soaks and slows pests.',
     bullet:{speed:340,r:3.4,color:'#bae6fd',slow:{factor:0.55,duration:1.7}},
     upgrade(t){t.damage=Math.round(t.damage*1.2);t.range=Math.min(215,t.range+10);t.rate=Math.max(0.3,t.rate*0.94);t.bullet.slow.duration+=0.2;t.bullet.slow.factor=Math.max(0.36,t.bullet.slow.factor-0.025)}},
-  rail:{name:'Railgun',icon:'🎯',color:'#f97316',cost:130,range:260,rate:1.4,damage:95,pierce:2,
-    desc:'Piercing shots punish bosses.',
-    bullet:{speed:620,r:4.5,color:'#facc15'},
+  rail:{name:'Thorn Launcher',icon:'🌵',color:'#84cc16',cost:130,range:260,rate:1.4,damage:95,pierce:2,
+    desc:'Piercing thorns punish big beasts.',
+    bullet:{speed:620,r:4.5,color:'#d9f99d'},
     upgrade(t){t.damage=Math.round(t.damage*1.32);t.range=Math.min(330,t.range+14);t.rate=Math.max(0.85,t.rate*0.95);if(t.level%2===0)t.pierce++}},
-  storm:{name:'Storm Nexus',icon:'⚡',color:'#fde68a',cost:150,range:165,rate:1.0,damage:42,pierce:0,chainTargets:3,chainRange:150,chainFalloff:0.72,
-    desc:'Chain lightning between foes.',
+  storm:{name:'Storm Totem',icon:'⚡',color:'#fde68a',cost:150,range:165,rate:1.0,damage:42,pierce:0,chainTargets:3,chainRange:150,chainFalloff:0.72,
+    desc:'Chain lightning between pests.',
     upgrade(t){t.damage=Math.round(t.damage*1.25);t.range=Math.min(235,t.range+12);t.rate=Math.max(0.6,t.rate*0.92);if(t.level%2===0)t.chainTargets=Math.min(7,t.chainTargets+1);t.chainRange=Math.min(230,t.chainRange+10)}},
-  beacon:{name:'Beacon',icon:'🌀',color:'#c084fc',cost:110,range:0,rate:1,damage:0,pierce:0,utility:true,
+  beacon:{name:'Sunflower',icon:'🌻',color:'#facc15',cost:110,range:0,rate:1,damage:0,pierce:0,utility:true,
     aura:{range:150,damageMult:1.14,rateMult:0.88},
     desc:'Aura: nearby towers +damage +speed.',
     upgrade(t){t.aura.range=Math.min(250,t.aura.range+14);t.aura.damageMult=+(t.aura.damageMult+0.05).toFixed(2);t.aura.rateMult=Math.max(0.6,+(t.aura.rateMult-0.045).toFixed(2))}}
@@ -329,33 +366,33 @@ const TOWER_KEYS=Object.keys(TOWER_TYPES);
 
 /* ---------- enemy definitions ---------- */
 const ENEMY_TYPES={
-  grunt:  {icon:'👾',hp:34, spd:60, reward:8, xp:2, dmg:8, r:14,color:'#ff5d73'},
-  fast:   {icon:'💨',hp:20, spd:118,reward:9, xp:2, dmg:6, r:11,color:'#55c8f0'},
-  tank:   {icon:'🛡️',hp:135,spd:38, reward:16,xp:5, dmg:14,r:18,color:'#a3a3c2',armor:3},
-  splitter:{icon:'🫧',hp:46,spd:64, reward:10,xp:3, dmg:8, r:15,color:'#7ee787'},
-  mini:   {icon:'🦠',hp:12, spd:100,reward:2, xp:1, dmg:4, r:8, color:'#7ee787'},
-  rich:   {icon:'💰',hp:42, spd:80, reward:34,xp:4, dmg:6, r:13,color:'#ffc94d'},
-  boss:   {icon:'🐉',hp:950,spd:33, reward:130,xp:40,dmg:22,r:32,color:'#ff5d73',armor:5,boss:true}
+  grunt:  {icon:'🐀',hp:34, spd:60, reward:8, xp:2, dmg:8, r:14,color:'#c4846c'},
+  fast:   {icon:'🦟',hp:20, spd:118,reward:9, xp:2, dmg:6, r:11,color:'#a5f3fc'},
+  tank:   {icon:'🐗',hp:135,spd:38, reward:16,xp:5, dmg:14,r:18,color:'#b45309',armor:3},
+  splitter:{icon:'🐇',hp:46,spd:64, reward:10,xp:3, dmg:8, r:15,color:'#e5e7eb'},
+  mini:   {icon:'🐰',hp:12, spd:100,reward:2, xp:1, dmg:4, r:8, color:'#f9a8d4'},
+  rich:   {icon:'🦝',hp:42, spd:80, reward:34,xp:4, dmg:6, r:13,color:'#ffb347'},
+  boss:   {icon:'🐻',hp:950,spd:33, reward:130,xp:40,dmg:22,r:32,color:'#ff6b5d',armor:5,boss:true}
 };
 
 /* ---------- wave events ---------- */
 const WAVE_EVENTS=[
-  {key:'treasure',name:'Treasure Rush',desc:'Enemies sprint but drop bonus cash',
+  {key:'treasure',name:'Farmers Market',desc:'Pests sprint but drop bonus cash',
     apply(m){m.killBonus+=3;m.enemySpeedMult*=1.14;m.enemyRewardMult*=1.15}},
-  {key:'overcharge',name:'Overcharge Grid',desc:'Towers fire faster and harder',
+  {key:'overcharge',name:'Morning Buzz',desc:'Towers fire faster and harder',
     apply(m){m.towerRateMult*=0.85;m.towerDamageMult*=1.14;m.hypeGainBonus+=2}},
-  {key:'frostfront',name:'Frostfront',desc:'Enemies are slow but hardened',
+  {key:'frostfront',name:'Cold Snap',desc:'Pests are slow but hardened',
     apply(m){m.enemySpeedMult*=0.8;m.enemyHpMult*=1.22;m.enemyRewardMult*=1.12}},
-  {key:'meteor',name:'Meteor Shower',desc:'Falling stars strike random foes',
+  {key:'meteor',name:'Hailstorm',desc:'Hail pelts random pests',
     apply(m,ev){ev.timer=1.4;m.hypeGainBonus+=1},
     tick(ev,dt){ev.timer-=dt;
       if(ev.timer<=0){ev.timer+=1.4;
         const alive=state.enemies.filter(e=>e.alive);
         if(alive.length){const t=pick(alive);
-          addLightning([{x:t.x+rand(-30,30),y:0},{x:t.x,y:t.y}],'#facc15');
-          spawnParticles(t.x,t.y,'#facc15',8,140);
+          addLightning([{x:t.x+rand(-30,30),y:0},{x:t.x,y:t.y}],'#bae6fd');
+          spawnParticles(t.x,t.y,'#bae6fd',8,140);
           damageEnemy(t,18+state.wave*1.5,null);}}}},
-  {key:'resonance',name:'Resonant Grounds',desc:'Tower range up; potato heals after wave',
+  {key:'resonance',name:'Fertile Grounds',desc:'Tower range up; groundhog heals after wave',
     apply(m){m.towerRangeBonus+=16;m.postWaveHeal+=14}}
 ];
 const BASE_MODS={enemyHpMult:1,enemySpeedMult:1,enemyRewardMult:1,towerDamageMult:1,towerRateMult:1,towerRangeBonus:0,killBonus:0,hypeGainBonus:0,postWaveHeal:0};
@@ -363,20 +400,50 @@ function hashWave(w){const s=Math.sin(w*12.9898)*43758.5453;return Math.abs(Math
 
 /* ---------- level-up perks ---------- */
 const PERKS=[
-  {id:'damage', icon:'🗡️',name:'Sharpened Spud',desc:'+25% potato damage',      max:99,apply(p){p.damage*=1.25}},
+  {id:'damage', icon:'🦷',name:'Sharp Incisors',desc:'+25% groundhog damage',   max:99,apply(p){p.damage*=1.25}},
   {id:'firerate',icon:'🔥',name:'Rapid Fire',    desc:'+20% attack speed',        max:8, apply(p){p.attackSpeed*=1.2}},
-  {id:'speed',  icon:'👟',name:'Speedy Tuber',  desc:'+12% move speed',          max:5, apply(p){p.speed*=1.12}},
-  {id:'maxhp',  icon:'❤️',name:'Thick Skin',    desc:'+25 max HP & heal 25',     max:99,apply(p){p.maxHp+=25;p.hp=Math.min(p.maxHp,p.hp+25)}},
-  {id:'regen',  icon:'🌱',name:'Photosynthesis',desc:'+0.7 HP/s regen',          max:6, apply(p){p.regen+=0.7}},
+  {id:'speed',  icon:'🐾',name:'Scurry',        desc:'+12% move speed',          max:5, apply(p){p.speed*=1.12}},
+  {id:'maxhp',  icon:'🧥',name:'Winter Coat',   desc:'+25 max HP & heal 25',     max:99,apply(p){p.maxHp+=25;p.hp=Math.min(p.maxHp,p.hp+25)}},
+  {id:'regen',  icon:'🕳️',name:'Deep Burrow',   desc:'+0.7 HP/s regen',          max:6, apply(p){p.regen+=0.7}},
   {id:'pierce', icon:'📌',name:'Piercing Shots',desc:'Shots pierce +1 enemy',    max:3, apply(p){p.pierce++}},
   {id:'multi',  icon:'🎇',name:'Split Shot',    desc:'+1 projectile per volley', max:3, apply(p){p.projectiles++},weight:0.5},
-  {id:'range',  icon:'📡',name:'Long Gaze',     desc:'+18% attack range',        max:4, apply(p){p.range*=1.18}},
+  {id:'range',  icon:'🔭',name:'Lookout Post',  desc:'+18% attack range',        max:4, apply(p){p.range*=1.18}},
   {id:'crit',   icon:'✨',name:'Critical Eye',  desc:'+10% crit chance (2.2×)',  max:5, apply(p){p.crit+=0.10}},
   {id:'magnet', icon:'🧲',name:'XP Magnet',     desc:'+45% pickup radius',       max:3, apply(p){p.pickup*=1.45}},
-  {id:'towerdmg',icon:'🗼',name:'Overclocked Grid',desc:'All towers +12% damage',max:6, apply(){state.meta.towerDmg*=1.12}},
-  {id:'discount',icon:'🏷️',name:'Bulk Contract',desc:'Towers cost 10% less',    max:3, apply(){state.meta.discount*=0.9}},
-  {id:'gold',   icon:'💵',name:'Sponsorship',   desc:'+20% cash from kills',     max:3, apply(){state.meta.goldMult*=1.2}}
+  {id:'towerdmg',icon:'🌿',name:'Overgrown Garden',desc:'All towers +12% damage',max:6, apply(){state.meta.towerDmg*=1.12}},
+  {id:'discount',icon:'🏷️',name:'Barter Deals', desc:'Towers cost 10% less',    max:3, apply(){state.meta.discount*=0.9}},
+  {id:'gold',   icon:'🌰',name:'Nut Stash',     desc:'+20% cash from kills',     max:3, apply(){state.meta.goldMult*=1.2}}
 ];
+
+/* ---------- meta-progression: classes & permanent upgrades ---------- */
+const CLASSES={
+  classic:{icon:'🦫',name:'Classic Chuck',cost:0,glow:'rgba(255,179,71,0.22)',
+    desc:'Balanced all-rounder.',mods:{}},
+  tank:{icon:'🛡️',name:'Burly Chuck',cost:150,glow:'rgba(139,195,74,0.28)',
+    desc:'+50 HP · +0.7 regen · −14% speed · −10% damage',
+    mods:{maxHp:50,regen:0.7,speedMult:0.86,damageMult:0.9}},
+  sniper:{icon:'🎯',name:'Hawkeye Chuck',cost:250,glow:'rgba(249,115,22,0.28)',
+    desc:'+40% range · +15% crit · −20% fire rate · −20 HP',
+    mods:{rangeMult:1.4,crit:0.15,attackSpeedMult:0.8,maxHp:-20}},
+  tycoon:{icon:'💰',name:'Hoarder Chuck',cost:400,glow:'rgba(126,231,135,0.28)',
+    desc:'Towers 15% off · +25% cash · −20% damage',
+    mods:{discount:0.85,goldMult:1.25,damageMult:0.8}}
+};
+const PERMS=[
+  {id:'cash',  icon:'💵',name:'Seed Capital', desc:'+25 starting cash', baseCost:60,growth:1.6,max:4},
+  {id:'power', icon:'💪',name:'Veggie Diet',  desc:'+8% groundhog damage', baseCost:80,growth:1.7,max:5},
+  {id:'wisdom',icon:'🧠',name:'Burrow Wisdom',desc:'+10% XP gain',      baseCost:70,growth:1.7,max:3}
+];
+const META={
+  spuds:store.get('spuds',0),
+  unlocks:store.get('unlocks',{classic:true}),
+  cls:store.get('class','classic'),
+  perm:store.get('perm',{})
+};
+if(!META.unlocks[META.cls])META.cls='classic';
+function permCost(p){return Math.round(p.baseCost*Math.pow(p.growth,META.perm[p.id]||0))}
+function permLevel(id){return META.perm[id]||0}
+function saveMeta(){store.set('spuds',META.spuds);store.set('unlocks',META.unlocks);store.set('class',META.cls);store.set('perm',META.perm)}
 
 /* ---------- difficulties ---------- */
 const DIFFS={
@@ -388,7 +455,7 @@ const DIFFS={
 /* ---------- state ---------- */
 let state=null;
 function freshState(difficulty){
-  return{
+  const s={
     mode:'playing', // playing | levelup | gameover | paused
     difficulty,
     time:0,
@@ -398,7 +465,7 @@ function freshState(difficulty){
     wavePlan:[],waveClock:0,
     autoStart:false,
     speed:1,
-    kills:0,cashEarned:0,towersBuilt:0,
+    kills:0,cashEarned:0,towersBuilt:0,bossKills:0,cls:META.cls,
     towers:[],enemies:[],bullets:[],orbs:[],particles:[],floats:[],lightning:[],pulses:[],toasts:[],
     mods:{...BASE_MODS},activeEvent:null,
     hype:0,hypeMax:100,hypeTimer:0,
@@ -407,7 +474,7 @@ function freshState(difficulty){
     armed:null,      // tower key armed for placement
     selling:false,
     selected:null,   // selected placed tower
-    meta:{towerDmg:1,discount:1,goldMult:1},
+    meta:{towerDmg:1,discount:1,goldMult:1,xpMult:1},
     perkCounts:{},
     levelupsQueued:0,
     player:{
@@ -417,6 +484,23 @@ function freshState(difficulty){
     },
     mouse:null
   };
+  // apply class modifiers
+  const cm=(CLASSES[META.cls]||CLASSES.classic).mods,p=s.player;
+  if(cm.maxHp){p.maxHp+=cm.maxHp;p.hp=p.maxHp}
+  if(cm.regen)p.regen+=cm.regen;
+  if(cm.crit)p.crit+=cm.crit;
+  if(cm.speedMult)p.speed*=cm.speedMult;
+  if(cm.damageMult)p.damage*=cm.damageMult;
+  if(cm.rangeMult)p.range*=cm.rangeMult;
+  if(cm.attackSpeedMult)p.attackSpeed*=cm.attackSpeedMult;
+  if(cm.discount)s.meta.discount*=cm.discount;
+  if(cm.goldMult)s.meta.goldMult*=cm.goldMult;
+  // apply permanent upgrades
+  s.money+=25*permLevel('cash');
+  p.damage*=1+0.08*permLevel('power');
+  s.meta.xpMult*=1+0.10*permLevel('wisdom');
+  p.damage=Math.round(p.damage*10)/10;
+  return s;
 }
 
 /* ---------- UI refs ---------- */
@@ -442,18 +526,18 @@ const bgCanvas=document.createElement('canvas');bgCanvas.width=W;bgCanvas.height
 (function(){
   const b=bgCanvas.getContext('2d');
   const g=b.createRadialGradient(W/2,H/2,80,W/2,H/2,620);
-  g.addColorStop(0,'#0b1430');g.addColorStop(1,'#05080f');
+  g.addColorStop(0,'#13200b');g.addColorStop(1,'#050803');
   b.fillStyle=g;b.fillRect(0,0,W,H);
   for(let i=0;i<150;i++){
-    b.globalAlpha=rand(0.08,0.8);b.fillStyle=Math.random()<0.12?'#9db4ff':'#ffffff';
+    b.globalAlpha=rand(0.08,0.8);b.fillStyle=Math.random()<0.3?'#fef08a':'#d9f99d';
     const r=rand(0.3,1.6);b.beginPath();b.arc(rand(0,W),rand(0,H),r,0,TAU);b.fill();
   }
   b.globalAlpha=1;
-  b.strokeStyle='rgba(42,54,110,0.33)';b.lineWidth=1;
+  b.strokeStyle='rgba(58,81,34,0.4)';b.lineWidth=1;
   for(let x=0;x<=W;x+=GRID){b.beginPath();b.moveTo(x+0.5,0);b.lineTo(x+0.5,H);b.stroke()}
   for(let y=0;y<=H;y+=GRID){b.beginPath();b.moveTo(0,y+0.5);b.lineTo(W,y+0.5);b.stroke()}
-  /* arena border glow */
-  b.strokeStyle='rgba(110,134,255,0.25)';b.lineWidth=2;b.strokeRect(1,1,W-2,H-2);
+  /* yard border glow */
+  b.strokeStyle='rgba(139,195,74,0.25)';b.lineWidth=2;b.strokeRect(1,1,W-2,H-2);
 })();
 
 /* ---------- fx ---------- */
@@ -541,6 +625,7 @@ function killEnemy(e){
   for(let i=0;i<n;i++)state.orbs.push({x:e.x+rand(-8,8),y:e.y+rand(-8,8),v:e.xp/n,ttl:18,vx:rand(-40,40),vy:rand(-40,40)});
   spawnParticles(e.x,e.y,e.color,e.boss?50:12,e.boss?260:130,e.boss?0.9:0.55);
   if(e.boss){
+    state.bossKills++;
     shake(10);addPulse(e.x,e.y,220,'#ff5d73');
     addFloat(e.x,e.y-30,'+$'+cash,'#ffc94d',18);
     Audio2.sfx.boss();
@@ -613,7 +698,7 @@ function updateTower(t,dt){
   t.flash=Math.max(0,t.flash-dt);
   if(t.utility){
     t.pulseT+=dt;
-    if(t.pulseT>=1.5){t.pulseT=0;addPulse(t.x,t.y,t.aura.range,'#c084fc',0.8)}
+    if(t.pulseT>=1.5){t.pulseT=0;addPulse(t.x,t.y,t.aura.range,'#facc15',0.8)}
     return;
   }
   if(t.cooldown>0)t.cooldown-=dt;
@@ -720,7 +805,7 @@ function updatePlayer(dt){
 }
 function gainXP(v){
   const p=state.player;
-  p.xp+=v;
+  p.xp+=v*state.meta.xpMult;
   while(p.xp>=p.xpNext){
     p.xp-=p.xpNext;p.level++;
     p.xpNext=Math.round(10*Math.pow(1.3,p.level-1));
@@ -798,7 +883,7 @@ function startWave(){
   state.wavePlan=buildWavePlan(state.wave);
   state.waveClock=0;
   state.waveActive=true;
-  addToast('WAVE '+state.wave+(state.wave%5===0?' — BOSS':''),ev.name+' · '+ev.desc);
+  addToast('WAVE '+state.wave+(state.wave%5===0?' — THE GRIZZLY':''),ev.name+' · '+ev.desc);
   if(state.wave%5===0){Audio2.sfx.boss();shake(4)}else Audio2.sfx.wave();
   updateDockState();
 }
@@ -821,7 +906,7 @@ function activateHype(){
   if(state.hype<state.hypeMax||state.hypeTimer>0)return false;
   state.hype=0;state.hypeTimer=9;
   addPulse(state.player.x,state.player.y,Math.max(W,H),'#ffc94d',0.7);
-  addToast('HYPE BURST','+30% damage · +60% fire rate · 9s');
+  addToast('GROUNDHOG RAGE','+30% damage · +60% fire rate · 9s');
   shake(6);Audio2.sfx.hype();
   return true;
 }
@@ -910,6 +995,10 @@ function gameOver(){
   Audio2.sfx.gameover();
   const isBest=state.wave>=bestWave&&state.wave>0;
   if(state.wave>bestWave){bestWave=state.wave;store.set('best',bestWave)}
+  // bank spuds for meta-progression
+  const spuds=state.wave*4+Math.floor(state.kills/12)+state.bossKills*10;
+  META.spuds+=spuds;saveMeta();
+  $('goSpuds').textContent=`+${spuds} 🥕 CARROTS EARNED · BALANCE ${META.spuds}`;
   UI.goWave.textContent=state.wave;
   UI.goKills.textContent=state.kills;
   UI.goCash.textContent='$'+state.cashEarned;
@@ -1026,7 +1115,7 @@ function draw(){
   // aura rings
   for(const t of state.towers){
     if(!t.aura)continue;
-    ctx.globalAlpha=0.1;ctx.strokeStyle='#c084fc';ctx.lineWidth=2;
+    ctx.globalAlpha=0.12;ctx.strokeStyle='#facc15';ctx.lineWidth=2;
     ctx.beginPath();ctx.arc(t.x,t.y,t.aura.range,0,TAU);ctx.stroke();
     ctx.globalAlpha=1;
   }
@@ -1041,7 +1130,7 @@ function draw(){
   for(const o of state.orbs){
     const tw=0.7+0.3*Math.sin(state.time*8+o.x);
     ctx.globalAlpha=Math.min(1,o.ttl)*tw;
-    ctx.fillStyle='#a78bfa';
+    ctx.fillStyle='#d4e157';
     ctx.beginPath();
     ctx.moveTo(o.x,o.y-4);ctx.lineTo(o.x+3.4,o.y);ctx.lineTo(o.x,o.y+4);ctx.lineTo(o.x-3.4,o.y);
     ctx.closePath();ctx.fill();
@@ -1068,7 +1157,7 @@ function draw(){
     if(showRanges||state.selected===t){
       const r=t.utility?t.aura.range:t.range+(state.mods.towerRangeBonus||0);
       ctx.globalAlpha=state.selected===t?0.3:0.1;
-      ctx.strokeStyle='#9db4ff';ctx.setLineDash([4,6]);
+      ctx.strokeStyle='#b5d38f';ctx.setLineDash([4,6]);
       ctx.beginPath();ctx.arc(t.x,t.y,r,0,TAU);ctx.stroke();
       ctx.setLineDash([]);ctx.globalAlpha=1;
     }
@@ -1111,11 +1200,11 @@ function draw(){
     // glow + body
     if(p.iframe>0&&Math.floor(state.time*18)%2===0)ctx.globalAlpha=0.35;
     ctx.globalAlpha*=1;
-    ctx.fillStyle='rgba(255,201,77,0.2)';
+    ctx.fillStyle=(CLASSES[state.cls]||CLASSES.classic).glow;
     ctx.beginPath();ctx.arc(p.x,p.y,p.r*1.5,0,TAU);ctx.fill();
     ctx.font='28px system-ui,"Apple Color Emoji","Segoe UI Emoji"';
-    ctx.fillStyle='#d9a066';
-    ctx.fillText('🥔',p.x,p.y+1);
+    ctx.fillStyle='#a9805b';
+    ctx.fillText('🦫',p.x,p.y+1);
     ctx.globalAlpha=1;
     // hp bar
     const bw=38,bh=4.5,bx=p.x-bw/2,by=p.y-p.r-13;
@@ -1165,7 +1254,7 @@ function draw(){
     ctx.fillStyle=ok?def.color:'#ff5d73';
     ctx.beginPath();ctx.arc(c.x,c.y,16,0,TAU);ctx.fill();
     ctx.globalAlpha=0.15;
-    ctx.strokeStyle='#9db4ff';
+    ctx.strokeStyle='#b5d38f';
     ctx.beginPath();ctx.arc(c.x,c.y,def.utility?def.aura.range:def.range,0,TAU);ctx.stroke();
     ctx.globalAlpha=1;
   }
@@ -1199,8 +1288,8 @@ function draw(){
     ctx.fillStyle='#3d1220';ctx.fillRect(bx,by,bw,10);
     ctx.fillStyle='#ff5d73';ctx.fillRect(bx,by,bw*(boss.hp/boss.maxHp),10);
     ctx.strokeStyle='rgba(255,93,115,0.5)';ctx.strokeRect(bx-2,by-2,bw+4,14);
-    ctx.fillStyle='#ffb3bf';ctx.font='900 11px system-ui';ctx.textAlign='center';
-    ctx.fillText('⚠ ARENA WARDEN ⚠',W/2,by+24);
+    ctx.fillStyle='#ffc3b8';ctx.font='900 11px system-ui';ctx.textAlign='center';
+    ctx.fillText('⚠ THE GRIZZLY ⚠',W/2,by+24);
   }
   // toasts
   let ty=boss?86:64;
@@ -1209,18 +1298,18 @@ function draw(){
     ctx.globalAlpha=a;
     ctx.textAlign='center';
     ctx.fillStyle='#ffffff';ctx.font='900 30px system-ui';
-    ctx.shadowColor='rgba(110,134,255,0.8)';ctx.shadowBlur=18;
+    ctx.shadowColor='rgba(139,195,74,0.8)';ctx.shadowBlur=18;
     ctx.fillText(t.text,W/2,ty);
     ctx.shadowBlur=0;
-    if(t.sub){ctx.fillStyle='#aab6ec';ctx.font='700 13px system-ui';ctx.fillText(t.sub,W/2,ty+24)}
+    if(t.sub){ctx.fillStyle='#b7c9a0';ctx.font='700 13px system-ui';ctx.fillText(t.sub,W/2,ty+24)}
     ctx.globalAlpha=1;
     ty+=64;
   }
   // waiting hint
   if(!state.waveActive&&state.mode==='playing'&&!state.toasts.length&&!state.autoStart){
     ctx.globalAlpha=0.5+0.25*Math.sin(state.time*3);
-    ctx.fillStyle='#aab6ec';ctx.font='700 15px system-ui';ctx.textAlign='center';
-    ctx.fillText(state.wave===0?'Build a tower or two, then press START WAVE':'Intermission — build & upgrade, then start wave '+(state.wave+1),W/2,H-48);
+    ctx.fillStyle='#b7c9a0';ctx.font='700 15px system-ui';ctx.textAlign='center';
+    ctx.fillText(state.wave===0?'Build a defense or two, then press START WAVE':'Intermission — build & upgrade, then start wave '+(state.wave+1),W/2,H-48);
     ctx.globalAlpha=1;
   }
 }
@@ -1430,6 +1519,51 @@ document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&state&&state.mode==='playing')togglePause();
 });
 
+/* ---------- locker (meta-progression UI) ---------- */
+function renderLocker(){
+  $('spudBal').textContent='🥕 '+META.spuds;
+  const row=$('classRow');row.innerHTML='';
+  for(const[id,c]of Object.entries(CLASSES)){
+    const unlocked=!!META.unlocks[id];
+    const el=document.createElement('button');
+    el.className='ccard'+(META.cls===id?' sel':'')+(unlocked?'':' locked');
+    let action='';
+    if(!unlocked)action=`<span class="cu${META.spuds<c.cost?' cant':''}">UNLOCK · 🥕 ${c.cost}</span>`;
+    else if(META.cls===id)action='<span class="csel">✓ SELECTED</span>';
+    el.innerHTML=`<span class="ci">${c.icon}</span><span class="cn">${c.name}</span>${META.cls===id&&unlocked?action:''}<div class="cd">${c.desc}</div>${!unlocked?action:''}`;
+    el.addEventListener('click',()=>{
+      Audio2.ensure();
+      if(unlocked){META.cls=id;saveMeta();Audio2.sfx.click()}
+      else if(META.spuds>=c.cost){META.spuds-=c.cost;META.unlocks[id]=true;META.cls=id;saveMeta();Audio2.sfx.upgrade()}
+      else{Audio2.sfx.hit();return}
+      renderLocker();
+    });
+    row.appendChild(el);
+  }
+  const prow=$('permRow');prow.innerHTML='';
+  for(const p of PERMS){
+    const lvl=permLevel(p.id),maxed=lvl>=p.max,cost=permCost(p);
+    const el=document.createElement('button');
+    el.className='pcard';
+    el.disabled=maxed||META.spuds<cost;
+    el.innerHTML=`<span class="pi">${p.icon}</span><span class="pn">${p.name}</span><div class="pd">${p.desc}</div><div class="pc">${maxed?'MAXED':'🥕 '+cost}</div><div class="pips">${Array.from({length:p.max},(_,i)=>`<i class="${i<lvl?'on':''}"></i>`).join('')}</div>`;
+    el.addEventListener('click',()=>{
+      if(maxed||META.spuds<cost)return;
+      META.spuds-=cost;META.perm[p.id]=lvl+1;saveMeta();
+      Audio2.ensure();Audio2.sfx.upgrade();
+      renderLocker();
+    });
+    prow.appendChild(el);
+  }
+}
+$('menuBtn').addEventListener('click',()=>{
+  Audio2.sfx.click();
+  UI.gameover.hidden=true;
+  renderLocker();
+  UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
+  UI.menu.hidden=false;
+});
+
 /* menu */
 UI.diffRow.addEventListener('click',e=>{
   const b=e.target.closest('.diff');
@@ -1455,7 +1589,7 @@ function startGame(difficulty){
   buildDock();
   updateDockState();
   UI.soundBtn.textContent=Audio2.isOn()?'🔊':'🔇';
-  addToast('WELCOME TO THE ARENA','Place towers, then start the wave');
+  addToast('WELCOME TO THE YARD','Place defenses, then start the wave');
 }
 
 /* ---------- loop ---------- */
@@ -1476,13 +1610,14 @@ function frame(ts){
   }
 }
 buildDock();
+renderLocker();
 resize();
 UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
 UI.hBest.textContent=bestWave;
 requestAnimationFrame(frame);
 
 /* test hook */
-window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t}};
+window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t},META,CLASSES,PERMS,renderLocker,saveMeta,permCost,permLevel};
 </script>
 </body>
 </html>

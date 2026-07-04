@@ -1,15 +1,16 @@
-# Potato Arena — Tower Defense × Survival
+# Groundhog Arena — Backyard Tower Defense × Survival
 
-## 🥔 Potato Arena (`arena.html`) — the flagship mode
+## 🦫 Groundhog Arena (`arena.html`) — the flagship mode
 
-A polished single-file hybrid of tower defense and arena survival. Pilot the potato with WASD (or a touch joystick), build and upgrade a grid of towers around yourself, and survive escalating waves.
+A polished single-file hybrid of tower defense and arena survival. Pilot the groundhog with WASD (or a touch joystick), build and upgrade garden defenses around yourself, and survive escalating waves of backyard pests.
 
 **Features**
-- **6 tower types** — Orbit Cannon, Pulse Emitter (splash), Cryo (slow), Railgun (pierce), Storm Nexus (chain lightning), Beacon (aura buffs) — each upgradable to level 8, sellable, with a click-to-select stats panel
+- **6 defense types** — Acorn Turret, Beehive (splash), Sprinkler (slow), Thorn Launcher (pierce), Storm Totem (chain lightning), Sunflower (aura buffs) — each upgradable to level 8, sellable, with a click-to-select stats panel
 - **Player progression** — enemies drop XP orbs; each level presents a 3-card perk draft (damage, fire rate, crits, split shot, regen, magnets, tower buffs, discounts…)
-- **7 enemy types** including splitters, gold carriers, and an Arena Warden boss every 5 waves with its own HP bar
-- **Wave modifiers** — every wave rolls a twist (Treasure Rush, Overcharge Grid, Frostfront, Meteor Shower, Resonant Grounds)
-- **Hype Burst & combo system** — kills charge a global overdrive; kill streaks stack damage bonuses
+- **Meta-progression** — runs bank 🥕 Carrots based on waves, kills, and boss takedowns; spend them in the Burrow on **4 playable classes** (Classic, Burly, Hawkeye, Hoarder Chuck) and **3 permanent upgrade tracks** (starting cash, damage, XP gain) — all persisted between sessions
+- **7 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons — and the Grizzly boss every 5 waves with its own HP bar
+- **Wave modifiers** — every wave rolls a twist (Farmers Market, Morning Buzz, Cold Snap, Hailstorm, Fertile Grounds)
+- **Groundhog Rage & combo system** — kills charge a global overdrive; kill streaks stack damage bonuses
 - **Juice** — particles, screen shake, floating text, bullet trails, chain-lightning arcs, low-HP vignette, synth SFX and a generative soundtrack (WebAudio, no assets)
 - **Quality of life** — pause, 1×/2×/3× speed, auto-start waves, difficulty select, persistent best wave, game-over stats + instant restart, full touch/mobile support
 - **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
