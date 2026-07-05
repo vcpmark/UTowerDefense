@@ -10,7 +10,11 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 - **Meta-progression** — runs bank 🥕 Carrots based on waves, kills, and boss takedowns; spend them in the Burrow on **4 playable classes** (Classic, Burly, Hawkeye, Hoarder Chuck) and **3 permanent upgrade tracks** (starting cash, damage, XP gain) — all persisted between sessions
 - **11 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons, weaving vipers, dash-striking bats, skunks (stink cloud on death slows tower fire), and quilled hedgehogs (death burst of quills) — plus **3 rotating bosses** every 5 waves, each with its own AI pattern and HP bar: the charging Grizzly, the minion-summoning Fox, and the feather-strafing Hawk
 - **Enemy visual polish** — spawn-in pop, direction-facing sprites, waddle wobble, pulsing boss glow, elite rings
-- **🎆 Special occasions** — during the July 4th week (auto-detected; `?party` to force) the game celebrates America's birthday: banner + daily +50 🥕 gift, fireworks on wave clears and boss kills, star-spangled elite rings, and the Hawk becomes the LIBERTY EAGLE with red-white-and-blue feathers. A "Grand Finale" wave event rains celebratory fireworks on pests year-round
+- **🎆 Seasonal calendar** — three auto-detected special occasions (`?season=july4|halloween|winter` to force, `?noparty` to disable), each with a menu banner, a daily +50 🥕 gift, themed fireworks, and seasonal elite rings:
+  - **July 4th week** — America's-birthday celebration, fireworks on wave clears and boss kills, and the Hawk becomes the LIBERTY EAGLE with red-white-and-blue feathers
+  - **Halloween Haunt** (Oct 24–31) — pumpkin-strewn moonlit yard with drifting fog, 👻 ghost pest variants, 🍬 candy cash drops, and the PHANTOM FOX
+  - **Winter Festival** (Dec 20–Jan 2) — falling snow, snow-drift lawn, and the Grizzly becomes the POLAR WARDEN 🐻‍❄️
+  A "Grand Finale" wave event rains celebratory fireworks on pests year-round
 - **Wave modifiers** — every wave rolls a twist (Farmers Market, Morning Buzz, Cold Snap, Hailstorm, Fertile Grounds)
 - **Groundhog Rage & combo system** — kills charge a global overdrive; kill streaks stack damage bonuses
 - **Armory: 4 weapon classes** — Acorn Slinger (ranged), Claws & Tail (melee arc swipes with knockback and a 360° tail-spin every 4th hit), Seed Shotgun (5-pellet spray), Thorn Rifle (slow piercing sniper)
@@ -18,7 +22,7 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 - **14 achievements** — persistent, each worth bonus carrots, shown in the Burrow
 - **A living groundhog** — waddles with dust puffs, faces its target, and when idle will sniff, look around, stretch, nibble a carrot, or doze off
 - **Juice & graphics** — hand-drawn tower bodies with aiming, recoiling barrels; soft entity shadows; additive-glow projectiles and XP orbs; a detailed lawn (mow stripes, grass tufts, flowers, stones, vignette) with drifting fireflies; particles, screen shake, floating text, chain-lightning arcs, synth SFX and a generative soundtrack (WebAudio, no assets)
-- **Quality of life** — pause, 1×/2×/3× speed, auto-start waves, **auto-spend** (AI buys and upgrades towers with spare cash), difficulty select, persistent best wave, game-over stats + instant restart, full touch/mobile support
+- **Quality of life** — pause menu with separate music/SFX toggles, 1×/2×/3× speed, auto-start waves, **auto-spend** (AI buys and upgrades towers with spare cash), difficulty select, persistent best wave, **recent-run history in the Burrow**, game-over stats + instant restart, full touch/mobile support
 - **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
 
 ---
