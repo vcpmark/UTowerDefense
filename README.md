@@ -21,7 +21,7 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 - **Victory & Endless** — defend the yard through wave 20 for a carrot bonus, then push into Endless Mode where shielded/swift/enraged elite pests join every wave
 - **14 achievements** — persistent, each worth bonus carrots, shown in the Burrow
 - **A living groundhog** — waddles with dust puffs, faces its target, and when idle will sniff, look around, stretch, nibble a carrot, or doze off
-- **Juice & graphics** — hand-drawn tower bodies with aiming, recoiling barrels; soft entity shadows; additive-glow projectiles and XP orbs; a detailed lawn (mow stripes, grass tufts, flowers, stones, vignette) with drifting fireflies; particles, screen shake, floating text, chain-lightning arcs, synth SFX and a generative soundtrack (WebAudio, no assets)
+- **Juice & graphics** — hand-drawn tower bodies with aiming, recoiling barrels, muzzle flashes, and gold level pips; boss intro splash cards; enemy death-pop animations and impact rings; soft entity shadows; additive-glow projectiles and XP orbs; a detailed lawn (mow stripes, grass tufts, flowers, stones, vignette) with drifting fireflies and cloud shadows; particles, screen shake, floating text, chain-lightning arcs, synth SFX and a generative soundtrack (WebAudio, no assets)
 - **Quality of life** — pause menu with separate music/SFX toggles, 1×/2×/3× speed, auto-start waves, **auto-spend** (AI buys and upgrades towers with spare cash), difficulty select, persistent best wave, **recent-run history in the Burrow**, game-over stats + instant restart, full touch/mobile support
 - **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
 
