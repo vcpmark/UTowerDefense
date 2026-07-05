@@ -6,7 +6,7 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 
 **Features**
 - **8 defense types** — Acorn Turret, Beehive (splash), Sprinkler (slow), Thorn Launcher (pierce), Storm Totem (chain lightning), Sunflower (aura buffs), Melon Mortar (long-range arcing artillery with a blind spot up close), and Cash Crop (harvests passive income) — each upgradable to level 8, sellable, with a click-to-select stats panel
-- **Player progression** — enemies drop XP orbs; each level presents a 3-card perk draft from 16 perks (damage, crits, split shot, regen, magnets, tower buffs — plus Orbiting Acorns, a loyal Bee Friend companion, and retaliating Thorn Coat)
+- **Player progression** — enemies drop XP orbs; each level presents a 4-card perk draft from 20 perks, including four build-defining archetypes: Rooted Fortune (stand still for a giant resource magnet + regen), Momentum Runner (damage ramps while moving), Turret Whisperer (buff towers you stand near), and Glass Cannon
 - **Meta-progression** — runs bank 🥕 Carrots based on waves, kills, and boss takedowns; spend them in the Burrow on **4 playable classes** (Classic, Burly, Hawkeye, Hoarder Chuck) and **3 permanent upgrade tracks** (starting cash, damage, XP gain) — all persisted between sessions
 - **11 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons, weaving vipers, dash-striking bats, skunks (stink cloud on death slows tower fire), and quilled hedgehogs (death burst of quills) — plus **3 rotating bosses** every 5 waves, each with its own AI pattern and HP bar: the charging Grizzly, the minion-summoning Fox, and the feather-strafing Hawk
 - **Enemy visual polish** — spawn-in pop, direction-facing sprites, waddle wobble, pulsing boss glow, elite rings
@@ -17,8 +17,8 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 - **Victory & Endless** — defend the yard through wave 20 for a carrot bonus, then push into Endless Mode where shielded/swift/enraged elite pests join every wave
 - **14 achievements** — persistent, each worth bonus carrots, shown in the Burrow
 - **A living groundhog** — waddles with dust puffs, faces its target, and when idle will sniff, look around, stretch, nibble a carrot, or doze off
-- **Juice** — particles, screen shake, floating text, bullet trails, chain-lightning arcs, low-HP vignette, synth SFX and a generative soundtrack (WebAudio, no assets)
-- **Quality of life** — pause, 1×/2×/3× speed, auto-start waves, difficulty select, persistent best wave, game-over stats + instant restart, full touch/mobile support
+- **Juice & graphics** — hand-drawn tower bodies with aiming, recoiling barrels; soft entity shadows; additive-glow projectiles and XP orbs; a detailed lawn (mow stripes, grass tufts, flowers, stones, vignette) with drifting fireflies; particles, screen shake, floating text, chain-lightning arcs, synth SFX and a generative soundtrack (WebAudio, no assets)
+- **Quality of life** — pause, 1×/2×/3× speed, auto-start waves, **auto-spend** (AI buys and upgrades towers with spare cash), difficulty select, persistent best wave, game-over stats + instant restart, full touch/mobile support
 - **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
 
 ---
