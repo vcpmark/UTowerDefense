@@ -95,6 +95,10 @@
   #goSpuds{color:var(--gold);font-weight:800;font-family:var(--mono);margin-bottom:10px;font-size:15px}
   @media (max-width:480px){.class-row{grid-template-columns:1fr}}
 
+  /* holiday banner */
+  #holidayBanner{margin-top:12px;padding:9px 14px;border-radius:10px;font-weight:800;font-size:13px;letter-spacing:.04em;color:var(--gold);background:linear-gradient(90deg,rgba(255,77,94,.16),rgba(20,26,12,.6),rgba(91,140,255,.16));border:1px solid rgba(255,179,71,.4)}
+  #holidayBanner span{display:block;margin-top:3px;font-weight:600;font-size:11.5px;color:var(--dim);letter-spacing:.02em}
+
   /* achievements */
   .ach-head{display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px}
   .ach-head em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--dim)}
@@ -197,9 +201,10 @@
       <div class="sheet">
         <div class="game-title">🦫 GROUNDHOG <span class="glow">ARENA</span></div>
         <div class="tagline">Backyard Tower Defense × Survival</div>
+        <div id="holidayBanner" hidden></div>
         <div class="howto">
           <b>Move</b> with <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> — your groundhog auto-fires at the nearest pest.<br>
-          <b>Build defenses</b> from the dock (<span class="key">1</span>–<span class="key">6</span>), then click the yard to place them.<br>
+          <b>Build defenses</b> from the dock (<span class="key">1</span>–<span class="key">8</span>), then click the yard to place them.<br>
           <b>Click a tower</b> to upgrade or sell it. Kills earn <b style="color:var(--gold)">cash</b> for towers and <b style="color:#c5e1a5">XP</b> for level-up perks.<br>
           <b>Groundhog Rage</b> <span class="key">Space</span> when the meter is full. A boss prowls in every 5 waves — Grizzly, Fox, or Hawk. Defend the burrow.
         </div>
@@ -299,6 +304,10 @@ const dist=(x1,y1,x2,y2)=>Math.hypot(x2-x1,y2-y1);
 const rand=(a,b)=>a+Math.random()*(b-a);
 const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* July 4th week special (override with ?party / ?noparty) */
+const HOLIDAY=(()=>{try{const q=new URLSearchParams(location.search);if(q.has('noparty'))return false;if(q.has('party'))return true}catch(e){}const d=new Date();return d.getMonth()===6&&d.getDate()<=7})();
+const HOLIDAY_250=HOLIDAY&&new Date().getFullYear()===2026;
+const FW_COLORS=HOLIDAY?['#ff4d5e','#ffffff','#5b8cff']:['#ffb347','#a3e635','#55c8f0','#f472b6'];
 
 /* ---------- persistence ---------- */
 const store={
@@ -340,6 +349,8 @@ const Audio2=(()=>{
     hype(){tone(180,1400,0.45,'sawtooth',0.07)},
     hurt(){tone(140,70,0.16,'sawtooth',0.09)},
     swipe(){tone(260,90,0.09,'sawtooth',0.045)},
+    whistle(){tone(320,1150,0.5,'triangle',0.028)},
+    crackle(){for(let i=0;i<5;i++)setTimeout(()=>tone(1200+Math.random()*1400,400,0.05,'square',0.03),i*45+Math.random()*30)},
     boss(){tone(70,45,0.7,'sawtooth',0.1);tone(140,90,0.7,'square',0.05)},
     gameover(){[392,330,262,196].forEach((f,i)=>setTimeout(()=>tone(f,f*0.97,0.32,'triangle',0.07),i*180))},
     click(){tone(1100,900,0.03,'square',0.03)}
@@ -407,6 +418,10 @@ const ENEMY_TYPES={
   splitter:{icon:'🐇',hp:46,spd:64, reward:10,xp:3, dmg:8, r:15,color:'#e5e7eb'},
   mini:   {icon:'🐰',hp:12, spd:100,reward:2, xp:1, dmg:4, r:8, color:'#f9a8d4'},
   rich:   {icon:'🦝',hp:42, spd:80, reward:34,xp:4, dmg:6, r:13,color:'#ffb347'},
+  viper:  {icon:'🐍',hp:26, spd:88, reward:11,xp:3, dmg:7, r:13,color:'#a3e635',move:'weave'},
+  bat:    {icon:'🦇',hp:22, spd:60, reward:12,xp:3, dmg:6, r:12,color:'#c4b5fd',move:'dash'},
+  skunk:  {icon:'🦨',hp:58, spd:48, reward:14,xp:4, dmg:9, r:15,color:'#e5e7eb',stink:true},
+  quill:  {icon:'🦔',hp:72, spd:44, reward:15,xp:4, dmg:10,r:15,color:'#d6a26e',armor:2,quills:true},
   boss:   {icon:'🐻',hp:950,spd:33, reward:130,xp:40,dmg:22,r:32,color:'#ff6b5d',armor:5,boss:true,ai:'charge',name:'THE GRIZZLY'},
   bossFox:{icon:'🦊',hp:720,spd:60, reward:130,xp:40,dmg:16,r:26,color:'#f97316',armor:4,boss:true,ai:'summon',name:'THE FOX'},
   bossHawk:{icon:'🦅',hp:800,spd:75,reward:130,xp:40,dmg:14,r:26,color:'#cbd5e1',armor:3,boss:true,ai:'dive',name:'THE HAWK'}
@@ -431,7 +446,15 @@ const WAVE_EVENTS=[
           spawnParticles(t.x,t.y,'#bae6fd',8,140);
           damageEnemy(t,18+state.wave*1.5,null);}}}},
   {key:'resonance',name:'Fertile Grounds',desc:'Tower range up; groundhog heals after wave',
-    apply(m){m.towerRangeBonus+=16;m.postWaveHeal+=14}}
+    apply(m){m.towerRangeBonus+=16;m.postWaveHeal+=14}},
+  {key:'finale',name:'Grand Finale',desc:'Celebration fireworks rain on random pests',
+    apply(m,ev){ev.timer=1.3;m.hypeGainBonus+=1},
+    tick(ev,dt){ev.timer-=dt;
+      if(ev.timer<=0){ev.timer+=1.3;
+        const alive=state.enemies.filter(e=>e.alive);
+        if(alive.length){const t=pick(alive);
+          burstFirework(t.x,t.y,pick(FW_COLORS));
+          damageEnemy(t,20+state.wave*1.4,null);}}}}
 ];
 const BASE_MODS={enemyHpMult:1,enemySpeedMult:1,enemyRewardMult:1,towerDamageMult:1,towerRateMult:1,towerRangeBonus:0,killBonus:0,hypeGainBonus:0,postWaveHeal:0};
 function hashWave(w){const s=Math.sin(w*12.9898)*43758.5453;return Math.abs(Math.floor(s))}
@@ -566,7 +589,7 @@ function freshState(difficulty){
     autoStart:false,
     speed:1,
     kills:0,cashEarned:0,towersBuilt:0,bossKills:0,cls:META.cls,weapon:META.weapon,victory:false,endless:false,waveDamage:0,
-    towers:[],enemies:[],bullets:[],eBullets:[],orbs:[],particles:[],floats:[],lightning:[],pulses:[],toasts:[],slashes:[],lobs:[],pets:[],
+    towers:[],enemies:[],bullets:[],eBullets:[],orbs:[],particles:[],floats:[],lightning:[],pulses:[],toasts:[],slashes:[],lobs:[],pets:[],clouds:[],fireworks:[],
     mods:{...BASE_MODS},activeEvent:null,
     hype:0,hypeMax:100,hypeTimer:0,
     combo:0,comboTimer:0,
@@ -670,6 +693,25 @@ function addLightning(points,color){
 }
 function addPulse(x,y,max,color,life=0.6){state.pulses.push({x,y,r:0,max,ttl:life,life,color})}
 function addToast(text,sub){state.toasts.push({text,sub,ttl:2.6,life:2.6})}
+function launchFirework(){
+  if(!state)return;
+  const tx=rand(W*0.12,W*0.88),ty=rand(H*0.12,H*0.42);
+  state.fireworks.push({x:tx+rand(-40,40),y:H+6,tx,ty,color:pick(FW_COLORS),t:0});
+  Audio2.sfx.whistle();
+}
+function celebrate(n){
+  if(REDUCED)n=Math.min(n,2);
+  for(let i=0;i<n;i++)setTimeout(launchFirework,i*260);
+}
+function burstFirework(x,y,color){
+  const n=REDUCED?22:46;
+  for(let i=0;i<n;i++){
+    const a=rand(0,TAU),sp=rand(50,210);
+    state.particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:rand(0.7,1.3),ttl:0,color:Math.random()<0.25?'#ffffff':color,r:rand(1.5,3),g:75,tw:true});
+  }
+  addPulse(x,y,70,color,0.5);
+  Audio2.sfx.crackle();
+}
 function shake(m){if(!REDUCED)state.shake=Math.min(16,state.shake+m)}
 
 /* ---------- enemies ---------- */
@@ -702,8 +744,10 @@ function spawnEnemy(type,px,py){
     reward:Math.round(t.reward*(1+0.02*(state.wave-1))*m.enemyRewardMult),
     xp:t.xp,dmg:Math.round(t.dmg*D.dmg*Math.min(2,1+(state.wave-1)*0.03)),
     alive:true,slowTimer:0,slowFactor:1,hitFlash:0,touchCd:0,wob:rand(0,TAU),
-    ai:t.ai||null,name:t.name||null,phase:'walk',phaseT:2,summonT:3.5,shootT:2.2,diveT:6,chargeDir:null,dmgMult:1
+    ai:t.ai||null,name:t.name||null,phase:'walk',phaseT:2,summonT:3.5,shootT:2.2,diveT:6,chargeDir:null,dmgMult:1,
+    moveType:t.move||null,dashT:1+rand(0,1.2),dashing:0,stink:!!t.stink,quills:!!t.quills,spawnT:0.3
   };
+  if(HOLIDAY&&type==='bossHawk')e.name='LIBERTY EAGLE';
   const eliteChance=state.endless||state.wave>20?0.18:(state.wave>=13?(state.wave-12)*0.012:0);
   if(!t.boss&&type!=='mini'&&Math.random()<eliteChance){
     const mod=pick(ELITE_MODS);
@@ -747,6 +791,7 @@ function killEnemy(e){
     META.bossTypes[e.type]=1;saveMeta();
     if(META.bossTypes.boss&&META.bossTypes.bossFox&&META.bossTypes.bossHawk)earnAch('menagerie');
     shake(10);addPulse(e.x,e.y,220,'#ff5d73');
+    celebrate(HOLIDAY?3:1);
     addFloat(e.x,e.y-30,'+$'+cash,'#ffc94d',18);
     Audio2.sfx.boss();
   }else if(e.type==='rich'){
@@ -754,6 +799,16 @@ function killEnemy(e){
   }else Audio2.sfx.kill();
   if(e.type==='splitter'){
     spawnEnemy('mini',e.x-10,e.y);spawnEnemy('mini',e.x+10,e.y);
+  }
+  if(e.stink){
+    state.clouds.push({x:e.x,y:e.y,r:88,ttl:4,life:4});
+    spawnParticles(e.x,e.y,'#a3e635',14,90,0.8);
+  }
+  if(e.quills){
+    for(let i=0;i<6;i++){
+      const a=i*TAU/6+rand(-0.2,0.2);
+      state.eBullets.push({x:e.x,y:e.y,vx:Math.cos(a)*160,vy:Math.sin(a)*160,r:4,dmg:Math.round(8+state.wave*0.3),ttl:2.5});
+    }
   }
 }
 function updateBossAI(e,dt,p,dx,dy,d,spd){
@@ -816,7 +871,7 @@ function updateBossAI(e,dt,p,dx,dy,d,spd){
         const base=Math.atan2(dy,dx);
         for(let i=-1;i<=1;i++){
           const a=base+i*0.22;
-          state.eBullets.push({x:e.x,y:e.y,vx:Math.cos(a)*190,vy:Math.sin(a)*190,r:5,dmg:Math.round(10+state.wave*0.4),ttl:4});
+          state.eBullets.push({x:e.x,y:e.y,vx:Math.cos(a)*190,vy:Math.sin(a)*190,r:5,dmg:Math.round(10+state.wave*0.4),ttl:4,color:HOLIDAY?['#ff4d5e','#ffffff','#5b8cff'][i+1]:null});
         }
         Audio2.sfx.shoot();
       }
@@ -837,8 +892,22 @@ function updateEnemy(e,dt){
   const p=state.player;
   const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
   const spd=e.spd*e.slowFactor;
+  e.spawnT=Math.max(0,(e.spawnT||0)-dt);
   if(e.ai)updateBossAI(e,dt,p,dx,dy,d,spd);
-  else{e.x+=dx/d*spd*dt;e.y+=dy/d*spd*dt}
+  else{
+    let mx=dx/d,my=dy/d,ms=spd;
+    if(e.moveType==='weave'){
+      const wamp=Math.sin(state.time*5+e.wob)*0.75;
+      mx+=-dy/d*wamp;my+=dx/d*wamp;
+      const n=Math.hypot(mx,my)||1;mx/=n;my/=n;
+    }else if(e.moveType==='dash'){
+      e.dashT-=dt;
+      if(e.dashT<=0){e.dashT=1.7;e.dashing=0.28}
+      if(e.dashing>0){e.dashing-=dt;ms*=3.2;if(!REDUCED&&Math.random()<0.6)spawnParticles(e.x,e.y,e.color,1,30,0.25)}
+      else ms*=0.6;
+    }
+    e.x+=mx*ms*dt;e.y+=my*ms*dt;
+  }
   const kx=p.x-e.x,ky=p.y-e.y,kd=Math.hypot(kx,ky)||1;
   if(kd<e.r+p.r&&e.touchCd<=0){
     hurtPlayer(Math.round(e.dmg*(e.dmgMult||1)));
@@ -898,6 +967,9 @@ function towerMods(t){
   for(const a of state.towers){
     if(!a.aura||a===t)continue;
     if(dist(a.x,a.y,t.x,t.y)<=a.aura.range){dm*=a.aura.damageMult;rm*=a.aura.rateMult}
+  }
+  for(const c of state.clouds){
+    if(dist(c.x,c.y,t.x,t.y)<=c.r){rm*=1.55;break}
   }
   return{dm,rm,rb};
 }
@@ -1202,6 +1274,10 @@ function buildWavePlan(wave){
   if(wave>=3)push('tank',n(1.6),gap(1.1));
   if(wave>=4)push('splitter',n(1.8),gap(0.85));
   if(wave>=5&&wave%2===1)push('rich',2,1.1);
+  if(wave>=6)push('viper',n(2.2),gap(0.55));
+  if(wave>=9)push('bat',n(2),gap(0.5));
+  if(wave>=11)push('skunk',n(1.4),gap(1.0));
+  if(wave>=13)push('quill',n(1.4),gap(1.0));
   if(wave>=6)push('grunt',n(3),gap(0.4));
   if(wave>=8)push('fast',n(2.5),gap(0.35));
   if(wave%5===0){
@@ -1236,6 +1312,8 @@ function waveCleared(){
   if(state.mods.postWaveHeal){const p=state.player;p.hp=Math.min(p.maxHp,p.hp+state.mods.postWaveHeal)}
   state.activeEvent=null;state.mods={...BASE_MODS};
   addToast('WAVE CLEARED','+$'+bonus+' bonus');
+  if(HOLIDAY)celebrate(state.wave%5===0?4:2);
+  else if(state.wave%5===0)celebrate(2);
   addFloat(state.player.x,state.player.y-30,'+$'+bonus,'#ffc94d',16);
   Audio2.sfx.coin();
   if(state.wave>bestWave){bestWave=state.wave;store.set('best',bestWave)}
@@ -1251,6 +1329,7 @@ function waveCleared(){
     META.spuds+=150;saveMeta();renderAch();
     $('vicSpuds').textContent='+150 🥕 VICTORY BONUS · BALANCE '+META.spuds;
     $('victory').hidden=false;
+    celebrate(HOLIDAY?8:5);
     Audio2.sfx.levelup();
   }
   state.interTimer=1.8;
@@ -1432,6 +1511,20 @@ function update(dt){
     if(b.ttl<=0||nx<-20||nx>W+20||ny<-20||ny>H+20){state.bullets.splice(i,1);continue}
     b.x=nx;b.y=ny;
   }
+  // fireworks rockets
+  for(let i=state.fireworks.length-1;i>=0;i--){
+    const f=state.fireworks[i];
+    f.t+=dt;
+    f.y-=290*dt;
+    f.x+=(f.tx-f.x)*2.2*dt;
+    if(!REDUCED&&Math.random()<0.7)state.particles.push({x:f.x,y:f.y,vx:rand(-15,15),vy:rand(30,70),life:0.35,ttl:0,color:'#ffd9a0',r:1.6});
+    if(f.y<=f.ty){burstFirework(f.x,f.y,f.color);state.fireworks.splice(i,1)}
+  }
+  // stink clouds
+  for(let i=state.clouds.length-1;i>=0;i--){
+    state.clouds[i].ttl-=dt;
+    if(state.clouds[i].ttl<=0)state.clouds.splice(i,1);
+  }
   // lobbed melons
   for(let i=state.lobs.length-1;i>=0;i--){
     const l=state.lobs[i];
@@ -1465,7 +1558,10 @@ function update(dt){
     const p=state.particles[i];
     p.ttl+=dt;
     if(p.ttl>=p.life){state.particles.splice(i,1);continue}
-    p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=(1-3*dt);p.vy*=(1-3*dt);
+    if(p.g)p.vy+=p.g*dt;
+    p.x+=p.vx*dt;p.y+=p.vy*dt;
+    const drag=p.g?1.2:3;
+    p.vx*=(1-drag*dt);p.vy*=(1-drag*dt);
   }
   for(let i=state.slashes.length-1;i>=0;i--){
     state.slashes[i].ttl-=dt;
@@ -1554,6 +1650,17 @@ function draw(){
       ctx.setLineDash([]);ctx.globalAlpha=1;
     }
   }
+  // stink clouds
+  for(const c of state.clouds){
+    const a=Math.min(0.3,(c.ttl/c.life)*0.35);
+    ctx.fillStyle='#84cc16';
+    for(let i=0;i<3;i++){
+      ctx.globalAlpha=a*(0.5+i*0.2);
+      const ox=Math.sin(state.time*1.5+i*2.1)*10,oy=Math.cos(state.time*1.2+i*1.7)*8;
+      ctx.beginPath();ctx.arc(c.x+ox,c.y+oy,c.r*(0.55+i*0.22),0,TAU);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  }
   // lobbed melons (shadow + arcing fruit)
   for(const l of state.lobs){
     const f=clamp(l.t/l.T,0,1);
@@ -1571,13 +1678,22 @@ function draw(){
   ctx.textAlign='center';ctx.textBaseline='middle';
   for(const e of state.enemies){
     const wob=Math.sin(e.wob)*0.08+1;
-    // glow
-    ctx.globalAlpha=0.22;ctx.fillStyle=e.color;
-    ctx.beginPath();ctx.arc(e.x,e.y,e.r*1.35,0,TAU);ctx.fill();
-    ctx.globalAlpha=1;
-    ctx.font=Math.round(e.r*1.7*wob)+'px system-ui,"Apple Color Emoji","Segoe UI Emoji"';
+    const sc=1-(e.spawnT||0)/0.3;
+    // glow (bosses pulse)
+    ctx.globalAlpha=e.boss?0.18+0.1*Math.sin(state.time*5):0.22;
     ctx.fillStyle=e.color;
-    ctx.fillText(e.icon,e.x,e.y+1);
+    ctx.beginPath();ctx.arc(e.x,e.y,e.r*1.35*sc,0,TAU);ctx.fill();
+    ctx.globalAlpha=1;
+    // body: face travel direction, pop in on spawn, waddle wobble
+    const face=(state.player.x-e.x)>=0?-1:1;
+    ctx.save();
+    ctx.translate(e.x,e.y+1);
+    ctx.rotate(Math.sin(e.wob)*(e.boss?0.03:0.07));
+    ctx.scale(face*sc,sc*wob);
+    ctx.font=Math.round(e.r*1.7)+'px system-ui,"Apple Color Emoji","Segoe UI Emoji"';
+    ctx.fillStyle=e.color;
+    ctx.fillText(e.icon,0,0);
+    ctx.restore();
     if(e.hitFlash>0){
       ctx.globalAlpha=e.hitFlash*7;ctx.fillStyle='#fff';
       ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,TAU);ctx.fill();ctx.globalAlpha=1;
@@ -1595,7 +1711,8 @@ function draw(){
       ctx.beginPath();ctx.arc(e.x,e.y,e.r+8,0,TAU);ctx.stroke();
     }
     if(e.elite){
-      ctx.strokeStyle=e.elite.color;ctx.lineWidth=2;ctx.setLineDash([3,4]);
+      ctx.strokeStyle=HOLIDAY?['#ff4d5e','#ffffff','#5b8cff'][Math.floor(state.time*3+e.wob)%3]:e.elite.color;
+      ctx.lineWidth=2;ctx.setLineDash([3,4]);
       ctx.beginPath();ctx.arc(e.x,e.y,e.r+7,0,TAU);ctx.stroke();ctx.setLineDash([]);
     }
     if(e.ai==='charge'&&e.phase==='windup'){
@@ -1694,9 +1811,9 @@ function draw(){
   }
   // enemy projectiles
   for(const b of state.eBullets){
-    ctx.strokeStyle='#fca5a5';ctx.globalAlpha=0.45;ctx.lineWidth=3;
+    ctx.strokeStyle=b.color||'#fca5a5';ctx.globalAlpha=0.45;ctx.lineWidth=3;
     ctx.beginPath();ctx.moveTo(b.x-b.vx*0.04,b.y-b.vy*0.04);ctx.lineTo(b.x,b.y);ctx.stroke();
-    ctx.globalAlpha=1;ctx.fillStyle='#ff8c7a';
+    ctx.globalAlpha=1;ctx.fillStyle=b.color||'#ff8c7a';
     ctx.beginPath();ctx.arc(b.x,b.y,b.r*0.8,0,TAU);ctx.fill();
   }
   // lightning
@@ -1709,8 +1826,9 @@ function draw(){
   }
   // particles
   for(const pa of state.particles){
-    const a=1-pa.ttl/pa.life;
-    ctx.globalAlpha=a;ctx.fillStyle=pa.color;
+    let a=1-pa.ttl/pa.life;
+    if(pa.tw)a*=0.55+0.45*Math.sin(pa.ttl*40+pa.x);
+    ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=pa.color;
     ctx.beginPath();ctx.arc(pa.x,pa.y,pa.r*a,0,TAU);ctx.fill();
   }
   ctx.globalAlpha=1;
@@ -2105,7 +2223,10 @@ function startGame(difficulty){
   buildDock();
   updateDockState();
   UI.soundBtn.textContent=Audio2.isOn()?'🔊':'🔇';
-  addToast('WELCOME TO THE YARD','Place defenses, then start the wave');
+  if(HOLIDAY){
+    addToast(HOLIDAY_250?'🎆 HAPPY 250TH, AMERICA! 🎆':'🎆 HAPPY 4TH OF JULY! 🎆','Fireworks specials active — defend the yard');
+    celebrate(3);
+  }else addToast('WELCOME TO THE YARD','Place defenses, then start the wave');
 }
 
 /* ---------- loop ---------- */
@@ -2125,6 +2246,14 @@ function frame(ts){
     syncHUD();
   }
 }
+if(HOLIDAY){
+  const giftKey='gift_'+new Date().toISOString().slice(0,10);
+  let gift='';
+  if(!store.get(giftKey,false)){store.set(giftKey,true);META.spuds+=50;saveMeta();gift=' · +50 🥕 birthday gift claimed!'}
+  const hb=$('holidayBanner');
+  hb.hidden=false;
+  hb.innerHTML=(HOLIDAY_250?'🎆 HAPPY 250TH BIRTHDAY, AMERICA! 🎆':'🎆 4TH OF JULY WEEK 🎆')+'<span>Fireworks specials active all week'+gift+'</span>';
+}
 buildDock();
 renderLocker();
 renderAch();
@@ -2134,7 +2263,7 @@ UI.hBest.textContent=bestWave;
 requestAnimationFrame(frame);
 
 /* test hook */
-window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t},META,CLASSES,PERMS,renderLocker,saveMeta,permCost,permLevel,ACH_LIST,earnAch,ELITE_MODS,WEAPONS,waveCleared:()=>waveCleared()};
+window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t},META,CLASSES,PERMS,renderLocker,saveMeta,permCost,permLevel,ACH_LIST,earnAch,ELITE_MODS,WEAPONS,waveCleared:()=>waveCleared(),launchFirework,celebrate,burstFirework,HOLIDAY,HOLIDAY_250,WAVE_EVENTS};
 </script>
 </body>
 </html>
