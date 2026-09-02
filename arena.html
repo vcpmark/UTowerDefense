@@ -1,69 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"></head>
-<body>
-<title>Groundhog Arena — Tower Defense Survival</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Groundhog Arena 2070 — Tower Defense Survival</title>
+<meta name="description" content="Groundhog Arena 2070: neural-linked backyard tower defense × survival. Installable, offline, haptic, gyro, gamepad and camera-ready on iPhone.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Groundhog 2070">
+<meta name="application-name" content="Groundhog 2070">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#04100f">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1320x2868.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2868x1320.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1206x2622.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2622x1206.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1290x2796.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2796x1290.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1179x2556.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2556x1179.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1284x2778.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2778x1284.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1170x2532.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2532x1170.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1125x2436.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2436x1125.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="./assets/splash/splash-1242x2688.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="./assets/splash/splash-2688x1242.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="./assets/splash/splash-828x1792.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="./assets/splash/splash-1792x828.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="./assets/splash/splash-750x1334.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="./assets/splash/splash-1334x750.png">
 <style>
   :root{
-    --bg:#0a1007; --panel:#121a0c; --panel2:#1c2711; --line:#3a5122;
-    --ink:#eef4e0; --dim:#9cb086; --gold:#ffb347; --blue:#8bc34a; --danger:#ff6b5d;
-    --frost:#55c8f0; --good:#7ee787;
+    --bg:#030a0c; --bg2:#07171a;
+    --panel:rgba(6,20,22,.8); --panel2:rgba(12,34,36,.72); --solid:#0a1c1e; --solid2:#11292c;
+    --line:rgba(94,234,212,.22); --line2:rgba(94,234,212,.5);
+    --ink:#e8fffb; --dim:#8fb6ae; --gold:#ffc35c; --blue:#5eead4; --danger:#ff5d73;
+    --frost:#67e8f9; --good:#86efac; --neon:#a3ff5e; --violet:#c084fc;
+    --glow:0 0 18px rgba(94,234,212,.22);
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+    --sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);
+  }
+  /* iPhone displays are P3: push the accents past sRGB where the browser can. */
+  @supports (color:color(display-p3 1 1 1)){
+    :root{--blue:color(display-p3 .42 .95 .85);--neon:color(display-p3 .66 1 .38);--gold:color(display-p3 1 .78 .38);--danger:color(display-p3 1 .38 .45);--violet:color(display-p3 .76 .52 1);--good:color(display-p3 .55 .95 .68)}
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  [hidden]{display:none!important}
   html,body{height:100%;overflow:hidden}
-  body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;user-select:none;-webkit-user-select:none}
-  #app{height:100%;height:100dvh;display:flex;flex-direction:column}
+  body{position:fixed;inset:0;overscroll-behavior:none;-webkit-touch-callout:none;
+    background:radial-gradient(1200px 600px at 15% -10%,#0b2a2a 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#1b1140 0%,transparent 60%),var(--bg);
+    color:var(--ink);font-family:ui-rounded,-apple-system,system-ui,'SF Pro Rounded','Segoe UI',Roboto,sans-serif;user-select:none;-webkit-user-select:none}
+  button{font-family:inherit;touch-action:manipulation;color:inherit}
+  button:disabled{cursor:not-allowed}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  #app{height:100%;height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr) auto;grid-template-columns:minmax(0,1fr);padding-left:var(--sal);padding-right:var(--sar)}
 
-  /* ---------- HUD ---------- */
-  #hud{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(180deg,#111a09,#0b1106);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  /* ---------- HUD (glass) ---------- */
+  #hud{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:calc(6px + var(--sat)) 12px 6px;
+    background:linear-gradient(180deg,rgba(6,22,24,.92),rgba(4,12,14,.78));backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);
+    border-bottom:1px solid var(--line);flex-wrap:wrap;position:relative;z-index:30}
   .hud-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-  .chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:13px;color:var(--ink)}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(94,234,212,.06);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   .chip em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--dim)}
   .chip b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;min-width:2ch;text-align:right}
   .chip.gold b{color:var(--gold)}
   .chip.hp b{color:var(--good)}
-  .chip.btn{cursor:pointer;font-weight:800;letter-spacing:.08em;font-size:12px}
-  .chip.btn:hover{border-color:var(--blue)}
+  .chip.btn{cursor:pointer;font-weight:800;letter-spacing:.08em;font-size:12px;min-height:32px}
+  .chip.btn:hover{border-color:var(--line2)}
   .chip.btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
-  .chip.btn.on{background:#2e4318;border-color:var(--blue)}
-  #hypeBtn{position:relative;overflow:hidden;min-width:120px;justify-content:center;border-color:#4a3d16}
-  #hypeFill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,#7a5a12,#c99a25);transition:width .2s ease;z-index:0}
+  .chip.btn.on{background:rgba(94,234,212,.18);border-color:var(--line2);box-shadow:var(--glow)}
+  #hypeBtn{position:relative;overflow:hidden;min-width:120px;justify-content:center;border-color:#5a4a1c}
+  #hypeFill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,#7a5a12,#d4a12a);transition:width .2s ease;z-index:0}
   #hypeBtn .hype-label{position:relative;z-index:1;display:flex;gap:6px;align-items:center;color:#ffe4a0}
   #hypeBtn.ready{border-color:var(--gold);animation:hypepulse 1s infinite}
   #hypeBtn.active .hype-label{color:#fff}
-  @keyframes hypepulse{0%,100%{box-shadow:0 0 0 0 rgba(255,179,71,.5)}50%{box-shadow:0 0 12px 2px rgba(255,179,71,.55)}}
+  @keyframes hypepulse{0%,100%{box-shadow:0 0 0 0 rgba(255,195,92,.5)}50%{box-shadow:0 0 14px 2px rgba(255,195,92,.6)}}
   @media (prefers-reduced-motion:reduce){#hypeBtn.ready{animation:none}}
 
   /* ---------- Stage ---------- */
-  #stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;background:radial-gradient(ellipse at 50% 40%,#0e1807 0%,#050803 75%)}
-  canvas{display:block;border-radius:4px;touch-action:none}
-  #xpbar{position:absolute;top:0;left:0;right:0;height:5px;background:#14200c;z-index:5}
-  #xpfill{height:100%;width:0%;background:linear-gradient(90deg,#8bc34a,#d4e157);transition:width .15s ease}
-  #lvlBadge{position:absolute;top:8px;left:10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;color:#c5e1a5;background:rgba(18,26,12,.8);border:1px solid var(--line);border-radius:6px;padding:2px 8px;z-index:5}
+  #stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0;overflow:hidden;touch-action:none;
+    background:radial-gradient(ellipse at 50% 40%,#0a1d1f 0%,#030a0c 75%)}
+  #stage::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;opacity:.55;mix-blend-mode:overlay;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
+  body.holo #stage{background:transparent}
+  #holoVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:saturate(1.15) contrast(1.05) brightness(.8)}
+  #view{position:relative;line-height:0;z-index:1}
+  canvas#game{display:block;border-radius:10px;touch-action:none;position:relative;z-index:1;box-shadow:0 0 0 1px var(--line),0 0 40px rgba(94,234,212,.12)}
+  #bloom{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;mix-blend-mode:screen;opacity:.6;border-radius:10px;
+    filter:blur(7px) saturate(1.6) brightness(1.15);-webkit-filter:blur(7px) saturate(1.6) brightness(1.15)}
+  #bloom[hidden]{display:none}
+  #xpbar{position:absolute;top:0;left:0;right:0;height:5px;background:#0b1a1c;z-index:5}
+  #xpfill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--neon));transition:width .15s ease;box-shadow:0 0 10px rgba(94,234,212,.6)}
+  #lvlBadge{position:absolute;top:9px;left:10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;color:#bff5e8;background:rgba(6,20,22,.8);border:1px solid var(--line);border-radius:6px;padding:2px 8px;z-index:5;backdrop-filter:blur(8px)}
+  #swToast{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:40;display:flex;gap:10px;align-items:center;background:var(--panel);backdrop-filter:blur(14px);border:1px solid var(--line2);border-radius:999px;padding:6px 8px 6px 14px;font-size:12px;font-weight:800;letter-spacing:.08em;box-shadow:var(--glow)}
+  #swToast[hidden]{display:none}
 
-  /* ---------- Overlays ---------- */
-  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,8,3,.78);backdrop-filter:blur(3px);z-index:20;padding:16px}
+  /* ---------- Overlays (liquid glass) ---------- */
+  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,8,9,.66);backdrop-filter:blur(10px) saturate(1.3);-webkit-backdrop-filter:blur(10px) saturate(1.3);z-index:20;padding:14px;padding-bottom:calc(14px + var(--sab))}
   .overlay[hidden]{display:none}
-  .sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;max-width:520px;width:100%;max-height:100%;overflow-y:auto;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+  .sheet{position:relative;background:var(--panel);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);border:1px solid var(--line);border-radius:22px;padding:26px;max-width:540px;width:100%;max-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06)}
+  .sheet::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--violet),transparent);opacity:.9}
   .game-title{font-size:clamp(30px,6vw,44px);font-weight:900;letter-spacing:.02em;line-height:1.05;text-wrap:balance}
-  .game-title .glow{color:var(--gold);text-shadow:0 0 24px rgba(255,179,71,.4)}
-  .tagline{color:var(--dim);font-size:14px;margin-top:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
-  .howto{margin:18px auto;text-align:left;max-width:400px;color:#c2d4a8;font-size:13.5px;line-height:1.75}
+  .game-title .glow{background:linear-gradient(135deg,var(--gold),#fff1c2 45%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(255,195,92,.35))}
+  .edition{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--blue);border:1px solid var(--line2);border-radius:999px;padding:4px 12px;background:rgba(94,234,212,.08);box-shadow:var(--glow)}
+  .tagline{color:var(--dim);font-size:13px;margin-top:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .howto{margin:16px auto;text-align:left;max-width:420px;color:#bfe3d8;font-size:13.5px;line-height:1.75}
   .howto b{color:var(--ink)}
-  .key{display:inline-block;font-family:var(--mono);font-size:11px;background:#263616;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:#d7e6c0}
-  .diff-row{display:flex;gap:8px;justify-content:center;margin:14px 0 20px}
-  .diff{background:var(--panel2);border:1px solid var(--line);color:var(--dim);border-radius:10px;padding:9px 18px;font-weight:800;letter-spacing:.08em;font-size:13px;cursor:pointer}
-  .diff.on{color:var(--ink);border-color:var(--blue);background:#2e4318}
-  .diff:focus-visible,.card:focus-visible,.dockbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-  .bigbtn{display:inline-block;background:linear-gradient(135deg,#e09a32,#ffb347);color:#241a02;border:0;border-radius:12px;padding:14px 44px;font-size:17px;font-weight:900;letter-spacing:.1em;cursor:pointer;box-shadow:0 6px 24px rgba(255,179,71,.25)}
+  body.is-touch .kbd-only{display:none}
+  body:not(.is-touch) .touch-only{display:none}
+  .key{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--solid2);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:#c9f5ea}
+  .diff-row{display:flex;gap:8px;justify-content:center;margin:14px 0 20px;flex-wrap:wrap}
+  .diff{background:var(--panel2);border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:10px 18px;font-weight:800;letter-spacing:.08em;font-size:13px;cursor:pointer;min-height:40px}
+  .diff.on{color:var(--ink);border-color:var(--line2);background:rgba(94,234,212,.16);box-shadow:var(--glow)}
+  .diff:focus-visible,.card:focus-visible,.dockbtn:focus-visible,.setbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .bigbtn{display:inline-block;background:linear-gradient(135deg,#e09a32,var(--gold));color:#241a02;border:0;border-radius:14px;padding:15px 44px;font-size:17px;font-weight:900;letter-spacing:.1em;cursor:pointer;box-shadow:0 8px 28px rgba(255,195,92,.28),inset 0 1px 0 rgba(255,255,255,.4);min-height:48px}
   .bigbtn:hover{filter:brightness(1.08)}
+  .bigbtn:active{transform:scale(.985)}
   .best-line{margin-top:14px;color:var(--dim);font-size:12px;letter-spacing:.1em;font-family:var(--mono)}
   .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:20px 0;text-align:left}
-  .stat-cell{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .stat-cell{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
   .stat-cell em{display:block;font-style:normal;font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--dim)}
   .stat-cell b{font-family:var(--mono);font-size:20px;font-variant-numeric:tabular-nums}
   #newBest{color:var(--gold);font-weight:800;letter-spacing:.1em;margin-bottom:6px}
+
+  /* install tip + device link */
+  #installTip{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(94,234,212,.08);border:1px dashed var(--line2);font-size:12px;color:var(--ink);text-align:left;display:flex;gap:10px;align-items:center;line-height:1.45}
+  #installTip[hidden]{display:none}
+  #installTip .ico{font-size:22px}
+  #installTip b{color:var(--blue)}
+  #installTip button{margin-left:auto;flex:0 0 auto}
+  .sys{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:6px;margin-top:8px}
+  .sys .s{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.03em;color:var(--dim);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:6px 8px;text-align:left;line-height:1.2}
+  .sys .s.ok{color:var(--ink);border-color:rgba(134,239,172,.45)}
+  .sys .s i{font-style:normal;color:var(--good);font-size:9px}
+  .sys .s.no i{color:rgba(255,93,115,.7)}
+  .sys .s .se{font-size:13px}
+  .sys .s small{display:block;font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.04em;font-weight:600}
+  .sync-row{display:flex;gap:8px;margin-top:8px}
+  .sync-row .diff{flex:1;padding:9px 6px;font-size:11.5px}
+  #syncText{width:100%;margin:14px 0 4px;background:var(--solid);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:10px;resize:vertical;-webkit-user-select:text;user-select:text}
 
   /* locker (meta-progression) */
   .locker{border-top:1px solid var(--line);margin-top:18px;padding-top:14px;text-align:left}
@@ -71,32 +156,32 @@
   .locker-head em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--dim)}
   #spudBal{font-family:var(--mono);font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
   .class-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .ccard{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;text-align:left;color:var(--ink);transition:border-color .1s ease}
-  .ccard:hover{border-color:#567a2e}
-  .ccard.sel{border-color:var(--gold);box-shadow:0 0 10px rgba(255,179,71,.2)}
+  .ccard{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;text-align:left;color:var(--ink);transition:border-color .1s ease}
+  .ccard:hover{border-color:var(--line2)}
+  .ccard.sel{border-color:var(--gold);box-shadow:0 0 12px rgba(255,195,92,.22)}
   .ccard.locked{opacity:.75}
   .ccard .ci{font-size:20px;float:left;margin-right:8px}
   .ccard .cn{font-weight:800;font-size:12.5px;letter-spacing:.03em}
   .ccard .cd{color:var(--dim);font-size:11px;line-height:1.45;margin-top:2px}
   .ccard .cu{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);background:#2b2a18;border:1px solid #4a3d16;border-radius:6px;padding:2px 8px}
-  .ccard .cu.cant{color:var(--dim);background:var(--panel);border-color:var(--line)}
+  .ccard .cu.cant{color:var(--dim);background:var(--solid);border-color:var(--line)}
   .ccard .csel{position:absolute;top:6px;right:8px;font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--gold)}
   .perm-row{display:flex;gap:8px;margin-top:10px}
-  .pcard{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;text-align:center;color:var(--ink)}
-  .pcard:hover:not(:disabled){border-color:#567a2e}
+  .pcard{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;text-align:center;color:var(--ink)}
+  .pcard:hover:not(:disabled){border-color:var(--line2)}
   .pcard:disabled{cursor:not-allowed;opacity:.55}
   .pcard .pi{font-size:17px;display:block}
   .pcard .pn{font-weight:800;font-size:10.5px;letter-spacing:.03em;margin-top:2px}
   .pcard .pd{color:var(--dim);font-size:10px;margin-top:2px;line-height:1.4}
   .pcard .pc{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--gold);margin-top:4px}
   .pcard .pips{display:flex;gap:2px;justify-content:center;margin-top:5px}
-  .pcard .pips i{width:8px;height:3px;border-radius:2px;background:#2c4116}
+  .pcard .pips i{width:8px;height:3px;border-radius:2px;background:#1e3a3d}
   .pcard .pips i.on{background:var(--good)}
   #goSpuds{color:var(--gold);font-weight:800;font-family:var(--mono);margin-bottom:10px;font-size:15px}
   @media (max-width:480px){.class-row{grid-template-columns:1fr}}
 
   /* holiday banner */
-  #holidayBanner{margin-top:12px;padding:9px 14px;border-radius:10px;font-weight:800;font-size:13px;letter-spacing:.04em;color:var(--gold);background:linear-gradient(90deg,rgba(255,77,94,.16),rgba(20,26,12,.6),rgba(91,140,255,.16));border:1px solid rgba(255,179,71,.4)}
+  #holidayBanner{margin-top:12px;padding:9px 14px;border-radius:12px;font-weight:800;font-size:13px;letter-spacing:.04em;color:var(--gold);background:linear-gradient(90deg,rgba(255,77,94,.16),rgba(6,20,22,.6),rgba(91,140,255,.16));border:1px solid rgba(255,195,92,.4)}
   #holidayBanner span{display:block;margin-top:3px;font-weight:600;font-size:11.5px;color:var(--dim);letter-spacing:.02em}
 
   /* achievements */
@@ -115,89 +200,145 @@
   .runrow .rw{font-family:var(--mono);font-weight:700;color:var(--gold);min-width:56px}
   .runrow .rk{font-family:var(--mono);color:var(--dim)}
   .runrow .rd{margin-left:auto;color:var(--dim);font-size:10.5px}
-  .runrow .re{color:#a78bfa;font-size:10px;font-weight:800;letter-spacing:.08em}
+  .runrow .re{color:var(--violet);font-size:10px;font-weight:800;letter-spacing:.08em}
   #runList .empty{color:var(--dim);font-size:11.5px;padding:2px}
 
   /* level-up cards */
   .cards{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-  .card{position:relative;flex:1;min-width:130px;max-width:160px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px 12px;cursor:pointer;transition:transform .12s ease,border-color .12s ease;text-align:center}
-  .card:hover{transform:translateY(-4px);border-color:var(--gold)}
+  .card{position:relative;flex:1;min-width:130px;max-width:160px;background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:16px 12px;cursor:pointer;transition:transform .12s ease,border-color .12s ease;text-align:center}
+  .card:hover,.card.focus{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 0 16px rgba(255,195,92,.2)}
   .card .ico{font-size:30px;display:block;margin-bottom:8px}
   .card .nm{display:block;font-weight:800;font-size:13.5px;letter-spacing:.03em;text-wrap:balance}
   .card .ds{display:block;color:var(--dim);font-size:12px;margin-top:6px;line-height:1.5}
-  .card .btag{position:absolute;top:6px;right:6px;font-size:8.5px;font-weight:900;letter-spacing:.12em;color:#241a02;background:linear-gradient(135deg,#e09a32,#ffb347);border-radius:4px;padding:2px 5px}
+  .card .btag{position:absolute;top:6px;right:6px;font-size:8.5px;font-weight:900;letter-spacing:.12em;color:#241a02;background:linear-gradient(135deg,#e09a32,var(--gold));border-radius:4px;padding:2px 5px}
+
+  /* settings (pause) */
+  .setgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+  .setbtn{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--dim);font-weight:800;font-size:11.5px;letter-spacing:.06em;cursor:pointer;text-align:left;min-height:44px}
+  .setbtn .st{font-family:var(--mono);font-size:10px;color:var(--dim);flex:0 0 auto}
+  .setbtn.on{color:var(--ink);border-color:var(--line2);background:rgba(94,234,212,.14)}
+  .setbtn.on .st{color:var(--good)}
+  .setbtn:disabled{opacity:.4;cursor:not-allowed}
 
   /* ---------- Tower select panel ---------- */
-  #towerPanel{position:absolute;right:10px;bottom:10px;z-index:15;background:rgba(18,26,12,.94);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:210px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  #towerPanel{position:absolute;right:10px;bottom:10px;z-index:15;background:var(--panel);backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--line2);border-radius:14px;padding:12px 14px;min-width:210px;box-shadow:0 10px 40px rgba(0,0,0,.5),var(--glow)}
   #towerPanel h4{font-size:14px;letter-spacing:.03em}
   #towerPanel .tstats{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin:6px 0 10px;line-height:1.7;font-variant-numeric:tabular-nums}
   #towerPanel .row{display:flex;gap:8px}
-  .pbtn{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:8px;padding:8px 6px;font-weight:800;font-size:12px;cursor:pointer;letter-spacing:.04em}
-  .pbtn.up{border-color:#4d6b2a}
-  .pbtn.up:hover:not(:disabled){background:#2c4116}
+  .pbtn{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:10px;padding:10px 6px;font-weight:800;font-size:12px;cursor:pointer;letter-spacing:.04em;min-height:40px}
+  .pbtn.up{border-color:rgba(134,239,172,.45)}
+  .pbtn.up:hover:not(:disabled){background:rgba(134,239,172,.12)}
   .pbtn.sell{color:var(--danger)}
-  .pbtn.sell:hover{background:#3a1f1b}
+  .pbtn.sell:hover{background:rgba(255,93,115,.12)}
   .pbtn:disabled{opacity:.4;cursor:not-allowed}
 
   /* ---------- Dock ---------- */
-  #dock{display:flex;gap:10px;align-items:stretch;padding:8px 12px;background:linear-gradient(0deg,#111a09,#0b1106);border-top:1px solid var(--line)}
-  #towerDock{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
+  #dock{display:flex;gap:10px;align-items:stretch;padding:8px 12px calc(8px + var(--sab));background:linear-gradient(0deg,rgba(6,22,24,.95),rgba(4,12,14,.8));backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);border-top:1px solid var(--line);position:relative;z-index:30}
+  #towerDock{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
   #towerDock::-webkit-scrollbar{display:none}
-  .tcard{position:relative;flex:0 0 auto;width:76px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 4px 5px;cursor:pointer;text-align:center;transition:border-color .1s ease}
-  .tcard:hover{border-color:#567a2e}
-  .tcard.armed{border-color:var(--gold);background:#2b2410;box-shadow:0 0 10px rgba(255,179,71,.25)}
+  .tcard{position:relative;flex:0 0 auto;width:76px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:6px 4px 5px;cursor:pointer;text-align:center;transition:border-color .1s ease}
+  .tcard:hover{border-color:var(--line2)}
+  .tcard.armed{border-color:var(--gold);background:rgba(255,195,92,.14);box-shadow:0 0 12px rgba(255,195,92,.3)}
   .tcard.poor{opacity:.45}
   .tcard .ti{font-size:20px;line-height:1.2}
-  .tcard .tn{font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#cfe3b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tcard .tn{font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#c9f5ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tcard .tc{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:700}
   .tcard .hk{position:absolute;top:2px;left:5px;font-family:var(--mono);font-size:9px;color:var(--dim)}
   .dock-right{display:flex;gap:8px;align-items:stretch}
-  .dockbtn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:10px;padding:0 16px;font-weight:900;letter-spacing:.08em;font-size:13px;cursor:pointer;white-space:nowrap}
-  .dockbtn.on{border-color:var(--danger);color:var(--danger);background:#2b1622}
-  .dockbtn.primary{background:linear-gradient(135deg,#3e5a1e,#5c8430);border-color:#8bc34a;min-width:150px}
+  .dockbtn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:12px;padding:0 16px;font-weight:900;letter-spacing:.08em;font-size:13px;cursor:pointer;white-space:nowrap;min-height:44px}
+  .dockbtn.on{border-color:var(--danger);color:var(--danger);background:rgba(255,93,115,.12)}
+  .dockbtn.primary{background:linear-gradient(135deg,#0f5c52,#1a9a86);border-color:var(--blue);min-width:150px;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
   .dockbtn.primary:not(:disabled){animation:wavepulse 1.6s infinite}
   .dockbtn.primary:disabled{animation:none;opacity:.45;cursor:not-allowed;background:var(--panel2);border-color:var(--line)}
-  @keyframes wavepulse{0%,100%{box-shadow:0 0 0 0 rgba(139,195,74,.4)}50%{box-shadow:0 0 14px 2px rgba(139,195,74,.45)}}
+  @keyframes wavepulse{0%,100%{box-shadow:0 0 0 0 rgba(94,234,212,.4)}50%{box-shadow:0 0 16px 2px rgba(94,234,212,.5)}}
   @media (prefers-reduced-motion:reduce){.dockbtn.primary:not(:disabled){animation:none}}
 
-  /* joystick */
-  #joy{position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid rgba(139,195,74,.35);background:rgba(139,195,74,.08);z-index:12;pointer-events:none}
-  #joyKnob{position:absolute;left:50%;top:50%;width:44px;height:44px;border-radius:50%;background:rgba(139,195,74,.35);border:2px solid rgba(190,220,150,.6);transform:translate(-50%,-50%)}
+  /* joysticks */
+  #joy,#aimJoy{position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid rgba(94,234,212,.35);background:rgba(94,234,212,.08);z-index:12;pointer-events:none;backdrop-filter:blur(2px)}
+  #joyKnob,#aimKnob{position:absolute;left:50%;top:50%;width:44px;height:44px;border-radius:50%;background:rgba(94,234,212,.35);border:2px solid rgba(190,245,230,.6);transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(94,234,212,.4)}
+  #aimJoy{border-color:rgba(255,195,92,.4);background:rgba(255,195,92,.08)}
+  #aimKnob{background:rgba(255,195,92,.35);border-color:rgba(255,228,160,.7);box-shadow:0 0 14px rgba(255,195,92,.45)}
+  #joy[hidden],#aimJoy[hidden]{display:none}
 
+  /* ---------- Phone layouts ---------- */
   @media (max-width:700px){
-    .chip{padding:4px 7px;font-size:11.5px}
+    .chip{padding:4px 8px;font-size:11.5px;gap:4px}
     .chip em{font-size:9px}
-    #hypeBtn{min-width:90px}
+    .chip.btn{min-height:30px}
+    #hud{padding-left:8px;padding-right:8px;gap:4px;flex-direction:column;align-items:stretch}
+    .hud-group{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+    .hud-group::-webkit-scrollbar{display:none}
+    .chip{flex:0 0 auto}
+    #hypeBtn{min-width:86px}
+    .hide-sm{display:none}
     .dockbtn{padding:0 10px;font-size:11.5px}
-    .dockbtn.primary{min-width:110px}
-    .tcard{width:64px}
+    .dockbtn.primary{min-width:104px}
+    .tcard{width:62px}
+    .sheet{padding:20px 16px;border-radius:18px}
+    .howto{font-size:13px}
+    #towerPanel{left:10px;right:10px;bottom:10px;min-width:0}
+    .setgrid{grid-template-columns:1fr 1fr}
+    .setbtn{font-size:10.5px;padding:9px 10px}
+    .card{min-width:120px;max-width:none;flex-basis:calc(50% - 6px)}
   }
+  /* Landscape iPhone: HUD stays a slim top strip, the dock becomes a right-hand column so the yard gets the full height. */
+  @media (orientation:landscape) and (max-height:520px){
+    #app{grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) auto}
+    #hud{grid-column:1/-1;padding-top:calc(3px + var(--sat));padding-bottom:3px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+    #hud::-webkit-scrollbar{display:none}
+    .hud-group{flex-wrap:nowrap}
+    .chip{padding:2px 7px;font-size:10.5px}
+    .chip.btn{min-height:26px}
+    #stage{grid-row:2;grid-column:1}
+    #dock{grid-row:2;grid-column:2;flex-direction:column;width:96px;padding:6px 6px calc(6px + var(--sab));border-top:0;border-left:1px solid var(--line);gap:6px}
+    #towerDock{flex-direction:column;overflow-x:hidden;overflow-y:auto;gap:5px}
+    .tcard{width:auto;padding:4px 2px 3px}
+    .tcard .ti{font-size:17px}
+    .dock-right{flex-direction:column;gap:6px}
+    .dockbtn{padding:8px 4px;font-size:10px;min-width:0;min-height:38px;white-space:normal;line-height:1.1}
+    .dockbtn.primary{min-width:0}
+    #towerPanel{right:8px;bottom:8px;left:auto;min-width:190px;padding:8px 10px}
+    .sheet{padding:14px 16px}
+    .game-title{font-size:26px}
+    .howto{margin:8px auto;font-size:12px;line-height:1.5}
+    .cards{margin-top:10px}
+    .card{padding:10px 8px}
+    .card .ico{font-size:22px;margin-bottom:4px}
+  }
+  @media (pointer:coarse){.chip.btn,.diff,.pbtn{min-height:40px}}
 </style>
 
 <div id="app">
-  <header id="hud">
-    <div class="hud-group">
+  <header id="hud" role="banner">
+    <div class="hud-group" aria-label="Run stats">
       <span class="chip stat"><em>WAVE</em><b id="hWave">0</b></span>
       <span class="chip stat gold"><em>$</em><b id="hMoney">0</b></span>
       <span class="chip stat hp"><em>HP</em><b id="hHp">100</b></span>
       <span class="chip stat"><em>FOES</em><b id="hFoes">0</b></span>
-      <span class="chip stat"><em>BEST</em><b id="hBest">0</b></span>
+      <span class="chip stat hide-sm"><em>BEST</em><b id="hBest">0</b></span>
       <span class="chip stat" id="hEventChip" hidden><em>EVENT</em><b id="hEvent" style="min-width:0">—</b></span>
     </div>
-    <div class="hud-group">
-      <button id="hypeBtn" class="chip btn" title="Groundhog Rage — supercharges everything (Space)"><span id="hypeFill"></span><span class="hype-label">RAGE <b id="hypePct">0%</b></span></button>
+    <div class="hud-group" aria-label="Controls">
+      <button id="hypeBtn" class="chip btn" title="Groundhog Rage — supercharges everything (Space · shake your phone)" aria-label="Groundhog Rage"><span id="hypeFill"></span><span class="hype-label">RAGE <b id="hypePct">0%</b></span></button>
       <button id="autoBtn" class="chip btn" title="Auto-start next wave">AUTO&nbsp;OFF</button>
       <button id="spendBtn" class="chip btn" title="Auto-spend spare cash: buys and upgrades towers for you">SPEND&nbsp;OFF</button>
-      <button id="speedBtn" class="chip btn" title="Game speed (F)">1×</button>
-      <button id="pauseBtn" class="chip btn" title="Pause (P)">⏸</button>
-      <button id="soundBtn" class="chip btn" title="Sound (M)">🔊</button>
+      <button id="speedBtn" class="chip btn" title="Game speed (F)" aria-label="Game speed">1×</button>
+      <button id="pauseBtn" class="chip btn" title="Pause & settings (P)" aria-label="Pause and settings">⏸</button>
+      <button id="soundBtn" class="chip btn" title="Sound (M)" aria-label="Toggle sound">🔊</button>
+      <button id="fsBtn" class="chip btn" title="Fullscreen" aria-label="Fullscreen" hidden>⛶</button>
     </div>
   </header>
 
   <div id="stage">
+    <video id="holoVideo" playsinline muted autoplay hidden aria-hidden="true"></video>
     <div id="xpbar"><div id="xpfill"></div></div>
     <span id="lvlBadge">LV 1</span>
-    <canvas id="game" width="960" height="560"></canvas>
+    <div id="view">
+      <canvas id="game" width="960" height="560" role="img" aria-label="Groundhog Arena playfield"></canvas>
+      <canvas id="bloom" width="240" height="140" aria-hidden="true"></canvas>
+    </div>
+    <div id="swToast" hidden><span>⚡ UPDATE READY</span><button id="swReload" class="diff" style="padding:6px 12px;min-height:0">RELOAD</button></div>
+    <div id="live" class="sr-only" aria-live="polite" role="status"></div>
 
     <div id="towerPanel" hidden>
       <h4 id="tpName">Tower</h4>
@@ -211,13 +352,26 @@
     <div class="overlay" id="menu">
       <div class="sheet">
         <div class="game-title">🦫 GROUNDHOG <span class="glow">ARENA</span></div>
+        <div class="edition">2070 EDITION · NEURAL-LINK</div>
         <div class="tagline">Backyard Tower Defense × Survival</div>
         <div id="holidayBanner" hidden></div>
-        <div class="howto">
+        <div id="installTip" hidden>
+          <span class="ico">📲</span>
+          <span id="installText">Install for fullscreen, offline play and the Home Screen icon: tap <b>Share</b> then <b>Add to Home Screen</b>.</span>
+          <button class="diff" id="installBtn" style="padding:6px 10px;min-height:0;font-size:11px" hidden>INSTALL</button>
+          <button class="diff" id="installDismiss" style="padding:6px 10px;min-height:0;font-size:11px" aria-label="Dismiss">✕</button>
+        </div>
+        <div class="howto kbd-only">
           <b>Move</b> with <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> — your groundhog auto-fires at the nearest pest.<br>
-          <b>Build defenses</b> from the dock (<span class="key">1</span>–<span class="key">8</span>), then click the yard to place them.<br>
-          <b>Click a tower</b> to upgrade or sell it. Kills earn <b style="color:var(--gold)">cash</b> for towers and <b style="color:#c5e1a5">XP</b> for level-up perks.<br>
-          <b>Groundhog Rage</b> <span class="key">Space</span> when the meter is full. A boss prowls in every 5 waves — Grizzly, Fox, or Hawk. Defend the burrow.
+          <b>Build defenses</b> from the dock (<span class="key">1</span>–<span class="key">0</span>), then click the yard to place them.<br>
+          <b>Click a tower</b> to upgrade or sell it. Kills earn <b style="color:var(--gold)">cash</b> for towers and <b style="color:var(--blue)">XP</b> for level-up perks.<br>
+          <b>Groundhog Rage</b> <span class="key">Space</span> when the meter is full. A boss prowls in every 5 waves — Grizzly, Fox, or Hawk. <b>Controllers</b> are supported too.
+        </div>
+        <div class="howto touch-only">
+          <b>Move:</b> drag anywhere on the <b>left half</b> of the yard (floating stick).<br>
+          <b>Aim:</b> drag on the <b>right half</b> to steer your fire (twin-stick) — or let auto-aim work.<br>
+          <b>Build:</b> pick a defense from the dock, then tap or drag-and-release on the yard. <b>Long-press</b> a tower to upgrade it.<br>
+          <b>Rage:</b> tap RAGE or <b>shake your phone</b> when the meter is full. Tilt steering, Holo-Yard camera mode and more live in <b>⏸ settings</b>.
         </div>
         <div class="diff-row" id="diffRow">
           <button class="diff" data-d="Easy">EASY</button>
@@ -227,7 +381,9 @@
         <button class="bigbtn" id="playBtn">ENTER THE YARD</button>
         <div class="best-line" id="menuBest"></div>
         <div class="locker">
-          <div class="locker-head"><em>BURROW — RUNS EARN CARROTS</em><span id="spudBal">🥕 0</span></div>
+          <div class="locker-head"><em>DEVICE LINK — SYSTEMS ONLINE</em><span id="sysCount" style="font-family:var(--mono);font-size:11px;color:var(--dim)"></span></div>
+          <div class="sys" id="sysGrid"></div>
+          <div class="locker-head" style="margin-top:16px"><em>BURROW — RUNS EARN CARROTS</em><span id="spudBal">🥕 0</span></div>
           <div class="class-row" id="classRow"></div>
           <div class="ach-head" style="margin-top:12px"><em>ARMORY — WEAPONS</em><span></span></div>
           <div class="class-row" id="weaponRow"></div>
@@ -236,6 +392,22 @@
           <div class="ach-grid" id="achGrid"></div>
           <div class="ach-head"><em>RECENT RUNS</em><span></span></div>
           <div id="runList"></div>
+          <div class="ach-head"><em>SAVE SYNC — CARRY YOUR BURROW</em><span></span></div>
+          <div class="sync-row"><button class="diff" id="exportBtn">📤 EXPORT SAVE</button><button class="diff" id="importBtn">📥 IMPORT SAVE</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="syncOv" hidden>
+      <div class="sheet" style="max-width:420px">
+        <div class="game-title" style="font-size:26px">SAVE <span class="glow">SYNC</span></div>
+        <div class="tagline" id="syncSub">Carry your burrow between devices</div>
+        <textarea id="syncText" rows="5" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Paste a GA2070: save code here"></textarea>
+        <div class="diff-row" style="margin-bottom:0">
+          <button class="diff" id="syncShare">SHARE</button>
+          <button class="diff" id="syncCopy">COPY</button>
+          <button class="diff" id="syncImport">IMPORT</button>
+          <button class="diff" id="syncClose">CLOSE</button>
         </div>
       </div>
     </div>
@@ -260,7 +432,7 @@
           <div class="stat-cell"><em>LEVEL REACHED</em><b id="goLevel">0</b></div>
         </div>
         <button class="bigbtn" id="againBtn">PLAY AGAIN</button>
-        <div style="margin-top:10px"><button class="diff" id="menuBtn">BURROW &amp; MENU</button></div>
+        <div class="diff-row" style="margin:10px 0 0"><button class="diff" id="shareBtn">📤 SHARE RUN</button><button class="diff" id="menuBtn">BURROW &amp; MENU</button></div>
         <div class="best-line" id="goBest"></div>
       </div>
     </div>
@@ -275,32 +447,40 @@
           <b style="color:var(--danger)">elite pests</b> — shielded, swift, and enraged — join every wave.
         </div>
         <button class="bigbtn" id="endlessBtn">CONTINUE — ENDLESS</button>
-        <div style="margin-top:10px"><button class="diff" id="vicMenuBtn">BURROW &amp; MENU</button></div>
+        <div class="diff-row" style="margin:10px 0 0"><button class="diff" id="shareVicBtn">📤 SHARE</button><button class="diff" id="vicMenuBtn">BURROW &amp; MENU</button></div>
       </div>
     </div>
 
     <div class="overlay" id="pausedOv" hidden>
-      <div class="sheet" style="max-width:340px">
+      <div class="sheet" style="max-width:460px">
         <div class="game-title" style="font-size:28px">PAUSED</div>
-        <div class="howto" style="text-align:center">
-          <span class="key">P</span> resume · <span class="key">M</span> sound · <span class="key">F</span> speed<br>
-          <span class="key">Esc</span> cancel build · <span class="key">Space</span> hype
+        <div class="tagline">Systems &amp; settings</div>
+        <div class="setgrid">
+          <button class="setbtn" id="musicBtn">🎵 MUSIC<span class="st">ON</span></button>
+          <button class="setbtn" id="sfxBtn">🔊 SOUND<span class="st">ON</span></button>
+          <button class="setbtn" id="hapticBtn">📳 HAPTICS<span class="st">ON</span></button>
+          <button class="setbtn" id="announcerBtn">🗣️ AI ANNOUNCER<span class="st">ON</span></button>
+          <button class="setbtn" id="twinBtn">🎯 TWIN-STICK AIM<span class="st">ON</span></button>
+          <button class="setbtn" id="tiltBtn">🧭 TILT &amp; SHAKE<span class="st">OFF</span></button>
+          <button class="setbtn" id="holoBtn">📷 HOLO-YARD<span class="st">OFF</span></button>
+          <button class="setbtn" id="bloomBtn">🌈 HOLO BLOOM<span class="st">ON</span></button>
         </div>
-        <div class="diff-row" style="margin-bottom:14px">
-          <button class="diff" id="musicBtn">MUSIC ON</button>
-          <button class="diff" id="sfxBtn">SOUND ON</button>
+        <div class="howto kbd-only" style="text-align:center;margin:6px auto 12px">
+          <span class="key">P</span> resume · <span class="key">M</span> sound · <span class="key">F</span> speed · <span class="key">Esc</span> cancel build · <span class="key">Space</span> rage
         </div>
         <button class="bigbtn" id="resumeBtn" style="padding:12px 34px">RESUME</button>
+        <div style="margin-top:10px"><button class="diff" id="quitBtn">QUIT TO BURROW</button></div>
       </div>
     </div>
 
     <div id="joy" hidden><div id="joyKnob"></div></div>
+    <div id="aimJoy" hidden><div id="aimKnob"></div></div>
   </div>
 
   <footer id="dock">
-    <div id="towerDock"></div>
+    <div id="towerDock" role="toolbar" aria-label="Defenses"></div>
     <div class="dock-right">
-      <button id="sellBtn" class="dockbtn" title="Sell mode — click a tower to sell">SELL</button>
+      <button id="sellBtn" class="dockbtn" title="Sell mode — tap a tower to sell">SELL</button>
       <button id="waveBtn" class="dockbtn primary">START WAVE ▶</button>
     </div>
   </footer>
@@ -312,8 +492,22 @@
    GROUNDHOG ARENA — backyard tower defense × survival
    ============================================================ */
 const $=id=>document.getElementById(id);
-const canvas=$('game'), ctx=canvas.getContext('2d');
-const W=960,H=560,GRID=40;
+const canvas=$('game');
+/* Wide-gamut (Display P3) canvas where supported — every iPhone since the 7 has a P3 panel. */
+const ctx=(()=>{let c=null;try{c=canvas.getContext('2d',{colorSpace:'display-p3'})}catch(e){}return c||canvas.getContext('2d')})();
+const P3=(()=>{try{return !!(ctx.getContextAttributes&&ctx.getContextAttributes().colorSpace==='display-p3'&&CSS.supports('color','color(display-p3 1 0 0)'))}catch(e){return false}})();
+const NEON=P3?{cream:'color(display-p3 1 0.93 0.72)',gold:'color(display-p3 1 0.8 0.32)',lime:'color(display-p3 0.66 1 0.38)',cyan:'color(display-p3 0.42 0.95 1)',violet:'color(display-p3 0.78 0.55 1)'}
+            :{cream:'#ffe9b3',gold:'#ffc94d',lime:'#a3ff5e',cyan:'#67e8f9',violet:'#c084fc'};
+/* The yard picks its shape from the screen: wide on landscape phones, tall on portrait iPhones. */
+let W=960,H=560;
+const GRID=40;
+const ARENA_PRESETS=[{minAspect:1.9,w:1200,h:600,name:'wide'},{minAspect:1.2,w:960,h:560,name:'classic'},{minAspect:0.85,w:760,h:760,name:'square'},{minAspect:0,w:560,h:960,name:'portrait'}];
+function pickArenaSize(){
+  const el=document.getElementById('stage');
+  const r=el?el.getBoundingClientRect():{width:960,height:560};
+  const aspect=(r.width||960)/Math.max(1,r.height||560);
+  return ARENA_PRESETS.find(p=>aspect>=p.minAspect)||ARENA_PRESETS[1];
+}
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -357,12 +551,263 @@ const store={
   set(k,v){try{localStorage.setItem('parena_'+k,JSON.stringify(v))}catch(e){}}
 };
 
+/* ---------- device capabilities (what this phone can do) ---------- */
+const Device=(()=>{
+  const ua=navigator.userAgent||'';
+  const iOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const iPhone=/iPhone|iPod/.test(ua);
+  const standalone=!!(navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches);
+  const touch=navigator.maxTouchPoints>0||'ontouchstart' in window;
+  const root=document.documentElement;
+  return{iOS,iPhone,standalone,touch,
+    coarse:matchMedia('(pointer: coarse)').matches,
+    haptics:!!navigator.vibrate||iOS,
+    motion:typeof DeviceMotionEvent!=='undefined',
+    motionPermission:typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function',
+    gamepad:!!navigator.getGamepads,
+    share:!!navigator.share,
+    wakeLock:!!navigator.wakeLock,
+    camera:!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia),
+    speech:'speechSynthesis' in window&&'SpeechSynthesisUtterance' in window,
+    sw:'serviceWorker' in navigator&&/^https?:$/.test(location.protocol),
+    fullscreen:!!(root.requestFullscreen||root.webkitRequestFullscreen)&&!iPhone,
+    audioSession:!!navigator.audioSession,
+    badge:!!navigator.setAppBadge,
+    p3:P3,
+    clipboard:!!(navigator.clipboard&&navigator.clipboard.writeText),
+    storage:!!(navigator.storage&&navigator.storage.persist)};
+})();
+document.body.classList.toggle('is-touch',Device.touch);
+const SETTINGS={
+  haptics:store.get('haptics',true),announcer:store.get('announcer',true),twin:store.get('twin',true),
+  tilt:false,holo:false,bloom:store.get('bloom',true)
+};
+
+/* ---------- haptics: Taptic Engine via the iOS switch trick, navigator.vibrate elsewhere, controller rumble when linked ---------- */
+const Haptics=(()=>{
+  let sw=null,last=0;
+  function ensureSwitch(){
+    if(sw)return sw;
+    try{
+      const l=document.createElement('label');l.setAttribute('aria-hidden','true');
+      l.style.cssText='position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';
+      const i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;
+      l.appendChild(i);document.body.appendChild(l);sw=l;
+    }catch(e){}
+    return sw;
+  }
+  function pulse(ms){
+    if(!SETTINGS.haptics)return;
+    const now=performance.now();
+    if(now-last<30)return;
+    last=now;
+    try{
+      if(navigator.vibrate)navigator.vibrate(ms);
+      else if(Device.iOS){const l=ensureSwitch();if(l)l.click()}
+    }catch(e){}
+    try{Pad.rumble(ms)}catch(e){}
+  }
+  function pattern(arr){
+    if(!SETTINGS.haptics)return;
+    if(navigator.vibrate){try{navigator.vibrate(arr)}catch(e){}try{Pad.rumble(arr.reduce((a,b)=>a+b,0))}catch(e){}return}
+    let t=0;
+    for(let i=0;i<arr.length;i+=2){setTimeout(()=>pulse(arr[i]),t);t+=arr[i]+(arr[i+1]||0)}
+  }
+  return{tap:()=>pulse(10),hit:()=>pulse(18),heavy:()=>pulse(45),
+    success:()=>pattern([18,70,28]),error:()=>pattern([40,90,40]),pattern};
+})();
+
+/* ---------- AI announcer (Web Speech) ---------- */
+const Announcer=(()=>{
+  let voice=null,lastT=0;
+  function pickVoice(){
+    try{
+      const vs=speechSynthesis.getVoices();
+      voice=vs.find(v=>/en[-_]US/i.test(v.lang)&&/Samantha|Siri|Ava|Allison|Google US/i.test(v.name))||vs.find(v=>/^en/i.test(v.lang))||null;
+    }catch(e){}
+  }
+  if(Device.speech){pickVoice();try{speechSynthesis.addEventListener('voiceschanged',pickVoice)}catch(e){}}
+  function say(text,opts={}){
+    if(!Device.speech||!SETTINGS.announcer)return;
+    const now=performance.now();
+    if(!opts.force&&now-lastT<2500)return;
+    lastT=now;
+    try{
+      if(opts.force)speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang='en-US';if(voice)u.voice=voice;
+      u.rate=1.05;u.pitch=0.85;u.volume=0.9;
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  return{say,stop(){try{speechSynthesis.cancel()}catch(e){}}};
+})();
+
+/* ---------- screen wake lock: the yard never dims mid-wave ---------- */
+const WakeLock=(()=>{
+  let lock=null;
+  async function acquire(){
+    if(!Device.wakeLock||lock||document.hidden)return;
+    try{lock=await navigator.wakeLock.request('screen');lock.addEventListener('release',()=>{lock=null})}catch(e){lock=null}
+  }
+  function release(){if(lock){try{lock.release()}catch(e){}lock=null}}
+  return{acquire,release,get active(){return !!lock}};
+})();
+
+/* ---------- motion: tilt steering + shake-to-rage (iOS asks permission once, from a tap) ---------- */
+const Motion=(()=>{
+  let on=false,granted=false,calib=null,lastShake=0;
+  function orient(e){
+    if(!on||!SETTINGS.tilt)return;
+    let beta=e.beta,gamma=e.gamma;
+    if(beta==null||gamma==null)return;
+    let ang=0;
+    try{ang=(screen.orientation&&screen.orientation.angle)??window.orientation??0}catch(err){}
+    let x,y;
+    if(ang===90){x=beta;y=-gamma}else if(ang===-90||ang===270){x=-beta;y=gamma}else if(ang===180){x=-gamma;y=-beta}else{x=gamma;y=beta}
+    if(!calib)calib={x,y};
+    const dz=3,sens=16;
+    let tx=x-calib.x,ty=y-calib.y;
+    tx=Math.abs(tx)<dz?0:(tx-Math.sign(tx)*dz)/sens;
+    ty=Math.abs(ty)<dz?0:(ty-Math.sign(ty)*dz)/sens;
+    input.tx=clamp(tx,-1,1);input.ty=clamp(ty,-1,1);
+  }
+  function motion(e){
+    const a=e.acceleration;
+    if(!a||a.x==null)return;
+    const mag=Math.hypot(a.x||0,a.y||0,a.z||0);
+    const now=performance.now();
+    if(mag>19&&now-lastShake>1200){lastShake=now;onShake()}
+  }
+  function onShake(){
+    if(state&&state.mode==='playing'&&activateHype())Haptics.pattern([40,60,40,60,90]);
+  }
+  async function enable(){
+    if(granted){on=true;calib=null;return true}
+    try{
+      if(Device.motionPermission){
+        const r=await DeviceMotionEvent.requestPermission();
+        if(r!=='granted')return false;
+        if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+          try{await DeviceOrientationEvent.requestPermission()}catch(e){}
+        }
+      }
+      window.addEventListener('deviceorientation',orient);
+      window.addEventListener('devicemotion',motion);
+      granted=true;on=true;calib=null;
+      return true;
+    }catch(e){return false}
+  }
+  function recenter(){calib=null;input.tx=0;input.ty=0}
+  return{enable,recenter,get on(){return on},get granted(){return granted}};
+})();
+
+/* ---------- camera "Holo-Yard": project the arena over your real backyard ---------- */
+const Holo=(()=>{
+  let stream=null;
+  async function enable(){
+    if(!Device.camera)return false;
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+      const v=$('holoVideo');v.srcObject=stream;v.hidden=false;
+      try{await v.play()}catch(e){}
+      document.body.classList.add('holo');SETTINGS.holo=true;
+      return true;
+    }catch(e){disable();return false}
+  }
+  function disable(){
+    if(stream){for(const t of stream.getTracks())t.stop();stream=null}
+    const v=$('holoVideo');if(v){v.srcObject=null;v.hidden=true}
+    document.body.classList.remove('holo');SETTINGS.holo=false;
+  }
+  return{enable,disable,get on(){return !!stream}};
+})();
+
+/* ---------- controller (MFi / PlayStation / Xbox pads pair with iPhone over Bluetooth) ---------- */
+const Pad=(()=>{
+  let active=false,prev={},cursorA=0,gpIndex=-1;
+  const DZ=0.18;
+  const dz=v=>Math.abs(v)<DZ?0:(v-Math.sign(v)*DZ)/(1-DZ);
+  const pressed=(gp,i)=>!!(gp.buttons[i]&&gp.buttons[i].pressed);
+  function current(){
+    if(!Device.gamepad)return null;
+    let gps;try{gps=navigator.getGamepads()}catch(e){return null}
+    for(const g of gps)if(g&&g.connected)return g;
+    return null;
+  }
+  function rumble(ms){
+    const gp=active?current():null;
+    if(!gp)return;
+    const act=gp.vibrationActuator||(gp.hapticActuators&&gp.hapticActuators[0]);
+    if(act&&act.playEffect){act.playEffect('dual-rumble',{duration:Math.min(300,ms*3),strongMagnitude:Math.min(1,ms/60),weakMagnitude:Math.min(1,ms/40)}).catch(()=>{})}
+    else if(act&&act.pulse)act.pulse(Math.min(1,ms/50),Math.min(300,ms*3)).catch?.(()=>{});
+  }
+  function poll(){
+    const gp=current();
+    if(!gp){if(active){active=false;input.gx=0;input.gy=0;if(input.aimSrc==='pad'){input.aiming=false;input.aimSrc=null}}return}
+    if(!active){active=true;gpIndex=gp.index;refreshSys()}
+    const lx=dz(gp.axes[0]||0),ly=dz(gp.axes[1]||0),rx=dz(gp.axes[2]||0),ry=dz(gp.axes[3]||0);
+    input.gx=lx;input.gy=ly;
+    if(pressed(gp,12))input.gy=-1;if(pressed(gp,13))input.gy=1;if(pressed(gp,14))input.gx=-1;if(pressed(gp,15))input.gx=1;
+    const edge=i=>{const p=pressed(gp,i),was=!!prev[i];prev[i]=p;return p&&!was};
+    const e=[];for(let i=0;i<17;i++)e[i]=edge(i);
+    if(!UI.menu.hidden){if(e[0]||e[9])UI.playBtn.click();return}
+    if(!state)return;
+    if(state.mode==='playing'){
+      if(state.armed){
+        if(rx||ry)cursorA=Math.atan2(ry,rx);
+        const p=state.player;
+        state.mouse={x:clamp(p.x+Math.cos(cursorA)*70,0,W-1),y:clamp(p.y+Math.sin(cursorA)*70,0,H-1)};
+      }else if(SETTINGS.twin&&(rx||ry)){
+        const n=Math.hypot(rx,ry);input.ax=rx/n;input.ay=ry/n;input.aiming=true;input.aimSrc='pad';
+      }else if(input.aimSrc==='pad'){input.aiming=false;input.aimSrc=null}
+      if(e[0]){if(state.armed){if(!tryPlace(state.mouse.x,state.mouse.y))Haptics.error()}else if(!state.waveActive)startWave()}
+      if(e[1]){armTower(null);selectTower(null);state.selling=false;UI.sellBtn.classList.remove('on')}
+      if(e[2])activateHype();
+      if(e[3]){
+        if(state.selected)upgradeTower(state.selected);
+        else{let best=null,bd=90;for(const t of state.towers){const d=dist(t.x,t.y,state.player.x,state.player.y);if(d<bd){bd=d;best=t}}if(best)selectTower(best)}
+      }
+      if(e[4])cycleArmed(-1);if(e[5])cycleArmed(1);
+      if(e[8])cycleSpeed();if(e[9])togglePause();
+    }else if(state.mode==='levelup'){
+      if(e[14]||e[4]||e[2])moveLuFocus(-1);
+      if(e[15]||e[5]||e[1])moveLuFocus(1);
+      if(e[0]){const f=UI.luCards.querySelector('.card.focus')||UI.luCards.firstElementChild;if(f)f.click()}
+    }else if(state.mode==='paused'){if(e[9]||e[0]||e[1])togglePause()}
+    else if(state.mode==='gameover'){if(e[0]&&!UI.gameover.hidden)UI.againBtn.click()}
+    else if(state.mode==='victory'){if(e[0]&&!$('victory').hidden)$('endlessBtn').click()}
+  }
+  window.addEventListener('gamepadconnected',ev=>{
+    if(state)addToast('CONTROLLER LINKED',(ev.gamepad.id||'gamepad').slice(0,40));
+    Haptics.tap();refreshSys();
+  });
+  window.addEventListener('gamepaddisconnected',()=>{if(state)addToast('CONTROLLER UNLINKED','');refreshSys()});
+  return{poll,rumble,get active(){return active}};
+})();
+function cycleArmed(dir){
+  if(!state)return;
+  const i=state.armed?TOWER_KEYS.indexOf(state.armed):-1;
+  const n=TOWER_KEYS.length;
+  const next=i<0?(dir>0?0:n-1):(i+dir+n)%n;
+  armTower(TOWER_KEYS[next]);
+}
+function moveLuFocus(dir){
+  const cards=[...UI.luCards.children];if(!cards.length)return;
+  let i=cards.findIndex(c=>c.classList.contains('focus'));
+  if(i<0)i=0;else i=(i+dir+cards.length)%cards.length;
+  cards.forEach((c,k)=>c.classList.toggle('focus',k===i));
+}
+
 /* ---------- audio ---------- */
 const Audio2=(()=>{
   let actx=null,master=null,musicGain=null,enabled=store.get('sound',true),musicOn=store.get('music',true),musicTimer=null,step=0,lastShot=0;
   function ensure(){
     try{
-      if(!actx){actx=new (window.AudioContext||window.webkitAudioContext)();
+      if(!actx){
+        // 'ambient' respects the silent switch and lets the player's own music keep playing.
+        try{if(navigator.audioSession)navigator.audioSession.type='ambient'}catch(e){}
+        actx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
         master=actx.createGain();master.gain.value=enabled?0.5:0;master.connect(actx.destination);
         musicGain=actx.createGain();musicGain.gain.value=musicOn?0.5:0;musicGain.connect(master);
         startMusic();}
@@ -449,9 +894,16 @@ const TOWER_TYPES={
     upgrade(t){t.damage=Math.round(t.damage*1.3);t.range=Math.min(360,t.range+16);t.rate=Math.max(1.4,t.rate*0.94);t.lob.splash=Math.min(140,t.lob.splash+8)}},
   crop:{name:'Cash Crop',icon:'🌽',color:'#fbbf24',cost:120,range:0,rate:1,damage:0,pierce:0,utility:true,income:{amount:7,every:6},
     desc:'Grows cash: harvests $ every few seconds.',
-    upgrade(t){t.income.amount+=4;t.income.every=Math.max(4,+(t.income.every-0.25).toFixed(2))}}
+    upgrade(t){t.income.amount+=4;t.income.every=Math.max(4,+(t.income.every-0.25).toFixed(2))}},
+  drone:{name:'Holo Drone',icon:'🛸',color:'#67e8f9',cost:170,range:200,rate:0.32,damage:11,pierce:0,beam:true,
+    desc:'2070 hover-drone laser: instant, rapid, never misses.',
+    upgrade(t){t.damage=Math.round(t.damage*1.22);t.range=Math.min(280,t.range+10);t.rate=Math.max(0.12,t.rate*0.9)}},
+  gravity:{name:'Gravity Well',icon:'🌀',color:'#c084fc',cost:125,range:0,rate:1,damage:0,pierce:0,utility:true,well:{range:120,pull:70,slow:0.7},
+    desc:'Drags nearby pests inward and slows them. Bosses resist the pull.',
+    upgrade(t){t.well.range=Math.min(190,t.well.range+10);t.well.pull+=12;t.well.slow=Math.max(0.45,+(t.well.slow-0.035).toFixed(3))}}
 };
 const TOWER_KEYS=Object.keys(TOWER_TYPES);
+const rangeOf=d=>d.aura?d.aura.range:d.well?d.well.range:d.range;
 
 /* ---------- enemy definitions ---------- */
 const ENEMY_TYPES={
@@ -465,6 +917,7 @@ const ENEMY_TYPES={
   bat:    {icon:'🦇',hp:22, spd:60, reward:12,xp:3, dmg:6, r:12,color:'#c4b5fd',move:'dash'},
   skunk:  {icon:'🦨',hp:58, spd:48, reward:14,xp:4, dmg:9, r:15,color:'#e5e7eb',stink:true},
   quill:  {icon:'🦔',hp:72, spd:44, reward:15,xp:4, dmg:10,r:15,color:'#d6a26e',armor:2,quills:true},
+  bot:    {icon:'🤖',hp:90, spd:52, reward:15,xp:4, dmg:12,r:15,color:'#67e8f9',armor:4,robot:true},
   boss:   {icon:'🐻',hp:950,spd:33, reward:130,xp:40,dmg:22,r:32,color:'#ff6b5d',armor:5,boss:true,ai:'charge',name:'THE GRIZZLY'},
   bossFox:{icon:'🦊',hp:720,spd:60, reward:130,xp:40,dmg:16,r:26,color:'#f97316',armor:4,boss:true,ai:'summon',name:'THE FOX'},
   bossHawk:{icon:'🦅',hp:800,spd:75,reward:130,xp:40,dmg:14,r:26,color:'#cbd5e1',armor:3,boss:true,ai:'dive',name:'THE HAWK'}
@@ -701,17 +1154,19 @@ const UI={
   levelup:$('levelup'),luLevel:$('luLevel'),luCards:$('luCards'),
   gameover:$('gameover'),goWave:$('goWave'),goKills:$('goKills'),goCash:$('goCash'),goLevel:$('goLevel'),againBtn:$('againBtn'),goBest:$('goBest'),newBest:$('newBest'),
   pausedOv:$('pausedOv'),resumeBtn:$('resumeBtn'),
-  joy:$('joy'),joyKnob:$('joyKnob'),stage:$('stage')
+  joy:$('joy'),joyKnob:$('joyKnob'),stage:$('stage'),
+  aimJoy:$('aimJoy'),aimKnob:$('aimKnob'),view:$('view'),bloom:$('bloom'),live:$('live'),fsBtn:$('fsBtn')
 };
 let bestWave=store.get('best',0);
 let chosenDiff='Normal';
 
 /* ---------- background (pre-rendered starfield) ---------- */
-const bgCanvas=document.createElement('canvas');bgCanvas.width=W;bgCanvas.height=H;
-(function(){
+const bgCanvas=document.createElement('canvas');
+function buildBackground(){
+  bgCanvas.width=W;bgCanvas.height=H;
   const b=bgCanvas.getContext('2d');
-  const g=b.createRadialGradient(W/2,H/2,80,W/2,H/2,620);
-  g.addColorStop(0,'#15230c');g.addColorStop(1,'#060a04');
+  const g=b.createRadialGradient(W/2,H/2,80,W/2,H/2,Math.max(W,H)*0.65);
+  g.addColorStop(0,'#14261a');g.addColorStop(1,'#04100e');
   b.fillStyle=g;b.fillRect(0,0,W,H);
   // mowed-lawn stripes
   for(let i=0;i<W/80;i++){
@@ -754,7 +1209,7 @@ const bgCanvas=document.createElement('canvas');bgCanvas.width=W;bgCanvas.height
   }
   b.globalAlpha=1;
   // faint placement grid
-  b.strokeStyle='rgba(58,81,34,0.22)';b.lineWidth=1;
+  b.strokeStyle='rgba(94,234,212,0.10)';b.lineWidth=1;
   for(let x=0;x<=W;x+=GRID){b.beginPath();b.moveTo(x+0.5,0);b.lineTo(x+0.5,H);b.stroke()}
   for(let y=0;y<=H;y+=GRID){b.beginPath();b.moveTo(0,y+0.5);b.lineTo(W,y+0.5);b.stroke()}
   // seasonal touches
@@ -778,9 +1233,15 @@ const bgCanvas=document.createElement('canvas');bgCanvas.width=W;bgCanvas.height
   const v=b.createRadialGradient(W/2,H/2,H*0.42,W/2,H/2,H*0.95);
   v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,0.42)');
   b.fillStyle=v;b.fillRect(0,0,W,H);
-  // yard border glow
-  b.strokeStyle='rgba(139,195,74,0.28)';b.lineWidth=2;b.strokeRect(1,1,W-2,H-2);
-})();
+  // holo fence: neon border + corner brackets
+  b.strokeStyle='rgba(94,234,212,0.32)';b.lineWidth=2;b.strokeRect(1,1,W-2,H-2);
+  b.strokeStyle='rgba(94,234,212,0.6)';b.lineWidth=2.5;
+  const L=26;
+  for(const[cx,cy,sx,sy]of[[0,0,1,1],[W,0,-1,1],[0,H,1,-1],[W,H,-1,-1]]){
+    b.beginPath();b.moveTo(cx+sx*5,cy+sy*(5+L));b.lineTo(cx+sx*5,cy+sy*5);b.lineTo(cx+sx*(5+L),cy+sy*5);b.stroke();
+  }
+}
+buildBackground();
 /* ---------- sprite helpers: soft shadows & additive glows ---------- */
 const shadowSprite=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const rg=g.createRadialGradient(32,32,4,32,32,30);rg.addColorStop(0,'rgba(0,0,0,0.4)');rg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=rg;g.fillRect(0,0,64,64);return c})();
 function drawShadow(x,y,w){ctx.drawImage(shadowSprite,x-w/2,y-w/4,w,w/2)}
@@ -826,7 +1287,11 @@ function addLightning(points,color){
   state.lightning.push({pts,ttl:0.16,life:0.16,color});
 }
 function addPulse(x,y,max,color,life=0.6){state.pulses.push({x,y,r:0,max,ttl:life,life,color})}
-function addToast(text,sub){state.toasts.push({text,sub,ttl:2.6,life:2.6})}
+function addToast(text,sub){
+  if(!state)return;
+  state.toasts.push({text,sub,ttl:2.6,life:2.6});
+  try{UI.live.textContent=text+(sub?'. '+sub:'')}catch(e){}
+}
 function launchFirework(){
   if(!state)return;
   const tx=rand(W*0.12,W*0.88),ty=rand(H*0.12,H*0.42);
@@ -879,12 +1344,13 @@ function spawnEnemy(type,px,py){
     xp:t.xp,dmg:Math.round(t.dmg*D.dmg*Math.min(2,1+(state.wave-1)*0.03)),
     alive:true,slowTimer:0,slowFactor:1,hitFlash:0,touchCd:0,wob:rand(0,TAU),
     ai:t.ai||null,name:t.name||null,phase:'walk',phaseT:2,summonT:3.5,shootT:2.2,diveT:6,chargeDir:null,dmgMult:1,
-    moveType:t.move||null,dashT:1+rand(0,1.2),dashing:0,stink:!!t.stink,quills:!!t.quills,spawnT:0.3
+    moveType:t.move||null,dashT:1+rand(0,1.2),dashing:0,stink:!!t.stink,quills:!!t.quills,robot:!!t.robot,spawnT:0.3
   };
   if(t.boss){state.bossIntro={name:e.name||t.name||'BOSS',icon:t.icon,ttl:2.2,life:2.2};shake(4)}
   if(HOLIDAY&&type==='bossHawk')e.name='LIBERTY EAGLE';
   if(SEASON==='halloween'&&type==='bossFox'){e.name='PHANTOM FOX';e.color='#a855f7'}
   if(SEASON==='winter'&&type==='boss'){e.name='POLAR WARDEN';e.icon='🐻‍❄️';e.color='#bae6fd'}
+  if(t.boss){Announcer.say('Warning. '+String(e.name||'a boss').toLowerCase()+' has entered the yard.',{force:true});Haptics.pattern([60,80,60,80,120])}
   if(SEASON==='halloween'&&type==='grunt'&&Math.random()<0.2){e.icon='👻';e.color='#c4b5fd';e.spd*=1.12}
   const eliteChance=state.endless||state.wave>20?0.18:(state.wave>=13?(state.wave-12)*0.012:0);
   if(!t.boss&&type!=='mini'&&Math.random()<eliteChance){
@@ -921,6 +1387,7 @@ function killEnemy(e){
   if(state.money>=2000)earnAch('rich2k');
   // hype
   state.hype=Math.min(state.hypeMax,state.hype+(e.boss?26:4)+state.mods.hypeGainBonus);
+  if(state.hype>=state.hypeMax&&!state.hypeReady&&state.hypeTimer<=0){state.hypeReady=true;Announcer.say('Rage ready.');Haptics.pattern([20,50,20])}
   // xp orbs
   const n=Math.min(3,Math.ceil(e.xp/2));
   for(let i=0;i<n;i++)state.orbs.push({x:e.x+rand(-8,8),y:e.y+rand(-8,8),v:e.xp/n,ttl:18,vx:rand(-40,40),vy:rand(-40,40)});
@@ -931,6 +1398,7 @@ function killEnemy(e){
     META.bossTypes[e.type]=1;saveMeta();
     if(META.bossTypes.boss&&META.bossTypes.bossFox&&META.bossTypes.bossHawk)earnAch('menagerie');
     shake(10);addPulse(e.x,e.y,220,'#ff5d73');
+    Haptics.pattern([30,40,30,40,90]);
     celebrate(SEASON?3:1);
     addFloat(e.x,e.y-30,'+$'+cash,'#ffc94d',18);
     Audio2.sfx.boss();
@@ -1078,7 +1546,7 @@ function hurtPlayer(dmg){
     }
     spawnParticles(p.x,p.y,'#84cc16',10,140,0.4);
   }
-  shake(5);Audio2.sfx.hurt();
+  shake(5);Audio2.sfx.hurt();Haptics.heavy();
   spawnParticles(p.x,p.y,'#ff5d73',10,150);
   if(p.hp<=0){p.hp=0;gameOver()}
 }
@@ -1095,6 +1563,7 @@ function makeTower(x,y,key){
     utility:!!d.utility,aura:d.aura?JSON.parse(JSON.stringify(d.aura)):null,
     chainTargets:d.chainTargets||0,chainRange:d.chainRange||d.range,chainFalloff:d.chainFalloff||0.72,
     minRange:d.minRange||0,lob:d.lob?JSON.parse(JSON.stringify(d.lob)):null,income:d.income?JSON.parse(JSON.stringify(d.income)):null,incomeT:0,aim:rand(0,TAU),drawAim:0,
+    well:d.well?JSON.parse(JSON.stringify(d.well)):null,beam:!!d.beam,
     upgradeCost:Math.round(towerCost(key)*1.35),spent:towerCost(key),pulseT:rand(0,1.4),flash:0
   };
   return t;
@@ -1117,6 +1586,20 @@ function towerMods(t){
 function updateTower(t,dt){
   t.flash=Math.max(0,t.flash-dt);
   if(t.utility){
+    if(t.well){
+      t.pulseT+=dt;
+      if(t.pulseT>=1.1){t.pulseT=0;addPulse(t.x,t.y,t.well.range,'#c084fc',0.9)}
+      for(const e of state.enemies){
+        if(!e.alive||e.boss)continue;
+        const d=dist(e.x,e.y,t.x,t.y);
+        if(d<t.well.range&&d>6){
+          const k=Math.min(1,t.well.pull*dt/d);
+          e.x+=(t.x-e.x)*k;e.y+=(t.y-e.y)*k;
+          if(!e.robot){e.slowTimer=Math.max(e.slowTimer,0.15);e.slowFactor=Math.min(e.slowFactor,t.well.slow)}
+        }
+      }
+      return;
+    }
     if(t.aura){
       t.pulseT+=dt;
       if(t.pulseT>=1.5){t.pulseT=0;addPulse(t.x,t.y,t.aura.range,'#facc15',0.8)}
@@ -1155,6 +1638,10 @@ function updateTower(t,dt){
     const tx=clamp(target.x+dx3/dd3*target.spd*lead,0,W),ty=clamp(target.y+dy3/dd3*target.spd*lead,0,H);
     const T=clamp(dist(t.x,t.y,tx,ty)/t.lob.speed,0.45,1.3);
     state.lobs.push({x0:t.x,y0:t.y,x1:tx,y1:ty,t:0,T,dmg,splash:t.lob.splash,owner:t});
+  }else if(t.beam){
+    damageEnemy(target,dmg,t);
+    state.lightning.push({pts:[{x:t.x,y:t.y},{x:target.x,y:target.y}],ttl:0.09,life:0.09,color:NEON.cyan,w:3});
+    spawnParticles(target.x,target.y,t.color,2,70,0.25);
   }else if(t.chainTargets>0){
     chainLightning(t,target,dmg);
   }else{
@@ -1197,11 +1684,11 @@ function fireBullet(src,target,dmg,pierce,opts={}){
 }
 
 /* ---------- player ---------- */
-const input={up:false,down:false,left:false,right:false,jx:0,jy:0};
+const input={up:false,down:false,left:false,right:false,jx:0,jy:0,tx:0,ty:0,gx:0,gy:0,ax:0,ay:0,aiming:false,aimSrc:null};
 function updatePlayer(dt){
   const p=state.player;
-  let dx=(input.right?1:0)-(input.left?1:0)+input.jx;
-  let dy=(input.down?1:0)-(input.up?1:0)+input.jy;
+  let dx=(input.right?1:0)-(input.left?1:0)+input.jx+input.tx+input.gx;
+  let dy=(input.down?1:0)-(input.up?1:0)+input.jy+input.ty+input.gy;
   const len=Math.hypot(dx,dy);
   if(len>1){dx/=len;dy/=len}
   p.x=clamp(p.x+dx*p.speed*dt,p.r,W-p.r);
@@ -1267,6 +1754,7 @@ function updatePlayer(dt){
         const d=dist(e.x,e.y,p.x,p.y)-e.r;
         if(d<best){best=d;target=e}
       }
+      if(input.aiming)target={x:p.x+input.ax*reach*0.8,y:p.y+input.ay*reach*0.8};
       if(target){
         p.swings++;
         const spin=p.swings%4===0;
@@ -1298,10 +1786,24 @@ function updatePlayer(dt){
     }else{
       const range=p.range*(wm.rangeMult||1);
       let target=null,best=range;
-      for(const e of state.enemies){
-        if(!e.alive)continue;
-        const d=dist(e.x,e.y,p.x,p.y);
-        if(d<best){best=d;target=e}
+      if(input.aiming){
+        // twin-stick: lock the nearest pest inside a cone around the aim direction, else fire down the stick
+        const aa=Math.atan2(input.ay,input.ax);
+        for(const e of state.enemies){
+          if(!e.alive)continue;
+          const d=dist(e.x,e.y,p.x,p.y);
+          if(d>range*1.15)continue;
+          let da=Math.atan2(e.y-p.y,e.x-p.x)-aa;
+          while(da>Math.PI)da-=TAU;while(da<-Math.PI)da+=TAU;
+          if(Math.abs(da)<0.5&&d<best){best=d;target=e}
+        }
+        if(!target)target={x:p.x+input.ax*range,y:p.y+input.ay*range};
+      }else{
+        for(const e of state.enemies){
+          if(!e.alive)continue;
+          const d=dist(e.x,e.y,p.x,p.y);
+          if(d<best){best=d;target=e}
+        }
       }
       if(target){
         p.facing=target.x>=p.x?1:-1;
@@ -1420,6 +1922,9 @@ function openLevelup(){
     UI.luCards.appendChild(el);
   });
   UI.levelup.hidden=false;
+  if(UI.luCards.firstElementChild)UI.luCards.firstElementChild.classList.add('focus');
+  Announcer.say('Level '+state.player.level+'. Choose a perk.');
+  Haptics.success();
 }
 
 /* ---------- waves ---------- */
@@ -1435,6 +1940,7 @@ function buildWavePlan(wave){
   if(wave>=4)push('splitter',n(1.8),gap(0.85));
   if(wave>=5&&wave%2===1)push('rich',2,1.1);
   if(wave>=6)push('viper',n(2.2),gap(0.55));
+  if(wave>=7)push('bot',n(1.5),gap(0.9));
   if(wave>=9)push('bat',n(2),gap(0.5));
   if(wave>=11)push('skunk',n(1.4),gap(1.0));
   if(wave>=13)push('quill',n(1.4),gap(1.0));
@@ -1463,6 +1969,7 @@ function startWave(){
   state.waveDamage=0;
   addToast('WAVE '+state.wave+(state.wave%5===0?' — '+ENEMY_TYPES[bossForWave(state.wave)].name:''),ev.name+' · '+ev.desc);
   if(state.wave%5===0){Audio2.sfx.boss();shake(4)}else Audio2.sfx.wave();
+  Haptics.tap();
   updateDockState();
 }
 function waveCleared(){
@@ -1475,7 +1982,8 @@ function waveCleared(){
   if(SEASON)celebrate(state.wave%5===0?4:2);
   else if(state.wave%5===0)celebrate(2);
   addFloat(state.player.x,state.player.y-30,'+$'+bonus,'#ffc94d',16);
-  Audio2.sfx.coin();
+  Audio2.sfx.coin();Haptics.success();
+  if(state.wave%5===0)Announcer.say('Wave '+state.wave+' cleared. Outstanding work.');
   if(state.wave>bestWave){bestWave=state.wave;store.set('best',bestWave)}
   if(state.wave>=5)earnAch('w5');
   if(state.wave>=10)earnAch('w10');
@@ -1491,6 +1999,7 @@ function waveCleared(){
     $('victory').hidden=false;
     celebrate(SEASON?8:5);
     Audio2.sfx.levelup();
+    Announcer.say('Yard defended. Victory.',{force:true});Haptics.pattern([40,60,40,60,40,60,150]);
   }
   state.interTimer=1.8;
   updateDockState();
@@ -1533,7 +2042,8 @@ function autoSpendTick(){
 /* ---------- hype ---------- */
 function activateHype(){
   if(state.hype<state.hypeMax||state.hypeTimer>0)return false;
-  state.hype=0;state.hypeTimer=9;
+  state.hype=0;state.hypeTimer=9;state.hypeReady=false;
+  Haptics.pattern([50,40,50,40,120]);Announcer.say('Rage engaged.',{force:true});
   addPulse(state.player.x,state.player.y,Math.max(W,H),'#ffc94d',0.7);
   addToast('GROUNDHOG RAGE','+30% damage · +60% fire rate · 9s');
   shake(6);Audio2.sfx.hype();
@@ -1563,7 +2073,7 @@ function tryPlace(x,y){
   if(state.towers.length>=10)earnAch('gardener');
   spawnParticles(c.x,c.y,t.color,10,100);
   addPulse(c.x,c.y,40,t.color,0.4);
-  Audio2.sfx.build();
+  Audio2.sfx.build();Haptics.tap();
   buildDock();
   return true;
 }
@@ -1590,7 +2100,7 @@ function upgradeTower(t){
   if(t.level>=8)earnAch('maxbloom');
   addPulse(t.x,t.y,50,'#7ee787',0.4);
   spawnParticles(t.x,t.y,'#7ee787',10,110);
-  Audio2.sfx.upgrade();
+  Audio2.sfx.upgrade();Haptics.success();
   refreshTowerPanel();
   buildDock();
   return true;
@@ -1608,6 +2118,8 @@ function refreshTowerPanel(){
   let s='';
   if(t.utility&&t.income){
     s=`harvest $${t.income.amount} every ${t.income.every}s<br>≈ $${Math.round(t.income.amount/t.income.every*60)}/min`;
+  }else if(t.utility&&t.well){
+    s=`well range ${Math.round(t.well.range)}<br>pull ${t.well.pull}/s · speed ×${t.well.slow.toFixed(2)}`;
   }else if(t.utility){
     s=`aura range ${Math.round(t.aura.range)}<br>damage ×${t.aura.damageMult.toFixed(2)} · speed +${Math.round((1-t.aura.rateMult)*100)}%`;
   }else{
@@ -1626,6 +2138,9 @@ function gameOver(){
   state.mode='gameover';
   shake(12);
   Audio2.sfx.gameover();
+  Announcer.say('Burrow overrun. Run terminated.',{force:true});
+  Haptics.pattern([80,60,80,60,200]);
+  WakeLock.release();
   const isBest=state.wave>=bestWave&&state.wave>0;
   if(state.wave>bestWave){bestWave=state.wave;store.set('best',bestWave)}
   // bank spuds for meta-progression
@@ -1694,7 +2209,7 @@ function update(dt){
         if(!h.e.alive)continue;
         if(state.pulses.length<50)addPulse(h.e.x,h.e.y,h.e.r+7,b.color,0.18);
         damageEnemy(h.e,b.dmg,b.owner,b.isCrit);
-        if(b.slow)h.e.slowTimer=Math.max(h.e.slowTimer,b.slow.duration),h.e.slowFactor=Math.min(h.e.slowFactor===1?b.slow.factor:h.e.slowFactor,b.slow.factor);
+        if(b.slow&&!h.e.robot)h.e.slowTimer=Math.max(h.e.slowTimer,b.slow.duration),h.e.slowFactor=Math.min(h.e.slowFactor===1?b.slow.factor:h.e.slowFactor,b.slow.factor);
         if(b.splashRadius){
           const sd=Math.max(1,Math.round(b.dmg*b.splashFalloff));
           for(const o of state.enemies){
@@ -1810,7 +2325,8 @@ function draw(){
   ctx.clearRect(0,0,W,H);
   // shake
   if(state.shake>0)ctx.translate(rand(-state.shake,state.shake),rand(-state.shake,state.shake));
-  ctx.drawImage(bgCanvas,0,0);
+  if(Holo.on){ctx.globalAlpha=0.3;ctx.drawImage(bgCanvas,0,0);ctx.globalAlpha=1}
+  else ctx.drawImage(bgCanvas,0,0);
   // drifting cloud shadows
   {
     ctx.fillStyle='#000';
@@ -1937,7 +2453,7 @@ function draw(){
       }
     }
     if(showRanges||state.selected===t){
-      const r=t.utility?t.aura.range:t.range+(state.mods.towerRangeBonus||0);
+      const r=t.utility?rangeOf(t):t.range+(state.mods.towerRangeBonus||0);
       ctx.globalAlpha=state.selected===t?0.3:0.1;
       ctx.strokeStyle='#b5d38f';ctx.setLineDash([4,6]);
       ctx.beginPath();ctx.arc(t.x,t.y,r,0,TAU);ctx.stroke();
@@ -2071,6 +2587,11 @@ function draw(){
     ctx.globalAlpha=0.06;ctx.strokeStyle='#ffe9b3';
     ctx.beginPath();ctx.arc(p.x,p.y,ringR,0,TAU);ctx.stroke();
     ctx.globalAlpha=1;
+    if(input.aiming){
+      ctx.globalAlpha=0.28;ctx.strokeStyle=NEON.gold;ctx.lineWidth=1.5;ctx.setLineDash([6,8]);
+      ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+input.ax*ringR,p.y+input.ay*ringR);ctx.stroke();
+      ctx.setLineDash([]);ctx.globalAlpha=1;
+    }
     // glow + body
     if(p.iframe>0&&Math.floor(state.time*18)%2===0)ctx.globalAlpha=0.35;
     ctx.fillStyle=(CLASSES[state.cls]||CLASSES.classic).glow;
@@ -2155,7 +2676,7 @@ function draw(){
   // lightning
   for(const l of state.lightning){
     ctx.globalAlpha=Math.max(0,l.ttl/l.life);
-    ctx.strokeStyle=l.color;ctx.lineWidth=2.2;
+    ctx.strokeStyle=l.color;ctx.lineWidth=l.w||2.2;
     ctx.beginPath();ctx.moveTo(l.pts[0].x,l.pts[0].y);
     for(let i=1;i<l.pts.length;i++)ctx.lineTo(l.pts[i].x,l.pts[i].y);
     ctx.stroke();ctx.globalAlpha=1;
@@ -2182,7 +2703,7 @@ function draw(){
     const c=cellCenter(gx,gy);
     const ok=canPlace(gx,gy)&&state.money>=towerCost(state.armed);
     const def=TOWER_TYPES[state.armed];
-    const rr=def.utility?def.aura.range:def.range;
+    const rr=rangeOf(def);
     ctx.globalAlpha=0.07;
     ctx.fillStyle=ok?'#b5d38f':'#ff6b5d';
     ctx.beginPath();ctx.arc(c.x,c.y,rr,0,TAU);ctx.fill();
@@ -2323,7 +2844,7 @@ function buildDock(){
       const el=document.createElement('button');
       el.className='tcard';el.dataset.key=key;
       el.title=d.name+' — '+d.desc;
-      el.innerHTML=`<span class="hk">${i+1}</span><span class="ti">${d.icon}</span><div class="tn">${d.name}</div><div class="tc">$${d.cost}</div>`;
+      el.innerHTML=`<span class="hk">${(i+1)%10}</span><span class="ti">${d.icon}</span><div class="tn">${d.name}</div><div class="tc">$${d.cost}</div>`;
       el.addEventListener('click',()=>{Audio2.ensure();Audio2.sfx.click();armTower(state.armed===key?null:key)});
       UI.towerDock.appendChild(el);
     });
@@ -2340,16 +2861,42 @@ function armTower(key){
 }
 
 /* ---------- input ---------- */
-let dpr=1,viewScale=1,viewLeft=0,viewTop=0;
+let dpr=1,viewScale=1,dprCap=2;
 function resize(){
   const rect=UI.stage.getBoundingClientRect();
-  const pad=8;
-  viewScale=Math.min((rect.width-pad)/W,(rect.height-pad)/H);
-  dpr=Math.min(2,window.devicePixelRatio||1);
-  canvas.style.width=W*viewScale+'px';
-  canvas.style.height=H*viewScale+'px';
-  canvas.width=Math.round(W*dpr);
-  canvas.height=Math.round(H*dpr);
+  const pad=Device.coarse?4:8;
+  viewScale=Math.max(0.05,Math.min((rect.width-pad)/W,(rect.height-pad)/H));
+  dpr=Math.min(dprCap,window.devicePixelRatio||1);
+  const cw=Math.round(W*viewScale),ch=Math.round(H*viewScale);
+  UI.view.style.width=cw+'px';UI.view.style.height=ch+'px';
+  canvas.style.width=cw+'px';canvas.style.height=ch+'px';
+  canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+  UI.bloom.width=Math.max(1,Math.round(W/4));UI.bloom.height=Math.max(1,Math.round(H/4));
+}
+/* bloom: a quarter-res copy of the frame, squared (multiply) so only bright neon survives, blurred + screen-blended by the GPU via CSS */
+const bctx=UI.bloom.getContext('2d');
+let bloomAuto=true;
+function drawBloom(){
+  const on=SETTINGS.bloom&&bloomAuto&&!REDUCED;
+  UI.bloom.hidden=!on;
+  if(!on)return;
+  const bw=UI.bloom.width,bh=UI.bloom.height;
+  bctx.globalCompositeOperation='copy';bctx.drawImage(canvas,0,0,bw,bh);
+  bctx.globalCompositeOperation='multiply';bctx.drawImage(canvas,0,0,bw,bh);
+  bctx.globalCompositeOperation='source-over';
+}
+/* adaptive quality: if frames run long for a while, trim resolution, then bloom */
+const Perf={ema:0.016,slowT:0,level:0};
+function perfTick(raw){
+  Perf.ema=Perf.ema*0.95+Math.min(0.1,raw)*0.05;
+  if(!state||state.mode!=='playing')return;
+  if(Perf.ema>0.027){Perf.slowT+=raw;if(Perf.slowT>2.5){Perf.slowT=0;degradeQuality()}}
+  else Perf.slowT=Math.max(0,Perf.slowT-raw);
+}
+function degradeQuality(){
+  if(Perf.level===0){dprCap=1.5;resize();Perf.level=1;addToast('ADAPTIVE QUALITY','Resolution trimmed for smoother play')}
+  else if(Perf.level===1){bloomAuto=false;Perf.level=2}
+  else if(Perf.level===2){dprCap=1;resize();Perf.level=3}
 }
 window.addEventListener('resize',resize);
 new ResizeObserver(()=>resize()).observe(UI.stage);
@@ -2359,10 +2906,8 @@ function canvasPos(e){
 }
 canvas.addEventListener('mousemove',e=>{state&&(state.mouse=canvasPos(e))});
 canvas.addEventListener('mouseleave',()=>{state&&(state.mouse=null)});
-canvas.addEventListener('click',e=>{
+function handleTap(pos){
   if(!state||state.mode!=='playing')return;
-  Audio2.ensure();
-  const pos=canvasPos(e);
   state.mouse=pos;
   const{gx,gy}=gridAt(pos.x,pos.y);
   const hit=towerAt(gx,gy);
@@ -2372,10 +2917,26 @@ canvas.addEventListener('click',e=>{
   }
   if(state.armed){
     if(hit){selectTower(hit);armTower(null)}
-    else tryPlace(pos.x,pos.y);
+    else if(!tryPlace(pos.x,pos.y))Haptics.error();
     return;
   }
   selectTower(hit||null);
+  if(hit)Haptics.tap();
+}
+function longPress(pos){
+  if(!state||state.mode!=='playing')return;
+  const{gx,gy}=gridAt(pos.x,pos.y);
+  const hit=towerAt(gx,gy);
+  if(hit){
+    selectTower(hit);
+    if(state.selling){sellTower(hit);return}
+    if(!upgradeTower(hit))Haptics.heavy();
+  }else if(state.armed){armTower(null);Haptics.tap()}
+}
+canvas.addEventListener('click',e=>{
+  if(!state||state.mode!=='playing')return;
+  Audio2.ensure();
+  handleTap(canvasPos(e));
 });
 canvas.addEventListener('contextmenu',e=>{e.preventDefault();armTower(null);if(state){state.selling=false;UI.sellBtn.classList.remove('on')}});
 
@@ -2397,7 +2958,7 @@ window.addEventListener('keydown',e=>{
   if(k==='x'&&state.selected)sellTower(state.selected);
   if(k==='enter'&&!state.waveActive&&state.mode==='playing')startWave();
   const num=parseInt(e.key);
-  if(num>=1&&num<=TOWER_KEYS.length)armTower(TOWER_KEYS[num-1]===state.armed?null:TOWER_KEYS[num-1]);
+  if(!isNaN(num)&&e.key.length===1){const idx=num===0?9:num-1;if(idx<TOWER_KEYS.length)armTower(TOWER_KEYS[idx]===state.armed?null:TOWER_KEYS[idx])}
 });
 window.addEventListener('keyup',e=>{
   const k=e.key.toLowerCase();
@@ -2407,47 +2968,88 @@ window.addEventListener('keyup',e=>{
   if(k==='d'||e.key==='ArrowRight')input.right=false;
 });
 
-/* touch joystick (left 45% of stage) + tap to place */
+/* touch: left half = floating move stick · right half = tap to build/select, drag to aim (twin-stick),
+   drag-and-release to place an armed tower, long-press a tower to upgrade */
 let joyId=null,joyCX=0,joyCY=0;
+const rTouch={};
+function placeJoy(el,x,y,rect){el.hidden=false;el.style.left=(x-rect.left-55)+'px';el.style.top=(y-rect.top-55)+'px'}
+function knob(el,dx,dy){el.style.transform=`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`}
 UI.stage.addEventListener('touchstart',e=>{
-  if(!state||state.mode!=='playing')return;
+  if(!state||state.mode!=='playing'||e.target!==canvas)return;
   Audio2.ensure();
+  const rect=UI.stage.getBoundingClientRect();
   for(const t of e.changedTouches){
-    const rect=UI.stage.getBoundingClientRect();
-    if(joyId===null&&t.clientX-rect.left<rect.width*0.45){
+    const left=(t.clientX-rect.left)<rect.width*0.5;
+    if(left&&joyId===null){
       joyId=t.identifier;joyCX=t.clientX;joyCY=t.clientY;
-      UI.joy.hidden=false;
-      UI.joy.style.left=(t.clientX-rect.left-55)+'px';
-      UI.joy.style.top=(t.clientY-rect.top-55)+'px';
-      e.preventDefault();
+      placeJoy(UI.joy,t.clientX,t.clientY,rect);
+    }else{
+      const rec={x0:t.clientX,y0:t.clientY,cx:t.clientX,cy:t.clientY,t0:performance.now(),moved:false,aim:false,done:false};
+      rec.lp=setTimeout(()=>{if(rec.moved||rec.done)return;rec.done=true;longPress(canvasPos({clientX:rec.cx,clientY:rec.cy}))},460);
+      rTouch[t.identifier]=rec;
+      if(state.armed)state.mouse=canvasPos(t);
     }
   }
+  e.preventDefault();
 },{passive:false});
 UI.stage.addEventListener('touchmove',e=>{
+  let handled=false;
   for(const t of e.changedTouches){
     if(t.identifier===joyId){
       const dx=t.clientX-joyCX,dy=t.clientY-joyCY;
       const d=Math.hypot(dx,dy),max=44;
       const f=d>max?max/d:1;
       input.jx=dx*f/max;input.jy=dy*f/max;
-      UI.joyKnob.style.transform=`translate(calc(-50% + ${dx*f}px), calc(-50% + ${dy*f}px))`;
-      e.preventDefault();
+      knob(UI.joyKnob,dx*f,dy*f);
+      handled=true;
+      continue;
+    }
+    const rec=rTouch[t.identifier];
+    if(!rec)continue;
+    handled=true;
+    rec.cx=t.clientX;rec.cy=t.clientY;
+    const dx=t.clientX-rec.x0,dy=t.clientY-rec.y0,d=Math.hypot(dx,dy);
+    if(!rec.moved&&d>12){rec.moved=true;clearTimeout(rec.lp)}
+    if(!state)continue;
+    if(state.armed){state.mouse=canvasPos(t);continue}
+    if(rec.moved&&SETTINGS.twin&&!rec.done&&d>0){
+      if(!rec.aim){rec.aim=true;placeJoy(UI.aimJoy,rec.x0,rec.y0,UI.stage.getBoundingClientRect())}
+      const max=44,f=d>max?max/d:1;
+      input.ax=dx/d;input.ay=dy/d;input.aiming=true;input.aimSrc='touch';
+      knob(UI.aimKnob,dx*f,dy*f);
     }
   }
+  if(handled)e.preventDefault();
 },{passive:false});
 function endTouch(e){
   for(const t of e.changedTouches){
     if(t.identifier===joyId){
       joyId=null;input.jx=0;input.jy=0;
-      UI.joy.hidden=true;
-      UI.joyKnob.style.transform='translate(-50%,-50%)';
+      UI.joy.hidden=true;knob(UI.joyKnob,0,0);
+      continue;
     }
+    const rec=rTouch[t.identifier];
+    if(!rec)continue;
+    delete rTouch[t.identifier];
+    clearTimeout(rec.lp);
+    if(rec.aim){
+      if(input.aimSrc==='touch'){input.aiming=false;input.aimSrc=null}
+      UI.aimJoy.hidden=true;knob(UI.aimKnob,0,0);
+    }
+    if(rec.done||e.type==='touchcancel'||!state)continue;
+    const pos=canvasPos(t);
+    if(state.mode==='playing'){
+      if(state.armed)handleTap(pos);
+      else if(!rec.moved&&performance.now()-rec.t0<500)handleTap(pos);
+    }
+    if(!Pad.active)state.mouse=null;
   }
 }
 UI.stage.addEventListener('touchend',endTouch);
 UI.stage.addEventListener('touchcancel',endTouch);
 
 /* ---------- buttons ---------- */
+document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('button'))Haptics.tap()},{capture:true});
 UI.waveBtn.addEventListener('click',()=>{Audio2.ensure();Audio2.sfx.click();startWave()});
 UI.sellBtn.addEventListener('click',()=>{
   Audio2.sfx.click();
@@ -2474,20 +3076,64 @@ function cycleSpeed(){
   UI.speedBtn.textContent=state.speed+'×';
 }
 UI.speedBtn.addEventListener('click',()=>{Audio2.sfx.click();cycleSpeed()});
+function setBtn(id,on,label,disabled){
+  const b=$(id);if(!b)return;
+  b.classList.toggle('on',!!on);
+  const st=b.querySelector('.st');if(st)st.textContent=label||(on?'ON':'OFF');
+  b.disabled=!!disabled;
+}
 function refreshAudioBtns(){
-  $('musicBtn').textContent=Audio2.isMusicOn()?'MUSIC ON':'MUSIC OFF';
-  $('musicBtn').classList.toggle('on',Audio2.isMusicOn());
-  $('sfxBtn').textContent=Audio2.isOn()?'SOUND ON':'SOUND OFF';
-  $('sfxBtn').classList.toggle('on',Audio2.isOn());
+  setBtn('musicBtn',Audio2.isMusicOn());
+  setBtn('sfxBtn',Audio2.isOn());
+  setBtn('hapticBtn',SETTINGS.haptics,Device.haptics?(SETTINGS.haptics?'ON':'OFF'):'N/A',!Device.haptics);
+  setBtn('announcerBtn',SETTINGS.announcer,Device.speech?(SETTINGS.announcer?'ON':'OFF'):'N/A',!Device.speech);
+  setBtn('twinBtn',SETTINGS.twin);
+  setBtn('tiltBtn',SETTINGS.tilt&&Motion.on,Device.motion?(SETTINGS.tilt&&Motion.on?'ARMED':'OFF'):'N/A',!Device.motion);
+  setBtn('holoBtn',Holo.on,Device.camera?(Holo.on?'LIVE':'OFF'):'N/A',!Device.camera);
+  setBtn('bloomBtn',SETTINGS.bloom,SETTINGS.bloom?(bloomAuto?'ON':'AUTO-OFF'):'OFF');
   UI.soundBtn.textContent=Audio2.isOn()?'🔊':'🔇';
 }
 function togglePause(){
-  if(!state||state.mode==='gameover'||state.mode==='levelup')return;
-  if(state.mode==='paused'){state.mode='playing';UI.pausedOv.hidden=true}
+  if(!state||state.mode==='gameover'||state.mode==='levelup'||state.mode==='victory')return;
+  if(state.mode==='paused'){state.mode='playing';UI.pausedOv.hidden=true;WakeLock.acquire()}
   else{state.mode='paused';UI.pausedOv.hidden=false;refreshAudioBtns()}
 }
 $('musicBtn').addEventListener('click',()=>{Audio2.ensure();Audio2.toggleMusic();refreshAudioBtns()});
 $('sfxBtn').addEventListener('click',()=>{Audio2.ensure();Audio2.toggle();refreshAudioBtns()});
+$('hapticBtn').addEventListener('click',()=>{SETTINGS.haptics=!SETTINGS.haptics;store.set('haptics',SETTINGS.haptics);if(SETTINGS.haptics)Haptics.success();refreshAudioBtns();refreshSys()});
+$('announcerBtn').addEventListener('click',()=>{SETTINGS.announcer=!SETTINGS.announcer;store.set('announcer',SETTINGS.announcer);if(SETTINGS.announcer)Announcer.say('Announcer online.',{force:true});else Announcer.stop();refreshAudioBtns();refreshSys()});
+$('twinBtn').addEventListener('click',()=>{SETTINGS.twin=!SETTINGS.twin;store.set('twin',SETTINGS.twin);if(!SETTINGS.twin){input.aiming=false;input.aimSrc=null}refreshAudioBtns();refreshSys()});
+$('tiltBtn').addEventListener('click',async()=>{
+  if(SETTINGS.tilt&&Motion.on){SETTINGS.tilt=false;store.set('tilt',false);Motion.recenter();refreshAudioBtns();refreshSys();return}
+  const ok=await Motion.enable();
+  SETTINGS.tilt=ok;store.set('tilt',ok);
+  if(ok){Motion.recenter();addToast('TILT STEERING ARMED','Hold the phone flat to recenter · shake for RAGE');Haptics.success()}
+  else{addToast('MOTION ACCESS DENIED','Allow Motion & Orientation for this site in Settings › Safari');Haptics.error()}
+  refreshAudioBtns();refreshSys();
+});
+$('holoBtn').addEventListener('click',async()=>{
+  if(Holo.on){Holo.disable();addToast('HOLO-YARD OFFLINE','');}
+  else{
+    const ok=await Holo.enable();
+    if(ok){addToast('HOLO-YARD ONLINE','The arena is projected over your camera');Haptics.success()}
+    else{addToast('CAMERA UNAVAILABLE','Allow camera access for this site (HTTPS required)');Haptics.error()}
+  }
+  refreshAudioBtns();refreshSys();
+});
+$('bloomBtn').addEventListener('click',()=>{SETTINGS.bloom=!SETTINGS.bloom;store.set('bloom',SETTINGS.bloom);if(SETTINGS.bloom)bloomAuto=true;refreshAudioBtns()});
+$('quitBtn').addEventListener('click',()=>{Audio2.sfx.click();UI.pausedOv.hidden=true;state.mode='paused';showMenu()});
+if(Device.fullscreen){
+  UI.fsBtn.hidden=false;
+  UI.fsBtn.addEventListener('click',()=>{
+    const root=document.documentElement;
+    const fsEl=document.fullscreenElement||document.webkitFullscreenElement;
+    try{
+      if(fsEl)(document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      else (root.requestFullscreen||root.webkitRequestFullscreen).call(root);
+    }catch(e){}
+    setTimeout(resize,300);
+  });
+}
 UI.pauseBtn.addEventListener('click',togglePause);
 UI.resumeBtn.addEventListener('click',togglePause);
 function toggleSound(){
@@ -2498,8 +3144,19 @@ UI.soundBtn.addEventListener('click',()=>{Audio2.ensure();toggleSound()});
 UI.tpUp.addEventListener('click',()=>{if(state.selected)upgradeTower(state.selected)});
 UI.tpSell.addEventListener('click',()=>{if(state.selected)sellTower(state.selected)});
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden&&state&&state.mode==='playing')togglePause();
+  if(document.hidden){
+    if(state&&state.mode==='playing')togglePause();
+    if(state&&state.mode==='paused'&&Device.badge){try{navigator.setAppBadge(1)}catch(e){}}
+    Announcer.stop();
+  }else{
+    if(Device.badge){try{navigator.clearAppBadge()}catch(e){}}
+    if(state&&(state.mode==='playing'||state.mode==='paused')&&UI.menu.hidden)WakeLock.acquire();
+    Audio2.ensure();
+    resize();
+  }
 });
+window.addEventListener('orientationchange',()=>{setTimeout(resize,250);Motion.recenter()});
+window.addEventListener('pageshow',()=>resize());
 
 /* ---------- locker (meta-progression UI) ---------- */
 function renderLocker(){
@@ -2581,21 +3238,173 @@ $('endlessBtn').addEventListener('click',()=>{
   state.mode='playing';
   addToast('ENDLESS MODE','Elite pests join every wave');
 });
+function showMenu(){
+  renderLocker();renderAch();refreshSys();
+  UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
+  UI.menu.hidden=false;
+  WakeLock.release();
+  Announcer.stop();
+}
 $('vicMenuBtn').addEventListener('click',()=>{
   Audio2.sfx.click();
   $('victory').hidden=true;
   state.mode='paused';
-  renderLocker();renderAch();
-  UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
-  UI.menu.hidden=false;
+  showMenu();
 });
 $('menuBtn').addEventListener('click',()=>{
   Audio2.sfx.click();
   UI.gameover.hidden=true;
-  renderLocker();renderAch();
-  UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
-  UI.menu.hidden=false;
+  showMenu();
 });
+$('shareBtn').addEventListener('click',()=>shareRun('gameover'));
+$('shareVicBtn').addEventListener('click',()=>shareRun('victory'));
+
+/* ---------- share card (Web Share API with a rendered PNG, text/clipboard fallbacks) ---------- */
+function renderShareCard(kind){
+  const s=state,c=document.createElement('canvas');c.width=1200;c.height=630;
+  const g=c.getContext('2d');
+  const bg=g.createLinearGradient(0,0,1200,630);bg.addColorStop(0,'#06201d');bg.addColorStop(1,'#1b1140');
+  g.fillStyle=bg;g.fillRect(0,0,1200,630);
+  g.strokeStyle='rgba(94,234,212,0.12)';g.lineWidth=1;
+  for(let x=0;x<=1200;x+=40){g.beginPath();g.moveTo(x,0);g.lineTo(x,630);g.stroke()}
+  for(let y=0;y<=630;y+=40){g.beginPath();g.moveTo(0,y);g.lineTo(1200,y);g.stroke()}
+  g.strokeStyle='rgba(94,234,212,0.6)';g.lineWidth=4;g.strokeRect(24,24,1152,582);
+  g.textBaseline='middle';
+  g.font='190px system-ui,"Apple Color Emoji","Segoe UI Emoji"';g.textAlign='center';
+  g.fillText((CLASSES[s.cls]||CLASSES.classic).icon==='🦫'?'🦫':(CLASSES[s.cls]||CLASSES.classic).icon,230,300);
+  g.textAlign='left';
+  g.fillStyle='#e8fffb';g.font='900 64px ui-rounded,system-ui,sans-serif';g.fillText('GROUNDHOG ARENA',430,150);
+  g.fillStyle='#5eead4';g.font='700 26px ui-monospace,Menlo,monospace';g.fillText('2070 EDITION · '+(kind==='victory'?'YARD DEFENDED':'BURROW OVERRUN'),432,205);
+  g.fillStyle='#ffc35c';g.font='900 120px ui-rounded,system-ui,sans-serif';g.fillText('WAVE '+s.wave,430,320);
+  g.fillStyle='#bfe3d8';g.font='700 34px ui-rounded,system-ui,sans-serif';
+  g.fillText(`${s.kills} pests · level ${s.player.level} · $${s.cashEarned} earned`,432,410);
+  g.fillText(`${s.difficulty.toUpperCase()}${s.endless?' · ENDLESS':''} · ${(WEAPONS[s.weapon]||WEAPONS.slinger).name}`,432,458);
+  g.fillStyle='#8fb6ae';g.font='600 24px ui-monospace,Menlo,monospace';g.fillText('best wave '+bestWave+' · play it on your phone',432,540);
+  return c;
+}
+async function shareRun(kind){
+  if(!state)return;
+  const s=state;
+  const text=`I ${kind==='victory'?'defended the yard':'survived to wave '+s.wave} in Groundhog Arena 2070 — ${s.kills} pests, level ${s.player.level}${s.endless?', ENDLESS':''}. Can you beat it?`;
+  const url=location.href.split('?')[0];
+  try{
+    const card=renderShareCard(kind);
+    const blob=await new Promise(r=>card.toBlob(r,'image/png'));
+    if(blob&&navigator.share&&navigator.canShare){
+      const file=new File([blob],'groundhog-arena-2070.png',{type:'image/png'});
+      if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Groundhog Arena 2070',text});Haptics.success();return}
+    }
+    if(navigator.share){await navigator.share({title:'Groundhog Arena 2070',text,url});Haptics.success();return}
+    if(Device.clipboard){await navigator.clipboard.writeText(text+' '+url);addToast('COPIED TO CLIPBOARD','Paste it anywhere');Haptics.success();return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  addToast('SHARE UNAVAILABLE','Take a screenshot of the yard instead');
+}
+
+/* ---------- save sync (export/import the whole burrow as a code) ---------- */
+const SAVE_KEYS=['spuds','unlocks','class','perm','ach','bossTypes','weapon','wUnlocks','best','runs','sound','music','haptics','announcer','twin','bloom','tilt'];
+function exportSave(){
+  const o={v:1,t:Date.now(),d:{}};
+  for(const k of SAVE_KEYS){const v=store.get(k,undefined);if(v!==undefined)o.d[k]=v}
+  return 'GA2070:'+btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+}
+function importSave(str){
+  try{
+    const m=String(str).trim().match(/GA2070:([A-Za-z0-9+/=]+)/);
+    if(!m)return false;
+    const o=JSON.parse(decodeURIComponent(escape(atob(m[1]))));
+    if(!o||o.v!==1||!o.d)return false;
+    for(const k of SAVE_KEYS)if(k in o.d)store.set(k,o.d[k]);
+    return true;
+  }catch(e){return false}
+}
+$('exportBtn').addEventListener('click',()=>{
+  $('syncText').value=exportSave();
+  $('syncSub').textContent='Share or copy this code to another device';
+  $('syncOv').hidden=false;
+});
+$('importBtn').addEventListener('click',()=>{
+  $('syncText').value='';
+  $('syncSub').textContent='Paste a save code, then IMPORT';
+  $('syncOv').hidden=false;
+  try{$('syncText').focus()}catch(e){}
+});
+$('syncClose').addEventListener('click',()=>{$('syncOv').hidden=true});
+$('syncCopy').addEventListener('click',async()=>{
+  const v=$('syncText').value||exportSave();$('syncText').value=v;
+  try{if(Device.clipboard){await navigator.clipboard.writeText(v);$('syncSub').textContent='Copied to clipboard';Haptics.success();return}}catch(e){}
+  try{$('syncText').select();document.execCommand('copy');$('syncSub').textContent='Copied'}catch(e){$('syncSub').textContent='Select the text and copy it manually'}
+});
+$('syncShare').addEventListener('click',async()=>{
+  const v=$('syncText').value||exportSave();$('syncText').value=v;
+  try{
+    if(navigator.share){await navigator.share({title:'Groundhog Arena 2070 save',text:v});Haptics.success();return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  $('syncCopy').click();
+});
+$('syncImport').addEventListener('click',()=>{
+  if(importSave($('syncText').value)){$('syncSub').textContent='Save imported — reloading…';Haptics.success();setTimeout(()=>location.reload(),500)}
+  else{$('syncSub').textContent='That is not a valid GA2070 save code';Haptics.error()}
+});
+
+/* ---------- device link panel ---------- */
+let swReady=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+function refreshSys(){
+  const el=$('sysGrid');if(!el)return;
+  const rows=[
+    ['📳','Haptics',Device.haptics&&SETTINGS.haptics,Device.haptics?(SETTINGS.haptics?'taptic on':'off'):'n/a'],
+    ['🎯','Twin-stick',SETTINGS.twin,Device.touch?'drag right half':'right stick'],
+    ['🧭','Tilt steer',SETTINGS.tilt&&Motion.on,Device.motion?(Motion.on?'armed':'⏸ settings'):'n/a'],
+    ['🤝','Shake = Rage',Motion.granted,Device.motion?(Motion.granted?'armed':'⏸ settings'):'n/a'],
+    ['🎮','Controller',Pad.active,Pad.active?'linked':(Device.gamepad?'pair via BT':'n/a')],
+    ['📷','Holo-Yard',Holo.on,Device.camera?(Holo.on?'camera live':'⏸ settings'):'n/a'],
+    ['📤','Share cards',Device.share,Device.share?'share sheet':(Device.clipboard?'clipboard':'n/a')],
+    ['🔆','Wake lock',Device.wakeLock,Device.wakeLock?'screen stays on':'n/a'],
+    ['📦','Offline',swReady,Device.sw?(swReady?'cached':'caching…'):'needs https'],
+    ['🌈','Wide color',Device.p3,Device.p3?'display-p3':'sRGB'],
+    ['🗣️','Announcer',Device.speech&&SETTINGS.announcer,Device.speech?(SETTINGS.announcer?'voice on':'off'):'n/a'],
+    ['📱','Installed',Device.standalone,Device.standalone?'home screen':'browser tab']
+  ];
+  el.innerHTML=rows.map(r=>`<div class="s ${r[2]?'ok':'no'}"><i>${r[2]?'●':'○'}</i><span class="se">${r[0]}</span><span>${r[1]}<small>${r[3]}</small></span></div>`).join('');
+  const n=rows.filter(r=>r[2]).length;
+  const sc=$('sysCount');if(sc)sc.textContent=n+'/'+rows.length+' ONLINE';
+}
+
+/* ---------- install prompt ---------- */
+let installEvt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();installEvt=e;
+  if(store.get('installTipDismissed',false))return;
+  $('installText').innerHTML='Install <b>Groundhog Arena 2070</b> for fullscreen, offline play and a Home Screen icon.';
+  $('installBtn').hidden=false;$('installTip').hidden=false;
+});
+$('installBtn').addEventListener('click',async()=>{
+  if(!installEvt)return;
+  try{installEvt.prompt();const r=await installEvt.userChoice;if(r&&r.outcome==='accepted'){$('installTip').hidden=true}}catch(e){}
+  installEvt=null;
+});
+$('installDismiss').addEventListener('click',()=>{$('installTip').hidden=true;store.set('installTipDismissed',true)});
+window.addEventListener('appinstalled',()=>{$('installTip').hidden=true;refreshSys()});
+if(Device.iOS&&!Device.standalone&&!store.get('installTipDismissed',false))$('installTip').hidden=false;
+
+/* ---------- offline: service worker + update toast ---------- */
+if(Device.sw){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      if(reg.active&&navigator.serviceWorker.controller){swReady=true;refreshSys()}
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;if(!nw)return;
+        nw.addEventListener('statechange',()=>{
+          if(nw.state==='installed'){
+            if(navigator.serviceWorker.controller){$('swToast').hidden=false;$('swReload').onclick=()=>{if(reg.waiting)reg.waiting.postMessage({type:'SKIP_WAITING'});else location.reload()}}
+            else{swReady=true;refreshSys()}
+          }
+        });
+      });
+    }).catch(()=>{});
+    let refreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{if(refreshing)return;refreshing=true;location.reload()});
+  });
+}
 
 /* menu */
 UI.diffRow.addEventListener('click',e=>{
@@ -2605,12 +3414,24 @@ UI.diffRow.addEventListener('click',e=>{
   UI.diffRow.querySelectorAll('.diff').forEach(x=>x.classList.toggle('on',x===b));
   Audio2.sfx.click();
 });
-UI.playBtn.addEventListener('click',()=>{Audio2.ensure();startGame(chosenDiff)});
+UI.playBtn.addEventListener('click',()=>{
+  Audio2.ensure();
+  if(store.get('tilt',false)&&!Motion.on)Motion.enable().then(ok=>{SETTINGS.tilt=ok;refreshSys()});
+  startGame(chosenDiff);
+});
 UI.againBtn.addEventListener('click',()=>{Audio2.ensure();UI.gameover.hidden=true;startGame(chosenDiff)});
 
 /* ---------- game lifecycle ---------- */
 function startGame(difficulty){
+  const sz=pickArenaSize();
+  if(sz.w!==W||sz.h!==H){W=sz.w;H=sz.h;buildBackground()}
+  resize();
   state=freshState(difficulty);
+  input.aiming=false;input.aimSrc=null;
+  WakeLock.acquire();
+  try{if(Device.storage&&!store.get('persisted',false))navigator.storage.persist().then(ok=>{if(ok)store.set('persisted',true)})}catch(e){}
+  if(Device.badge){try{navigator.clearAppBadge()}catch(e){}}
+  Announcer.say('Neural link established. Defend the burrow.',{force:true});
   UI.menu.hidden=true;
   UI.gameover.hidden=true;
   UI.levelup.hidden=true;
@@ -2635,8 +3456,11 @@ let last=0;
 function frame(ts){
   requestAnimationFrame(frame);
   const t=ts/1000;
-  let dt=Math.min(0.04,last?t-last:0.016);
+  const raw=last?t-last:0.016;
+  let dt=Math.min(0.04,raw);
   last=t;
+  Pad.poll();
+  perfTick(raw);
   if(state){
     if(state.mode==='playing'){
       const scaled=dt*state.speed;
@@ -2644,6 +3468,7 @@ function frame(ts){
       for(let i=0;i<steps;i++)update(scaled/steps);
     }
     draw();
+    drawBloom();
     syncHUD();
   }
 }
@@ -2658,13 +3483,25 @@ if(SEASON){
 buildDock();
 renderLocker();
 renderAch();
+refreshSys();
 resize();
 UI.menuBest.textContent=bestWave>0?'BEST WAVE · '+bestWave:'FIRST RUN — GOOD LUCK';
 UI.hBest.textContent=bestWave;
 requestAnimationFrame(frame);
+/* deep links (Siri Shortcuts / Home Screen quick actions): ?diff=Hard&play=1 · ?holo=1 */
+(function(){
+  try{
+    const q=new URLSearchParams(location.search);
+    const d=q.get('diff');
+    if(d&&DIFFS[d]){chosenDiff=d;UI.diffRow.querySelectorAll('.diff').forEach(x=>x.classList.toggle('on',x.dataset.d===d))}
+    if(q.get('holo')==='1')Holo.enable().then(ok=>{refreshSys();if(ok&&state)addToast('HOLO-YARD ONLINE','The arena is projected over your camera')});
+    if(q.get('play')==='1')setTimeout(()=>startGame(chosenDiff),50);
+  }catch(e){}
+})();
 
 /* test hook */
-window.__ARENA={get state(){return state},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t},META,CLASSES,PERMS,renderLocker,saveMeta,permCost,permLevel,ACH_LIST,earnAch,ELITE_MODS,WEAPONS,waveCleared:()=>waveCleared(),launchFirework,celebrate,burstFirework,HOLIDAY,HOLIDAY_250,SEASON,WAVE_EVENTS,autoSpendTick,renderRuns,Audio2};
+window.__ARENA={get state(){return state},get W(){return W},get H(){return H},startGame,startWave,update,spawnEnemy,TOWER_TYPES,ENEMY_TYPES,PERKS,tryPlace,armTower,towerCost,makeTower:(x,y,k)=>{const t=makeTower(x,y,k);state.towers.push(t);return t},META,CLASSES,PERMS,renderLocker,saveMeta,permCost,permLevel,ACH_LIST,earnAch,ELITE_MODS,WEAPONS,waveCleared:()=>waveCleared(),launchFirework,celebrate,burstFirework,HOLIDAY,HOLIDAY_250,SEASON,WAVE_EVENTS,autoSpendTick,renderRuns,Audio2,
+  Device,SETTINGS,Haptics,Announcer,Motion,Holo,Pad,WakeLock,input,handleTap,longPress,pickArenaSize,exportSave,importSave,refreshSys,togglePause,activateHype,gameOver,shareRun,renderShareCard,cycleArmed,Perf,degradeQuality,upgradeTower,selectTower};
 </script>
 </body>
 </html>

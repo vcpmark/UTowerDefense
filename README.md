@@ -1,14 +1,44 @@
-# Groundhog Arena — Backyard Tower Defense × Survival
+# Groundhog Arena 2070 — Backyard Tower Defense × Survival
+
+> **2070 Edition.** The flagship `arena.html` is now a neural-linked, installable iPhone game: liquid-glass HUD, wide-color neon bloom, an orientation-adaptive yard, twin-stick touch, Taptic haptics, gyro tilt + shake-to-rage, Bluetooth controllers, a camera "Holo-Yard" mode, share cards, an AI announcer, wake lock, offline play and cross-device save sync — all in one dependency-free HTML file.
+
+## 📱 iPhone systems (arena.html)
+
+Open the yard on an iPhone and the **DEVICE LINK** panel on the menu shows which systems are online. Everything degrades gracefully on other browsers.
+
+| System | What it does | How |
+| --- | --- | --- |
+| 📲 **Installable PWA** | Home Screen icon, per-model splash screens, standalone fullscreen, safe-area layout for the notch / Dynamic Island / home indicator | `manifest.webmanifest`, `apple-touch-icon`, `apple-touch-startup-image`, `viewport-fit=cover` + `env(safe-area-inset-*)` |
+| 📦 **Offline** | The whole yard is cached on first visit; an "update ready" toast appears when a new build ships | `sw.js` (stale-while-revalidate app shell, `SKIP_WAITING` flow) |
+| 🔄 **Adaptive yard** | Portrait iPhones get a tall 560×960 yard, landscape phones a wide 1200×600 one, desktops the classic 960×560; the dock becomes a side column in landscape | `pickArenaSize()` at run start + CSS grid media queries |
+| 🎯 **Twin-stick touch** | Floating move stick on the left half, aim stick on the right, drag-and-release to place, **long-press** a tower to upgrade, tap to select | Multi-touch handling on the canvas only (`touch-action:none`) |
+| 📳 **Haptics** | Taptic feedback on hits, builds, upgrades, level-ups, rage, boss entrances, wave clears and game over | iOS `<input type="checkbox" switch>` trick, `navigator.vibrate` elsewhere, controller rumble via `vibrationActuator` |
+| 🧭 **Tilt & shake** | Gyro tilt steering (auto-recentres on rotation) and **shake your phone to trigger RAGE** | `DeviceMotionEvent.requestPermission()` + `deviceorientation` / `devicemotion` |
+| 🎮 **Controllers** | MFi / DualSense / Xbox pads: left stick moves, right stick aims or positions the placement cursor, A places/starts waves, X = rage, Y = upgrade, bumpers cycle defenses, Start pauses; menus and level-up cards are navigable | Gamepad API polled every frame |
+| 📷 **Holo-Yard** | Projects the translucent arena over your real backyard via the rear camera | `getUserMedia({video:{facingMode:'environment'}})` behind a transparent canvas |
+| 📤 **Share cards** | Rendered 1200×630 run cards go straight into the iOS share sheet (falls back to text / clipboard) | Web Share API level 2 with files |
+| 🗣️ **AI announcer** | Boss warnings, rage callouts, wave reports, victory and defeat lines | Web Speech `speechSynthesis` |
+| 🌈 **Wide color + bloom** | Display-P3 canvas and CSS accents, GPU-composited neon bloom, adaptive resolution when frames run long | `getContext('2d',{colorSpace:'display-p3'})`, `color(display-p3 …)`, a quarter-res multiply/blur/screen pass |
+| 🔆 **Wake lock & audio session** | The screen never dims mid-wave; audio respects the silent switch and mixes with your own music | Screen Wake Lock API, `navigator.audioSession.type='ambient'` |
+| 🔁 **Save sync** | Export the whole burrow as a `GA2070:` code, share it, import it anywhere; persistent storage is requested so iOS keeps your progress | `navigator.storage.persist()`, Web Share / Clipboard |
+| 🔗 **Deep links** | Siri Shortcuts / Home Screen quick actions: `?diff=Hard&play=1`, `?holo=1` | URL params + manifest `shortcuts` |
+| 🔔 **Badging** | A paused run in the background shows an app badge until you return | Badging API |
+| ♿ **Accessibility** | Live region for toasts, 44pt touch targets, reduced-motion support, VoiceOver labels | `aria-live`, `prefers-reduced-motion` |
+
+**New 2070 content:** the 🛸 **Holo Drone** (instant hit-scan laser, never misses), the 🌀 **Gravity Well** (drags pests inward and slows them; bosses resist), and the 🤖 **Rogue Mower Bot** pest (armored, immune to slows) from wave 7.
+
+**Legacy note:** the original `index.html` landing, `motato.html`, `go.html` and `towers.html` still work unchanged.
+
 
 ## 🦫 Groundhog Arena (`arena.html`) — the flagship mode
 
 A polished single-file hybrid of tower defense and arena survival. Pilot the groundhog with WASD (or a touch joystick), build and upgrade garden defenses around yourself, and survive escalating waves of backyard pests.
 
 **Features**
-- **8 defense types** — Acorn Turret, Beehive (splash), Sprinkler (slow), Thorn Launcher (pierce), Storm Totem (chain lightning), Sunflower (aura buffs), Melon Mortar (long-range arcing artillery with a blind spot up close), and Cash Crop (harvests passive income) — each upgradable to level 8, sellable, with a click-to-select stats panel
+- **10 defense types** — Acorn Turret, Beehive (splash), Sprinkler (slow), Thorn Launcher (pierce), Storm Totem (chain lightning), Sunflower (aura buffs), Melon Mortar (long-range arcing artillery with a blind spot up close), Cash Crop (harvests passive income), Holo Drone (hit-scan laser) and Gravity Well (pull + slow) — each upgradable to level 8, sellable, with a tap-to-select stats panel
 - **Player progression** — enemies drop XP orbs; each level presents a 4-card perk draft from 20 perks, including four build-defining archetypes: Rooted Fortune (stand still for a giant resource magnet + regen), Momentum Runner (damage ramps while moving), Turret Whisperer (buff towers you stand near), and Glass Cannon
 - **Meta-progression** — runs bank 🥕 Carrots based on waves, kills, and boss takedowns; spend them in the Burrow on **4 playable classes** (Classic, Burly, Hawkeye, Hoarder Chuck) and **3 permanent upgrade tracks** (starting cash, damage, XP gain) — all persisted between sessions
-- **11 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons, weaving vipers, dash-striking bats, skunks (stink cloud on death slows tower fire), and quilled hedgehogs (death burst of quills) — plus **3 rotating bosses** every 5 waves, each with its own AI pattern and HP bar: the charging Grizzly, the minion-summoning Fox, and the feather-strafing Hawk
+- **12 pest types** — rats, mosquitoes, boars, splitting rabbits, loot raccoons, weaving vipers, dash-striking bats, skunks (stink cloud on death slows tower fire), quilled hedgehogs (death burst of quills), and armored rogue mower bots (immune to slows) — plus **3 rotating bosses** every 5 waves, each with its own AI pattern and HP bar: the charging Grizzly, the minion-summoning Fox, and the feather-strafing Hawk
 - **Enemy visual polish** — spawn-in pop, direction-facing sprites, waddle wobble, pulsing boss glow, elite rings
 - **🎆 Seasonal calendar** — three auto-detected special occasions (`?season=july4|halloween|winter` to force, `?noparty` to disable), each with a menu banner, a daily +50 🥕 gift, themed fireworks, and seasonal elite rings:
   - **July 4th week** — America's-birthday celebration, fireworks on wave clears and boss kills, and the Hawk becomes the LIBERTY EAGLE with red-white-and-blue feathers
@@ -22,8 +52,8 @@ A polished single-file hybrid of tower defense and arena survival. Pilot the gro
 - **14 achievements** — persistent, each worth bonus carrots, shown in the Burrow
 - **A living groundhog** — waddles with dust puffs, faces its target, and when idle will sniff, look around, stretch, nibble a carrot, or doze off
 - **Juice & graphics** — hand-drawn tower bodies with aiming, recoiling barrels, muzzle flashes, and gold level pips; boss intro splash cards; enemy death-pop animations and impact rings; soft entity shadows; additive-glow projectiles and XP orbs; a detailed lawn (mow stripes, grass tufts, flowers, stones, vignette) with drifting fireflies and cloud shadows; particles, screen shake, floating text, chain-lightning arcs, synth SFX and a generative soundtrack (WebAudio, no assets)
-- **Quality of life** — pause menu with separate music/SFX toggles, 1×/2×/3× speed, auto-start waves, **auto-spend** (AI buys and upgrades towers with spare cash), difficulty select, persistent best wave, **recent-run history in the Burrow**, game-over stats + instant restart, full touch/mobile support
-- **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host
+- **Quality of life** — pause menu with music/SFX/haptics/announcer/twin-stick/tilt/Holo-Yard/bloom toggles, 1×/2×/3× speed, auto-start waves, **auto-spend** (AI buys and upgrades towers with spare cash), difficulty select, persistent best wave, **recent-run history in the Burrow**, game-over stats + share card + instant restart, full touch/mobile/controller support
+- **Zero dependencies** — one self-contained HTML file, works from `file://`, GitHub Pages, or any static host (installable + offline when served over HTTPS)
 
 ---
 
@@ -220,7 +250,7 @@ npx http-server
 - [ ] Save/load game state
 - [ ] Sound effects and music
 - [ ] Particle system for better effects
-- [ ] Mobile touch controls
+- [x] Mobile touch controls
 - [ ] Leaderboards
 - [ ] Multiplayer support
 
