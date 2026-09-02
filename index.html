@@ -1,181 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Groundhog Arena - Backyard Tower Defense</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Groundhog Arena 2070 — Backyard Tower Defense × Survival</title>
+  <meta name="description" content="Groundhog Arena 2070: neural-linked backyard tower defense × survival. Installable, offline, haptic, gyro, gamepad and camera-ready on iPhone.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Groundhog 2070">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#04100f">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      height: 100%;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f1220 0%, #1a1f3a 100%);
-      color: #e8eaf6;
+    :root{
+      --bg:#030a0c;--panel:rgba(6,20,22,.78);--panel2:rgba(12,34,36,.72);--line:rgba(94,234,212,.22);--line2:rgba(94,234,212,.5);
+      --ink:#e8fffb;--dim:#8fb6ae;--gold:#ffc35c;--blue:#5eead4;--violet:#c084fc;--good:#86efac;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
     }
-
-    .container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .title {
-      font-size: 72px;
-      font-weight: 900;
-      background: linear-gradient(135deg, #5b72ff, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 16px;
-    }
-
-    .subtitle {
-      font-size: 24px;
-      color: #9aa3d7;
-      font-weight: 500;
-    }
-
-    .game-card {
-      background: #141830;
-      border: 2px solid #263059;
-      border-radius: 24px;
-      padding: 48px;
-      max-width: 600px;
-      width: 100%;
-      transition: all .3s ease;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .game-card:hover {
-      border-color: #5b72ff;
-      transform: translateY(-8px);
-      box-shadow: 0 16px 48px rgba(91, 114, 255, 0.3);
-    }
-
-    .game-icon {
-      font-size: 96px;
-      margin-bottom: 24px;
-      display: block;
-      text-align: center;
-    }
-
-    .game-title {
-      font-size: 40px;
-      font-weight: 800;
-      margin-bottom: 16px;
-      color: #e8eaf6;
-      text-align: center;
-    }
-
-    .game-desc {
-      font-size: 18px;
-      line-height: 1.8;
-      color: #a6b3f5;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-
-    .features {
-      list-style: none;
-      padding: 0;
-      margin-bottom: 32px;
-    }
-
-    .features li {
-      padding: 12px 0;
-      font-size: 16px;
-      color: #9aa3d7;
-    }
-
-    .features li:before {
-      content: "✓";
-      color: #22c55e;
-      font-weight: bold;
-      margin-right: 12px;
-      font-size: 18px;
-    }
-
-    .play-button {
-      background: linear-gradient(135deg, #5b72ff, #7c9eff);
-      color: #fff;
-      border: 0;
-      padding: 16px 32px;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      transition: all .2s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .play-button:hover {
-      background: linear-gradient(135deg, #6e84ff, #8daeff);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(91, 114, 255, 0.4);
-    }
-
-    .footer {
-      margin-top: 60px;
-      text-align: center;
-      color: #6b7ba8;
-      font-size: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .title {
-        font-size: 48px;
-      }
-
-      .game-title {
-        font-size: 32px;
-      }
-    }
+    @supports (color:color(display-p3 1 1 1)){:root{--blue:color(display-p3 .42 .95 .85);--gold:color(display-p3 1 .78 .38);--violet:color(display-p3 .76 .52 1)}}
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{min-height:100%}
+    body{min-height:100%;color:var(--ink);font-family:ui-rounded,-apple-system,system-ui,'SF Pro Rounded','Segoe UI',Roboto,sans-serif;
+      background:radial-gradient(1200px 600px at 15% -10%,#0b2a2a 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#1b1140 0%,transparent 60%),var(--bg);
+      background-attachment:fixed}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.35;
+      background:repeating-linear-gradient(0deg,rgba(94,234,212,.06) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,rgba(94,234,212,.06) 0 1px,transparent 1px 40px)}
+    .wrap{position:relative;max-width:720px;margin:0 auto;padding:calc(28px + var(--sat)) 18px calc(40px + var(--sab))}
+    .hero{text-align:center;margin-bottom:26px}
+    .mascot{font-size:88px;line-height:1;filter:drop-shadow(0 0 24px rgba(255,195,92,.35))}
+    h1{font-size:clamp(34px,8vw,60px);font-weight:900;letter-spacing:.02em;line-height:1.05;margin-top:10px;text-wrap:balance}
+    h1 .glow{background:linear-gradient(135deg,var(--gold),#fff1c2 45%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+    .edition{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--blue);border:1px solid var(--line2);border-radius:999px;padding:5px 14px;background:rgba(94,234,212,.08);box-shadow:0 0 18px rgba(94,234,212,.22)}
+    .tagline{color:var(--dim);font-size:13px;margin-top:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+    .card{position:relative;background:var(--panel);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 30px 90px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);margin-bottom:16px}
+    .card::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--violet),transparent)}
+    .play{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#e09a32,var(--gold));color:#241a02;border:0;border-radius:14px;padding:16px 28px;font-size:18px;font-weight:900;letter-spacing:.1em;text-decoration:none;box-shadow:0 8px 28px rgba(255,195,92,.28),inset 0 1px 0 rgba(255,255,255,.4);min-height:52px}
+    .play:active{transform:scale(.985)}
+    .sub{text-align:center;color:var(--dim);font-size:12.5px;margin-top:12px;line-height:1.6}
+    h2{font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--dim);margin-bottom:12px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+    .f{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.45}
+    .f b{display:block;font-size:12px;letter-spacing:.03em}
+    .f span{color:var(--dim);font-size:11.5px}
+    .f .i{font-size:20px;display:block;margin-bottom:4px}
+    #installTip{display:none;align-items:center;gap:10px;margin-top:14px;padding:10px 12px;border-radius:12px;background:rgba(94,234,212,.08);border:1px dashed var(--line2);font-size:12.5px;line-height:1.45}
+    #installTip.show{display:flex}
+    #installTip b{color:var(--blue)}
+    #installBtn{margin-left:auto;background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:10px;padding:8px 12px;font-weight:800;font-size:11px;letter-spacing:.08em;display:none}
+    .legacy{text-align:center;color:var(--dim);font-size:12px;margin-top:18px;line-height:1.8}
+    .legacy a{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--line2)}
+    @media (prefers-reduced-motion:no-preference){.mascot{animation:bob 3.4s ease-in-out infinite}@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="title">🦫 Groundhog Arena</div>
-      <div class="subtitle">Backyard Tower Defense × Survival</div>
+  <div class="wrap">
+    <div class="hero">
+      <div class="mascot">🦫</div>
+      <h1>GROUNDHOG <span class="glow">ARENA</span></h1>
+      <div class="edition">2070 EDITION · NEURAL-LINK</div>
+      <div class="tagline">Backyard Tower Defense × Survival</div>
     </div>
 
-    <a href="arena.html" class="game-card">
-      <span class="game-icon">🦫</span>
-      <h2 class="game-title">Groundhog Arena</h2>
-      <p class="game-desc">
-        Pilot the groundhog, build garden defenses around it, and survive escalating waves of backyard pests. Level-up perks, tower upgrades, Groundhog Rage, combos, and the Grizzly every 5 waves.
-      </p>
-      <ul class="features">
-        <li>6 defenses: acorn turrets, beehives, sprinklers &amp; more</li>
-        <li>XP level-ups, 13 draftable perks, 4 unlockable classes</li>
-        <li>Grizzly boss waves, wave modifiers, combo &amp; rage systems</li>
-        <li>Synth soundtrack, particles &amp; screen shake</li>
-        <li>Keyboard + full touch support — instant play</li>
-      </ul>
-      <button class="play-button" onclick="window.location.href='arena.html'; return false;">
-        Play Now
-      </button>
-    </a>
+    <div class="card">
+      <a class="play" href="./arena.html">ENTER THE YARD ▶</a>
+      <div class="sub">Pilot the groundhog, build holo-defenses around it, and survive escalating waves of backyard pests.<br>10 defenses · 12 pests · 3 bosses · perks, classes, weapons, achievements.</div>
+      <div id="installTip">
+        <span style="font-size:22px">📲</span>
+        <span id="installText">On iPhone: tap <b>Share</b> → <b>Add to Home Screen</b> for fullscreen, offline play, splash screen and app icon.</span>
+        <button id="installBtn">INSTALL</button>
+      </div>
+    </div>
 
-    <div class="footer">
-      <p>Built with HTML5 Canvas and Vanilla JavaScript</p>
-      <p style="margin-top: 8px; font-size: 12px;">
-        Classic modes: <a href="motato.html" style="color:#8da2ff">Motato MVP</a> • <a href="go.html" style="color:#8da2ff">Motato Towers (legacy)</a>
-      </p>
+    <div class="card">
+      <h2>iPHONE SYSTEMS — EVERY LINK ONLINE</h2>
+      <div class="grid">
+        <div class="f"><span class="i">📲</span><b>Installable PWA</b><span>Home Screen icon, splash screens, standalone fullscreen, safe-area aware (notch, Dynamic Island, home indicator).</span></div>
+        <div class="f"><span class="i">📦</span><b>Offline</b><span>Service worker caches the whole yard. Play with zero signal.</span></div>
+        <div class="f"><span class="i">📳</span><b>Haptics</b><span>Taptic Engine feedback on hits, builds, rage, bosses, level-ups. Controller rumble too.</span></div>
+        <div class="f"><span class="i">🎯</span><b>Twin-stick touch</b><span>Floating move stick on the left, aim stick on the right, drag-to-place, long-press to upgrade.</span></div>
+        <div class="f"><span class="i">🧭</span><b>Tilt &amp; shake</b><span>Gyro tilt steering and shake-to-RAGE via Core Motion.</span></div>
+        <div class="f"><span class="i">🎮</span><b>Controllers</b><span>MFi, DualSense and Xbox pads over Bluetooth — full menu and placement support.</span></div>
+        <div class="f"><span class="i">📷</span><b>Holo-Yard</b><span>Project the arena over your real backyard through the camera.</span></div>
+        <div class="f"><span class="i">📤</span><b>Share cards</b><span>Rendered run cards straight into the iOS share sheet.</span></div>
+        <div class="f"><span class="i">🗣️</span><b>AI announcer</b><span>Boss warnings, rage callouts and wave reports via on-device speech.</span></div>
+        <div class="f"><span class="i">🌈</span><b>Wide color</b><span>Display-P3 canvas and CSS, neon bloom, adaptive resolution.</span></div>
+        <div class="f"><span class="i">🔆</span><b>Wake lock</b><span>The screen never dims mid-wave. Silent-switch-aware audio session.</span></div>
+        <div class="f"><span class="i">🔁</span><b>Save sync</b><span>Export your burrow as a code and import it on any device. Siri Shortcut deep links.</span></div>
+      </div>
+    </div>
+
+    <div class="legacy">
+      Classic modes: <a href="./motato.html">Motato MVP</a> · <a href="./go.html">Motato Towers (legacy)</a> · <a href="./towers.html">WebGL2 towers</a><br>
+      Zero dependencies — one HTML file, works from GitHub Pages or any static host.
     </div>
   </div>
+  <script>
+    (function(){
+      var ua=navigator.userAgent||'';
+      var iOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+      var standalone=!!(navigator.standalone||matchMedia('(display-mode: standalone)').matches);
+      var tip=document.getElementById('installTip'),btn=document.getElementById('installBtn');
+      if(iOS&&!standalone)tip.classList.add('show');
+      var evt=null;
+      window.addEventListener('beforeinstallprompt',function(e){
+        e.preventDefault();evt=e;
+        document.getElementById('installText').innerHTML='Install <b>Groundhog Arena 2070</b> for fullscreen, offline play and a Home Screen icon.';
+        btn.style.display='inline-block';tip.classList.add('show');
+      });
+      btn.addEventListener('click',function(){if(evt){evt.prompt();evt=null}});
+      if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+        window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){})});
+      }
+    })();
+  </script>
 </body>
 </html>

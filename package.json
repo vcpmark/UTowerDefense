@@ -1,7 +1,7 @@
 {
-  "name": "motato-towers-webgl",
-  "version": "2.0.0",
-  "description": "Tower defense game with modern WebGL2 engine and Motato-inspired mechanics",
+  "name": "groundhog-arena-2070",
+  "version": "3.0.0",
+  "description": "Groundhog Arena 2070 \u2014 installable, offline, haptic, gyro, gamepad and camera-ready backyard tower defense \u00d7 survival for iPhone (plus legacy Motato/WebGL2 modes)",
   "type": "module",
   "scripts": {
     "start": "python3 serve.py",
@@ -11,9 +11,14 @@
   "keywords": [
     "game",
     "tower-defense",
+    "survival",
+    "pwa",
+    "iphone",
+    "ios",
+    "haptics",
+    "gamepad",
     "webgl",
     "webgl2",
-    "motato",
     "ecs",
     "javascript"
   ],
